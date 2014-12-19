@@ -25,11 +25,10 @@ public class StravaController {
         AthleteProfile athleteProfile = stravaRestTemplate
                 .getForObject("https://www.strava.com/api/v3/athlete", AthleteProfile.class);
         model.addAttribute("profile", athleteProfile);
-        //UserRedirectRequiredException
         return "strava";
     }
 
-    public void setFacebookRestTemplate(OAuth2RestTemplate stravaRestTemplate) {
+    public void setStravaRestTemplate(OAuth2RestTemplate stravaRestTemplate) {
         this.stravaRestTemplate = stravaRestTemplate;
     }
 
