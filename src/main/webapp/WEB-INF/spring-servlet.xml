@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2-1.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.iliuta.strava.mvc"/>
+
+    <!--apply the oauth client context -->
+    <oauth:client id="oauth2ClientFilter"/>
+
+    <http xmlns="http://www.springframework.org/schema/security"
+          auto-config="false"
+          authentication-manager-ref="oAuthAuthenticationManager">
+        <form-login authentication-failure-url="/login.jsp?authentication_error=true" default-target-url="/index.jsp"
+                    login-page="/login.jsp" login-processing-url="/login.do" />
+        <logout logout-success-url="/index.jsp" logout-url="/logout.do" />
+        <anonymous />
+        <intercept-url pattern="/login.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <intercept-url pattern="/**" access="ROLE_USER"/>
+
+        <custom-filter ref="oauth2ClientFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
+    </http>
+
+
+    <bean id="oAuthAuthenticationManager" class="com.iliuta.strava.springsecurity.AlwaysUserAuthenticationManager" />
+
+
+
+    <oauth:resource id="strava" type="authorization_code" client-id="3929"
+                    client-secret="cb75b4472c4df6bf74700c82fd062b780b84da31"
+                    access-token-uri="https://www.strava.com/oauth/token"
+                    client-authentication-scheme="form"
+                    user-authorization-uri="https://www.strava.com/oauth/authorize?response_type=code"/>
+
+
+    <mvc:annotation-driven />
+
+    <!--Basic application beans. -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+
+    <bean id="jacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="jacksonObjectMapper"/>
+        <property name="targetMethod" value="configure"/>
+        <property name="arguments">
+            <list>
+                <value type="com.fasterxml.jackson.databind.DeserializationFeature">FAIL_ON_UNKNOWN_PROPERTIES</value>
+                <value>false</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <oauth:rest-template id="stravaRestTemplate" resource="strava">
+        <property name="messageConverters">
+            <list>
+                <bean id="mappingJacksonHttpMessageConverter"
+                      class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                    <property name="prettyPrint" value="false"/>
+                    <property name="objectMapper" ref="jacksonObjectMapper"/>
+                </bean>
+            </list>
+        </property>
+    </oauth:rest-template>
+
+</beans>
