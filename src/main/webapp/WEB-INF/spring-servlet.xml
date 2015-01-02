@@ -35,7 +35,7 @@
     <bean id="oAuthAuthenticationManager" class="com.iliuta.strava.springsecurity.AlwaysUserAuthenticationManager" />
 
 
-
+    <!-- properties to be added in catalina.properties, for exemple -->
     <oauth:resource id="strava" type="authorization_code" client-id="${strava.client.id}"
                     client-secret="${strava.client.secret}"
                     access-token-uri="https://www.strava.com/oauth/token"
