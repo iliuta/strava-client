@@ -36,8 +36,8 @@
 
 
 
-    <oauth:resource id="strava" type="authorization_code" client-id="3929"
-                    client-secret="cb75b4472c4df6bf74700c82fd062b780b84da31"
+    <oauth:resource id="strava" type="authorization_code" client-id="${strava.client.id}"
+                    client-secret="${strava.client.secret}"
                     access-token-uri="https://www.strava.com/oauth/token"
                     client-authentication-scheme="form"
                     user-authorization-uri="https://www.strava.com/oauth/authorize?response_type=code"/>
