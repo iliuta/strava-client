@@ -1,8 +1,14 @@
 <%@ taglib prefix="authz" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html ng-app="stravaApp">
 <head>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="app/js/app.js"></script>
+    <script src="app/js/controllers.js"></script>
+    
     <title>Strava personal heatmap</title>
 
     <style type="text/css">
@@ -17,7 +23,8 @@
         }
 
         #map-canvas {
-            height: 100%
+            height: 70%;
+            width: 70%
         }
     </style>
     <script type="text/javascript"
@@ -43,58 +50,9 @@
 
 </div>
 
+<div ng-view=""></div>
+
 <div id="map-canvas"></div>
 
-<script type="text/javascript">
-    function draw(activities) {
-        var mapOptions = {
-            center: { lat: 48.880821, lng: 2.242003 },
-            zoom: 8
-        };
 
-        var bounds = new google.maps.LatLngBounds();
-
-        var map = new google.maps.Map(document.getElementById('map-canvas'),
-                mapOptions);
-
-        activities.forEach(function (activity) {
-            if (activity.type == 'Ride') {
-                var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
-
-                decodedPath.forEach(function (point, index) {
-                            var loc = new google.maps.LatLng(point.lat(), point.lng());
-                            bounds.extend(loc);
-                        }
-                );
-
-                var activityGmapsPath = new google.maps.Polyline({
-                    path: decodedPath,
-                    geodesic: true,
-                    strokeColor: 'red',
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2
-                });
-
-                google.maps.event.addListener(activityGmapsPath, 'mouseover',
-                        function () {
-                            activityGmapsPath.setOptions({strokeColor: 'blue', strokeWeight: 4});
-                        });
-
-                google.maps.event.addListener(activityGmapsPath, 'mouseout',
-                        function () {
-                            activityGmapsPath.setOptions({strokeColor: 'red', strokeWeight: 2});
-                        });
-
-                activityGmapsPath.setMap(map);
-            }
-        });
-
-        map.fitBounds(bounds);
-        map.panToBounds(bounds);
-    }
-
-</script>
-<script type="application/javascript"
-        src="https://www.strava.com/api/v3/athlete/activities?access_token=5cb193483342f32dee1b5bf6cd62629c7e5e83b9&callback=draw&after=1420070400&per_page=200"></script>
-</body>
 </html>

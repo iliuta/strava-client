@@ -10,7 +10,6 @@
         <appender-ref ref="console"/>
     </root>
 
-    <logger name="org.springframework.security" level="ERROR">
-    </logger>
+    <logger name="org.springframework.security" level="ERROR" />
 
 </configuration>

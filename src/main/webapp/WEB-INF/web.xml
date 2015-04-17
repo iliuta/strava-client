@@ -21,6 +21,15 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/bower_components/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/app/*</url-pattern>
+    </servlet-mapping>
+
 
     <servlet-mapping>
         <servlet-name>spring</servlet-name>
