@@ -95,6 +95,6 @@
 
 </script>
 <script type="application/javascript"
-        src="https://www.strava.com/api/v3/athlete/activities?access_token=ce6bb7fd5b36aba5fd42b7464ef9d14b95e05636&callback=draw&after=1420070400&per_page=200"></script>
+        src="https://www.strava.com/api/v3/athlete/activities?access_token=5cb193483342f32dee1b5bf6cd62629c7e5e83b9&callback=draw&after=1420070400&per_page=200"></script>
 </body>
 </html>
