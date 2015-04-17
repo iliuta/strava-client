@@ -14,14 +14,23 @@ public class Activity {
     private Double distance;
 
     private String type;
+    @JsonProperty(value = "start_date")
+    private Date startDate;
     @JsonProperty(value = "start_date_local")
     private Date startDateLocal;
     private Map map;
     private Boolean trainer;
     private Boolean commute;
-
     @JsonProperty(value = "resource_state")
     private int resourceState;
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
     public Boolean getTrainer() {
         return trainer;

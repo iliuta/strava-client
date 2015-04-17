@@ -8,11 +8,9 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
             zoom: 8
         };
 
-        
-        
-        
+
         $scope.fetchActivities = function (before, after) {
-            
+
             if (before) {
                 before = Math.floor(new Date(before).getTime() / 1000);
             }
@@ -24,44 +22,50 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
 
                 var map = new google.maps.Map(document.getElementById('map-canvas'),
                     mapOptions);
-                
+
                 $scope.activities = data;
 
                 $scope.activities.forEach(function (activity) {
                     if (activity.type == 'Ride') {
-                        var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
 
-                        decodedPath.forEach(function (point, index) {
-                                var loc = new google.maps.LatLng(point.lat(), point.lng());
-                                bounds.extend(loc);
-                            }
-                        );
+                        if (!activity.map.summary_polyline) {
+                            console.log(activity.name);
 
-                        var activityGmapsPath = new google.maps.Polyline({
-                            path: decodedPath,
-                            geodesic: true,
-                            strokeColor: 'red',
-                            strokeOpacity: 1.0,
-                            strokeWeight: 2
-                        });
+                        } else {
+                            var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
 
-                        google.maps.event.addListener(activityGmapsPath, 'mouseover',
-                            function () {
-                                activityGmapsPath.setOptions({strokeColor: 'blue', strokeWeight: 4});
+                            decodedPath.forEach(function (point, index) {
+                                    var loc = new google.maps.LatLng(point.lat(), point.lng());
+                                    bounds.extend(loc);
+                                }
+                            );
+
+                            var activityGmapsPath = new google.maps.Polyline({
+                                path: decodedPath,
+                                geodesic: true,
+                                strokeColor: 'red',
+                                strokeOpacity: 1.0,
+                                strokeWeight: 2
                             });
 
-                        google.maps.event.addListener(activityGmapsPath, 'mouseout',
-                            function () {
-                                activityGmapsPath.setOptions({strokeColor: 'red', strokeWeight: 2});
-                            });
+                            google.maps.event.addListener(activityGmapsPath, 'mouseover',
+                                function () {
+                                    activityGmapsPath.setOptions({strokeColor: 'blue', strokeWeight: 4});
+                                });
 
-                        activityGmapsPath.setMap(map);
+                            google.maps.event.addListener(activityGmapsPath, 'mouseout',
+                                function () {
+                                    activityGmapsPath.setOptions({strokeColor: 'red', strokeWeight: 2});
+                                });
+
+                            activityGmapsPath.setMap(map);
+                        }
                     }
                 });
 
                 map.fitBounds(bounds);
                 map.panToBounds(bounds);
-                
+
             });
         }
     }]);
