@@ -2,9 +2,16 @@ package com.iliuta.strava.mvc;
 
 import com.iliuta.strava.model.Activity;
 import com.iliuta.strava.model.ActivityList;
+import com.iliuta.strava.model.StravaError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
 import javax.annotation.Resource;
@@ -17,6 +24,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/rest")
 public class StravaRestController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(StravaRestController.class);
+
     @Resource(name = "stravaRestTemplate")
     private RestOperations stravaRestTemplate;
 
@@ -24,27 +33,27 @@ public class StravaRestController {
     public List<Activity> activities(Long before, Long after) {
         ActivityList activityList = fetch200ActivitiesFromStrava(before, after);
         // sort by date
-        List<Activity> activities = activityList.stream().sorted((a1, a2) -> {
-            return a1.getStartDate().compareTo(a2.getStartDate());
-        }).map(a -> {
-            return (Activity) a;
-        }).collect(Collectors.toList());
+        List<Activity> activities = sortActivitiesByDate(activityList);
 
         // fetch the next 200 activities
         while (activityList.size() == 200) {
             activityList = fetch200ActivitiesFromStrava(null, (activities.get(activities.size() - 1).getStartDate().getTime() + 1000) / 1000);
             // sort by date
-            List<Activity> sortedActivities = activityList.stream().sorted((a1, a2) -> {
-                return a1.getStartDate().compareTo(a2.getStartDate());
-            }).map(a -> {
-                return (Activity) a;
-            }).collect(Collectors.toList());
+            List<Activity> sortedActivities = sortActivitiesByDate(activityList);
             // add to sorted activities
             activities.addAll(sortedActivities);
         }
 
         // return them
         return activities;
+    }
+
+    private List<Activity> sortActivitiesByDate(ActivityList activityList) {
+        return activityList.stream().sorted((a1, a2) -> {
+            return a1.getStartDate().compareTo(a2.getStartDate());
+        }).map(a -> {
+            return (Activity) a;
+        }).collect(Collectors.toList());
     }
 
     private ActivityList fetch200ActivitiesFromStrava(Long before, Long after) {
@@ -61,5 +70,17 @@ public class StravaRestController {
 
     public void setStravaRestTemplate(OAuth2RestTemplate stravaRestTemplate) {
         this.stravaRestTemplate = stravaRestTemplate;
+    }
+
+
+    @ExceptionHandler(RestClientException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected StravaError handleRestClientException(RestClientException rce) {
+        LOGGER.error("Strava error", rce);
+        StravaError error = new StravaError();
+        error.setMessage("An error occured while acessing Strava.");
+        error.setDetailedMessage(rce.getMessage());
+        return error;
+
     }
 }

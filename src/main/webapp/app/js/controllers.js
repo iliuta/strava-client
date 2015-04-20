@@ -10,6 +10,15 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
 
 
         $scope.fetchActivities = function (before, after) {
+            $scope.stravaError = null;
+            
+            $scope.activities = null;
+            
+            $scope.trainerDistance = 0;
+
+            $scope.commuteDistance = 0;
+
+            $scope.totalDistance = 0;
 
             if (before) {
                 before = Math.floor(new Date(before).getTime() / 1000);
@@ -24,9 +33,19 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                     mapOptions);
 
                 $scope.activities = data;
-
+                
                 $scope.activities.forEach(function (activity) {
                     if (activity.type == 'Ride') {
+                        
+                        if (activity.commute) {
+                            $scope.commuteDistance += activity.distance;
+                        }
+
+                        if (activity.trainer) {
+                            $scope.trainerDistance += activity.distance;
+                        }
+                        
+                        $scope.totalDistance += activity.distance;
 
                         if (!activity.map.summary_polyline) {
                             console.log(activity.name);
@@ -66,6 +85,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                 map.fitBounds(bounds);
                 map.panToBounds(bounds);
 
+            }).error(function (data) {
+                $scope.stravaError = data;
             });
         }
     }]);

@@ -1,5 +1,28 @@
-<input type="date" ng-model="after">
-<input type="date" ng-model="before">
-<input type="button" value="Draw" ng-click="fetchActivities(before,after)">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="dateAfter">From</label>
+                <input type="date" ng-model="after" id="dateAfter" class="form-control" placeholder="After">
+            </div>
+            <div class="form-group">
+                <label for="dateBefore">To</label>
+                <input type="date" ng-model="before" id="dateBefore" class="form-control" placeholder="Before">
+            </div>
+
+            <input type="button" class="btn btn-default" value="Draw heatmap" ng-click="fetchActivities(before,after)">
+        </form>
+    </div>
+    <div class="panel-body">
+        <div class="alert alert-danger" role="alert" ng-show="stravaError">{{stravaError.message}}</div>
+        <div id="map-canvas"></div>
+    </div>
+    <div class="panel-footer" ng-show="activities">
+        Total distance: {{totalDistance/1000 | number:1}}km, Commute: {{commuteDistance/1000 | number:1}}km, Trainer:
+        {{trainerDistance/1000 | number:1}}km
+    </div>
+</div>
+
+
 
 

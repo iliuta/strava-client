@@ -23,6 +23,16 @@ public class Activity {
     private Boolean commute;
     @JsonProperty(value = "resource_state")
     private int resourceState;
+    
+    private Gear gear;
+
+    public Gear getGear() {
+        return gear;
+    }
+
+    public void setGear(Gear gear) {
+        this.gear = gear;
+    }
 
     public Date getStartDate() {
         return startDate;
