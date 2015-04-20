@@ -19,6 +19,7 @@
     <!--apply the oauth client context -->
     <oauth:client id="oauth2ClientFilter"/>
 
+    <http pattern="bower_components/**" security="none" />
     <http xmlns="http://www.springframework.org/schema/security"
           auto-config="false"
           authentication-manager-ref="oAuthAuthenticationManager">
