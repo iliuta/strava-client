@@ -19,19 +19,19 @@
     <!--apply the oauth client context -->
     <oauth:client id="oauth2ClientFilter"/>
 
-    <http pattern="bower_components/**" security="none" />
-    <http xmlns="http://www.springframework.org/schema/security"
+    <sec:http pattern="/bower_components/**" security="none" />
+    <sec:http
           auto-config="false"
           authentication-manager-ref="oAuthAuthenticationManager">
-        <form-login authentication-failure-url="/login.jsp?authentication_error=true" default-target-url="/index.jsp"
+        <sec:form-login authentication-failure-url="/login.jsp?authentication_error=true" default-target-url="/index.jsp"
                     login-page="/login.jsp" login-processing-url="/login.do" />
-        <logout logout-success-url="/index.jsp" logout-url="/logout.do" />
-        <anonymous />
-        <intercept-url pattern="/login.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <intercept-url pattern="/**" access="ROLE_USER"/>
+        <sec:logout logout-success-url="/index.jsp" logout-url="/logout.do" />
+        <sec:anonymous />
+        <sec:intercept-url pattern="/login.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <sec:intercept-url pattern="/**" access="ROLE_USER"/>
 
-        <custom-filter ref="oauth2ClientFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
-    </http>
+        <sec:custom-filter ref="oauth2ClientFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
+    </sec:http>
 
 
     <bean id="oAuthAuthenticationManager" class="com.iliuta.strava.springsecurity.AlwaysUserAuthenticationManager" />
