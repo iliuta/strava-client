@@ -20,7 +20,7 @@
     <oauth:client id="oauth2ClientFilter"/>
 
     <sec:http pattern="/bower_components/**" security="none" />
-    <sec:http patterb="/*.ico" security="none" />
+    <sec:http pattern="/*.ico" security="none" />
     <sec:http
           auto-config="false"
           authentication-manager-ref="oAuthAuthenticationManager">
