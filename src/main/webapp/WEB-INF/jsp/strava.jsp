@@ -50,7 +50,7 @@
             <h1>${profile.firstName}</h1>
 
             <c:forEach var="bike" items="${profile.bikes}">
-                <p class="bg-info">${bike.name}: ${bike.distance/1000}km </p>
+                <p class="bg-info"><b>${bike.name}</b> ${bike.distance/1000}km </p>
             </c:forEach>
 
 
