@@ -16,7 +16,8 @@
     <context:annotation-config/>
     <context:component-scan base-package="com.iliuta.strava.mvc"/>
 
-    <!--apply the oauth client context -->
+    <mvc:default-servlet-handler/>
+
     <oauth:client id="oauth2ClientFilter"/>
 
     <sec:http pattern="/bower_components/**" security="none" />
