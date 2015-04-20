@@ -16,27 +16,23 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Strava heatmap</a>
-        </div>
-    </div>
-</nav>
-
 
 <div class="container-fluid">
 
-    <div class="row">
-        <div class="col-md-2">
 
-        </div>
-        <div class="col-md-10">
+<div class="jumbotron">
+  <h1>Strava personal heatmap</h1>
+  <p>Display your personal heatmap from Strava.</p>
+  <p>This application uses Strava and Google Maps free APIs. These APIs are subject to bandwidth usage limits.</p>
+  <p>From time to time, some related error messages could be displayed.</p>
+  <p>This is a work in progress. For the moment, only cycling activities are displayed.</p>
+  <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcomed</a> or you can connect with <a href="http://strava.com/athletes/iliuta">me</a> on Strava.</p>
+  <p>Enjoy!</p>
+  <p>
             <form id="loginForm" class="form-inline" action="<c:url value="/login.do"/>" method="post">
-               <input type="submit" class="btn btn-default" value="Connect with Strava"/>
+               <input type="submit" class="btn btn-primary btn-lg" value="Connect with Strava"/>
             </form>
-        </div>
-    </div>
+</p>
 
 </div>
 

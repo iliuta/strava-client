@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 
 
-    <title>Strava personal heatmap</title>
+    <title>Strava personal heatmap (beta)</title>
 
     <style type="text/css">
         html {
@@ -37,7 +37,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Strava heatmap</a>
+            <a class="navbar-brand" href="#">Strava personal heatmap (beta)</a>
         </div>
     </div>
 </nav>
