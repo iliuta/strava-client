@@ -26,6 +26,7 @@
   <p>This application uses Strava and Google Maps free APIs. These APIs are subject to bandwidth usage limits.</p>
   <p>From time to time, some related error messages could be displayed.</p>
   <p>This is a work in progress. For the moment, only cycling activities are displayed.</p>
+  <p>If you don't use Google Chrome, please input dates into the YYYY-MM-DD format. I will look for a nice solution for that issue.</p>
   <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcomed</a> or you can connect with <a href="http://strava.com/athletes/iliuta">me</a> on Strava.</p>
   <p>Enjoy!</p>
   <p>
