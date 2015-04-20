@@ -40,8 +40,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                 $scope.activities.forEach(function (activity) {
                     if (activity.type == 'Ride') {
 
-                        console.log(activity);
-
                         if (activity.commute) {
                             $scope.commuteDistance += activity.distance;
                         }
@@ -62,7 +60,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
 
                         if (!activity.map.summary_polyline) {
                             console.log(activity.name);
-
                         } else {
                             var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
 
