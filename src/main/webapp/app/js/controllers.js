@@ -11,14 +11,16 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
 
         $scope.fetchActivities = function (before, after) {
             $scope.stravaError = null;
-            
+
             $scope.activities = null;
-            
+
             $scope.trainerDistance = 0;
 
             $scope.commuteDistance = 0;
 
             $scope.totalDistance = 0;
+
+            $scope.gearDistances = new Object();
 
             if (before) {
                 before = Math.floor(new Date(before).getTime() / 1000);
@@ -27,16 +29,19 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                 after = Math.floor(new Date(after).getTime() / 1000);
             }
             $http.get('rest/activities?before=' + (before ? before : '') + '&after=' + (after ? after : '')).success(function (data) {
+
                 var bounds = new google.maps.LatLngBounds();
 
                 var map = new google.maps.Map(document.getElementById('map-canvas'),
                     mapOptions);
 
                 $scope.activities = data;
-                
+
                 $scope.activities.forEach(function (activity) {
                     if (activity.type == 'Ride') {
-                        
+
+                        console.log(activity);
+
                         if (activity.commute) {
                             $scope.commuteDistance += activity.distance;
                         }
@@ -44,8 +49,16 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                         if (activity.trainer) {
                             $scope.trainerDistance += activity.distance;
                         }
-                        
+
                         $scope.totalDistance += activity.distance;
+
+                        if (activity.gear_id) {
+                            if ($scope.gearDistances[activity.gear_id]) {
+                                $scope.gearDistances[activity.gear_id] += activity.distance;
+                            } else {
+                                $scope.gearDistances[activity.gear_id] = activity.distance;
+                            }
+                        }
 
                         if (!activity.map.summary_polyline) {
                             console.log(activity.name);

@@ -18,8 +18,9 @@
         <div id="map-canvas"></div>
     </div>
     <div class="panel-footer" ng-show="activities">
-        Total distance: {{totalDistance/1000 | number:1}}km, Commute: {{commuteDistance/1000 | number:1}}km, Trainer:
-        {{trainerDistance/1000 | number:1}}km
+        <b>Total distance</b> {{totalDistance/1000 | number:1}}km, <b>Commute</b> {{commuteDistance/1000 | number:1}}km,
+        <b>Trainer</b> {{trainerDistance/1000 | number:1}}km
+        <!--<span ng-repeat="(key,value) in gearDistances">{{key}}: {{value/1000 | number:1}}km&nbsp;</span>-->
     </div>
 </div>
 

@@ -26,6 +26,17 @@ public class Activity {
     
     private Gear gear;
 
+    public String getGearId() {
+        return gearId;
+    }
+
+    public void setGearId(String gearId) {
+        this.gearId = gearId;
+    }
+
+    @JsonProperty(value = "gear_id")
+    private String gearId;
+
     public Gear getGear() {
         return gear;
     }
