@@ -29,7 +29,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
         };
 
 
-        $scope.fetchActivities = function (before, after) {
+        $scope.fetchActivities = function (before, after, type) {
             $scope.stravaError = null;
 
             $scope.activities = null;
@@ -52,7 +52,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
             if (after) {
                 after = Math.floor(new Date(after).getTime() / 1000);
             }
-            $http.get('rest/activities?before=' + (before ? before : '') + '&after=' + (after ? after : '')).success(function (data) {
+            $http.get('rest/activities?before=' + (before ? before : '') + '&after=' + (after ? after : '') + '&type=' + (type ? type: '')).success(function (data) {
 
                 var bounds = new google.maps.LatLngBounds();
 

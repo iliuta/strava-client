@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,7 +31,7 @@ public class StravaRestController {
     private RestOperations stravaRestTemplate;
 
     @RequestMapping("/activities")
-    public List<Activity> activities(Long before, Long after) {
+    public List<Activity> activities(Long before, Long after, String type) {
         ActivityList activityList = fetch200ActivitiesFromStrava(before, after);
         // sort by date
         List<Activity> activities = sortActivitiesByDate(activityList);
@@ -45,7 +46,11 @@ public class StravaRestController {
         }
 
         // return them
-        return activities;
+        if (StringUtils.hasText(type)) {
+            return activities.stream().filter(a -> type.equals(a.getType())).collect(Collectors.toList());
+        } else {
+            return activities;
+        }
     }
 
     private List<Activity> sortActivitiesByDate(ActivityList activityList) {

@@ -32,8 +32,43 @@
                 </div>
                 <div class="form-group">
                     <p class="input-group">
+                        <select class="form-control" ng-model="type">
+                            <option></option>
+                            <option>Ride</option>
+                            <option>Run</option>
+                            <option>Swim</option>
+                            <option>Hike</option>
+                            <option>Walk</option>
+                            <option>AlpineSki</option>
+                            <option>BackcountrySki</option>
+                            <option>Canoeing</option>
+                            <option>CrossCountrySkiing</option>
+                            <option>Crossfit</option>
+                            <option>Elliptical</option>
+                            <option>IceSkate</option>
+                            <option>InlineSkate</option>
+                            <option>Kayaking</option>
+                            <option>Kitesurf</option>
+                            <option>NordicSki</option>
+                            <option>RockClimbing</option>
+                            <option>RollerSki</option>
+                            <option>Rowing</option>
+                            <option>Snowboard</option>
+                            <option>Snowshoe</option>
+                            <option>StairStepper</option>
+                            <option>StandUpPaddling</option>
+                            <option>Surfing</option>
+                            <option>WeightTraining</option>
+                            <option>Windsurf</option>
+                            <option>Workout</option>
+                            <option>Yoga</option>
+                        </select>
+                    </p>
+                </div>
+                <div class="form-group">
+                    <p class="input-group">
                         <input type="button" class="btn btn-default" value="Draw heatmap"
-                               ng-click="fetchActivities(before,after)" ng-disabled="before.$invalid || after.$invalid">
+                               ng-click="fetchActivities(before,after,type)">
                     </p>
                 </div>
             </form>
@@ -58,31 +93,31 @@
         <li class="list-group-item">
             {{currentActivity.type}}
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-show="currentActivity.distance">
             <span class="badge">{{currentActivity.distance/1000 | number:1}}</span>
             Distance (km)
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-show="currentActivity.average_speed">
             <span class="badge">{{3600 * currentActivity.average_speed/1000 | number:1}}</span>
             Avg speed (km/h)
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-show="currentActivity.max_speed">
             <span class="badge">{{3600 * currentActivity.max_speed/1000 | number:1}}</span>
             Max speed (km/h)
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-show="currentActivity.average_watts">
             <span class="badge">{{currentActivity.average_watts | number:0}}</span>
             Avg watts
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-show="currentActivity.max_heartrate">
             <span class="badge">{{currentActivity.max_heartrate | number:0}}</span>
             Max heartrate
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-show="currentActivity.average_heartrate">
             <span class="badge">{{currentActivity.average_heartrate | number:0}}</span>
             Avg heartrate
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-show="currentActivity.total_elevation_gain">
             <span class="badge">{{currentActivity.total_elevation_gain | number:0}}</span>
             Elevation (m)
         </li>
