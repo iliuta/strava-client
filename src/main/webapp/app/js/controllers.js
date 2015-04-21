@@ -42,6 +42,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
 
             $scope.totalDistance = 0;
 
+            $scope.totalElevationGain = 0;
+
             $scope.gearDistances = new Object();
 
             if (before) {
@@ -71,6 +73,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                         }
 
                         $scope.totalDistance += activity.distance;
+                        
+                        $scope.totalElevationGain += activity.total_elevation_gain;
 
                         if (activity.gear_id) {
                             if ($scope.gearDistances[activity.gear_id]) {
