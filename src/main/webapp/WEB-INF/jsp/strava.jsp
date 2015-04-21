@@ -1,5 +1,6 @@
 <%@ taglib prefix="authz" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html ng-app="stravaApp">
 <head>
@@ -50,7 +51,11 @@
             <h1>${profile.firstName}</h1>
 
             <c:forEach var="bike" items="${profile.bikes}">
-                <p class="bg-info"><b>${bike.name}</b> ${bike.distance/1000}km </p>
+                <p class="bg-info"><b>${bike.name}</b> <fmt:formatNumber type="number" maxFractionDigits="1" value="${bike.distance/1000}" />km </p>
+            </c:forEach>
+
+            <c:forEach var="shoe" items="${profile.shoes}">
+                <p class="bg-info"><b>${bike.name}</b> <fmt:formatNumber type="number" maxFractionDigits="1" value="${shoe.distance/1000}" />km </p>
             </c:forEach>
 
 
