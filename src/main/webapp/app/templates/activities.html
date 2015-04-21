@@ -57,7 +57,7 @@
         </li>
         <li class="list-group-item">
             <span class="badge">{{currentActivity.distance/1000 | number:1}}</span>
-            Distance
+            Distance (km)
         </li>
         <li class="list-group-item">
             <span class="badge">{{3600 * currentActivity.average_speed/1000 | number:1}}</span>
@@ -79,14 +79,12 @@
             <span class="badge">{{currentActivity.average_heartrate | number:1}}</span>
             Avg heartrate
         </li>
-    </ul>
-    
-    
+        <li class="list-group-item">
+            <span class="badge">{{currentActivity.total_elevation_gain | number:0}}</span>
+            Elevation (m)
+        </li>
 
-    
-    
-    {{currentActivity.average_heartrate | number:1}}
-    {{currentActivity.max_heartrate | number:1}}
+    </ul>
 </div>
 
 

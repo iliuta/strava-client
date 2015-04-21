@@ -43,9 +43,10 @@ public class Activity {
     private Double averageHeartrate;
     @JsonProperty(value = "max_heartrate")
     private Double maxHeartrate;
+    
     @JsonProperty(value = "total_elevation_gain")
-
     private Double totalElevationGain;
+    
     @JsonProperty(value = "gear_id")
     private String gearId;
 
