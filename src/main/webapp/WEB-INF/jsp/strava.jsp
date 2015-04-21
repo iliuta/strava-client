@@ -56,7 +56,7 @@
             </c:forEach>
 
             <c:forEach var="shoe" items="${profile.shoes}">
-                <p class="bg-info"><b>${bike.name}</b> <fmt:formatNumber type="number" maxFractionDigits="1"
+                <p class="bg-info"><b>${shoe.name}</b> <fmt:formatNumber type="number" maxFractionDigits="1"
                                                                          value="${shoe.distance/1000}"/>km </p>
             </c:forEach>
 
