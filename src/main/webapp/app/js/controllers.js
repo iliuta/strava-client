@@ -8,6 +8,26 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
             zoom: 8
         };
 
+        $scope.openDatePickerBefore = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.datePickerOpenedBefore = true;
+        };
+
+        $scope.openDatePickerAfter = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.datePickerOpenedAfter = true;
+        };
+
+        $scope.dateOptions = {
+            formatYear: 'yyyy',
+            startingDay: 1,
+            showWeeks: false
+        };
+
 
         $scope.fetchActivities = function (before, after) {
             $scope.stravaError = null;

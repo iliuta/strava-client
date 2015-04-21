@@ -1,6 +1,7 @@
 var stravaApp = angular.module('stravaApp', [
     'ngRoute',
-    'stravaControllers'
+    'stravaControllers',
+    'ui.bootstrap'
 ]);
 
 stravaApp.config(['$routeProvider',
