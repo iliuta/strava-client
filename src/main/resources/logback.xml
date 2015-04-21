@@ -11,5 +11,6 @@
     </root>
 
     <logger name="org.springframework.security" level="ERROR" />
+    <logger name="com.iliuta.strava" level="INFO" />
 
 </configuration>

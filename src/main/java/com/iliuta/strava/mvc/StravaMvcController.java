@@ -32,6 +32,7 @@ public class StravaMvcController {
         AthleteProfile athleteProfile = stravaRestTemplate
                 .getForObject("https://www.strava.com/api/v3/athlete", AthleteProfile.class);
         model.addAttribute("profile", athleteProfile);
+        LOGGER.info("AthleteProfile retrieved: id={}", athleteProfile.getId());
         return "strava";
     }
 
