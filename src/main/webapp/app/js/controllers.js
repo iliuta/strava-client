@@ -2,20 +2,20 @@ var stravaControllers = angular.module('stravaControllers', []);
 
 stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
     function ($scope, $http) {
-        
+
         var mapOptions = {
             center: { lat: 48.880821, lng: 2.242003 },
             zoom: 8
         };
 
-        $scope.openDatePickerBefore = function($event) {
+        $scope.openDatePickerBefore = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
 
             $scope.datePickerOpenedBefore = true;
         };
 
-        $scope.openDatePickerAfter = function($event) {
+        $scope.openDatePickerAfter = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
 
@@ -62,61 +62,59 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                 $scope.activities = data;
 
                 $scope.activities.forEach(function (activity) {
-                    if (activity.type == 'Ride') {
 
-                        if (activity.commute) {
-                            $scope.commuteDistance += activity.distance;
-                        }
+                    if (activity.commute) {
+                        $scope.commuteDistance += activity.distance;
+                    }
 
-                        if (activity.trainer) {
-                            $scope.trainerDistance += activity.distance;
-                        }
+                    if (activity.trainer) {
+                        $scope.trainerDistance += activity.distance;
+                    }
 
-                        $scope.totalDistance += activity.distance;
-                        
-                        $scope.totalElevationGain += activity.total_elevation_gain;
+                    $scope.totalDistance += activity.distance;
 
-                        if (activity.gear_id) {
-                            if ($scope.gearDistances[activity.gear_id]) {
-                                $scope.gearDistances[activity.gear_id] += activity.distance;
-                            } else {
-                                $scope.gearDistances[activity.gear_id] = activity.distance;
-                            }
-                        }
+                    $scope.totalElevationGain += activity.total_elevation_gain;
 
-                        if (!activity.map.summary_polyline) {
-                            console.log(activity.name);
+                    if (activity.gear_id) {
+                        if ($scope.gearDistances[activity.gear_id]) {
+                            $scope.gearDistances[activity.gear_id] += activity.distance;
                         } else {
-                            var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
+                            $scope.gearDistances[activity.gear_id] = activity.distance;
+                        }
+                    }
 
-                            decodedPath.forEach(function (point, index) {
-                                    var loc = new google.maps.LatLng(point.lat(), point.lng());
-                                    bounds.extend(loc);
-                                }
-                            );
+                    if (!activity.map.summary_polyline) {
+                        console.log(activity.name);
+                    } else {
+                        var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
 
-                            var activityGmapsPath = new google.maps.Polyline({
-                                path: decodedPath,
-                                geodesic: true,
-                                strokeColor: 'red',
-                                strokeOpacity: 1.0,
-                                strokeWeight: 2
+                        decodedPath.forEach(function (point, index) {
+                                var loc = new google.maps.LatLng(point.lat(), point.lng());
+                                bounds.extend(loc);
+                            }
+                        );
+
+                        var activityGmapsPath = new google.maps.Polyline({
+                            path: decodedPath,
+                            geodesic: true,
+                            strokeColor: 'red',
+                            strokeOpacity: 1.0,
+                            strokeWeight: 2
+                        });
+
+                        google.maps.event.addListener(activityGmapsPath, 'mouseover',
+                            function () {
+                                activityGmapsPath.setOptions({strokeColor: 'blue', strokeWeight: 4});
+                                $scope.currentActivity = activity;
+                                $scope.$apply();
                             });
 
-                            google.maps.event.addListener(activityGmapsPath, 'mouseover',
-                                function () {
-                                    activityGmapsPath.setOptions({strokeColor: 'blue', strokeWeight: 4});
-                                    $scope.currentActivity = activity;
-                                    $scope.$apply();
-                                });
+                        google.maps.event.addListener(activityGmapsPath, 'mouseout',
+                            function () {
+                                activityGmapsPath.setOptions({strokeColor: 'red', strokeWeight: 2});
+                            });
 
-                            google.maps.event.addListener(activityGmapsPath, 'mouseout',
-                                function () {
-                                    activityGmapsPath.setOptions({strokeColor: 'red', strokeWeight: 2});
-                                });
-
-                            activityGmapsPath.setMap($scope.map);
-                        }
+                        activityGmapsPath.setMap($scope.map);
                     }
                 });
 

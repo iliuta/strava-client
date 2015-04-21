@@ -56,6 +56,9 @@
             <a href="http://www.strava.com/activities/{{currentActivity.id}}" target="_new">{{currentActivity.name}}</a>
         </li>
         <li class="list-group-item">
+            {{currentActivity.type}}
+        </li>
+        <li class="list-group-item">
             <span class="badge">{{currentActivity.distance/1000 | number:1}}</span>
             Distance (km)
         </li>
