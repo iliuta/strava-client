@@ -51,17 +51,29 @@
             <h1>${profile.firstName}</h1>
 
             <c:forEach var="bike" items="${profile.bikes}">
-                <p class="bg-info"><b>${bike.name}</b> <fmt:formatNumber type="number" maxFractionDigits="1" value="${bike.distance/1000}" />km </p>
+                <p class="bg-info"><b>${bike.name}</b> <fmt:formatNumber type="number" maxFractionDigits="1"
+                                                                         value="${bike.distance/1000}"/>km </p>
             </c:forEach>
 
             <c:forEach var="shoe" items="${profile.shoes}">
-                <p class="bg-info"><b>${bike.name}</b> <fmt:formatNumber type="number" maxFractionDigits="1" value="${shoe.distance/1000}" />km </p>
+                <p class="bg-info"><b>${bike.name}</b> <fmt:formatNumber type="number" maxFractionDigits="1"
+                                                                         value="${shoe.distance/1000}"/>km </p>
             </c:forEach>
 
 
         </div>
         <div ng-view="">
 
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12 panel panel-default">
+            <div class="panel-body">
+                <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcomed</a> or you can connect with
+                    <a
+                            href="http://strava.com/athletes/iliuta">me</a> on Strava.</p></div>
         </div>
     </div>
 
@@ -80,13 +92,20 @@
 <script src="app/js/controllers.js"></script>
 
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-62082824-1', 'auto');
-  ga('send', 'pageview');
+    ga('create', 'UA-62082824-1', 'auto');
+    ga('send', 'pageview');
 
 </script>
 
