@@ -23,8 +23,103 @@ public class Activity {
     private Boolean commute;
     @JsonProperty(value = "resource_state")
     private int resourceState;
-    
+
     private Gear gear;
+
+
+    @JsonProperty(value = "location_city")
+    private String locationCity;
+    @JsonProperty(value = "location_state")
+    private String locationState;
+    @JsonProperty(value = "location_country")
+    private String locationCountry;
+    @JsonProperty(value = "average_speed")
+    private Double averageSpeed;
+    @JsonProperty(value = "max_speed")
+    private Double maxSpeed;
+    @JsonProperty(value = "average_watts")
+    private Double averageWatts;
+    @JsonProperty(value = "average_heartrate")
+    private Double averageHeartrate;
+    @JsonProperty(value = "max_heartrate")
+    private Double maxHeartrate;
+    @JsonProperty(value = "total_elevation_gain")
+
+    private Double totalElevationGain;
+    @JsonProperty(value = "gear_id")
+    private String gearId;
+
+    public String getLocationCity() {
+        return locationCity;
+    }
+
+    public void setLocationCity(String locationCity) {
+        this.locationCity = locationCity;
+    }
+
+    public String getLocationState() {
+        return locationState;
+    }
+
+    public void setLocationState(String locationState) {
+        this.locationState = locationState;
+    }
+
+    public String getLocationCountry() {
+        return locationCountry;
+    }
+
+    public void setLocationCountry(String locationCountry) {
+        this.locationCountry = locationCountry;
+    }
+
+    public Double getAverageSpeed() {
+        return averageSpeed;
+    }
+
+    public void setAverageSpeed(Double averageSpeed) {
+        this.averageSpeed = averageSpeed;
+    }
+
+    public Double getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public void setMaxSpeed(Double maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
+    public Double getAverageWatts() {
+        return averageWatts;
+    }
+
+    public void setAverageWatts(Double averageWatts) {
+        this.averageWatts = averageWatts;
+    }
+
+    public Double getAverageHeartrate() {
+        return averageHeartrate;
+    }
+
+    public void setAverageHeartrate(Double averageHeartrate) {
+        this.averageHeartrate = averageHeartrate;
+    }
+
+    public Double getMaxHeartrate() {
+        return maxHeartrate;
+    }
+
+    public void setMaxHeartrate(Double maxHeartrate) {
+        this.maxHeartrate = maxHeartrate;
+    }
+
+    public Double getTotalElevationGain() {
+        return totalElevationGain;
+    }
+
+    public void setTotalElevationGain(Double totalElevationGain) {
+        this.totalElevationGain = totalElevationGain;
+    }
 
     public String getGearId() {
         return gearId;
@@ -33,9 +128,6 @@ public class Activity {
     public void setGearId(String gearId) {
         this.gearId = gearId;
     }
-
-    @JsonProperty(value = "gear_id")
-    private String gearId;
 
     public Gear getGear() {
         return gear;

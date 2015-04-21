@@ -55,8 +55,8 @@
 
 
         </div>
-        <div class="col-md-10">
-            <div ng-view=""></div>
+        <div ng-view="">
+
         </div>
     </div>
 

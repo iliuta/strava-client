@@ -1,53 +1,93 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <form class="form-inline">
-            <div class="form-group">
-                <label for="dateAfter">From</label>
+<div class="col-md-8">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="dateAfter">From</label>
 
-                <p class="input-group">
-                    <input id="dateAfter" type="text" class="form-control" datepicker-popup="yyyy/MM/dd"
-                           ng-model="after"
-                           datepicker-options="dateOptions" is-open="datePickerOpenedAfter"
-                           close-text="Close" placeholder="YYYY/MM/DD"/>
+                    <p class="input-group">
+                        <input id="dateAfter" type="text" class="form-control" datepicker-popup="yyyy/MM/dd"
+                               ng-model="after"
+                               datepicker-options="dateOptions" is-open="datePickerOpenedAfter"
+                               close-text="Close" placeholder="YYYY/MM/DD"/>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-click="openDatePickerAfter($event)">
                         <i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
-                </p>
-            </div>
-            <div class="form-group">
-                <label for="dateBefore">To</label>
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label for="dateBefore">To</label>
 
-                <p class="input-group">
-                    <input id="dateBefore" type="text" class="form-control" datepicker-popup="yyyy/MM/dd"
-                           ng-model="before"
-                           datepicker-options="dateOptions" is-open="datePickerOpenedBefore"
-                           close-text="Close" placeholder="YYYY/MM/DD"/>
+                    <p class="input-group">
+                        <input id="dateBefore" type="text" class="form-control" datepicker-popup="yyyy/MM/dd"
+                               ng-model="before"
+                               datepicker-options="dateOptions" is-open="datePickerOpenedBefore"
+                               close-text="Close" placeholder="YYYY/MM/DD"/>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-click="openDatePickerBefore($event)">
                         <i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
-                </p>
-            </div>
-            <div class="form-group">
-                <p class="input-group">
-                    <input type="button" class="btn btn-default" value="Draw heatmap"
-                           ng-click="fetchActivities(before,after)" ng-disabled="before.$invalid || after.$invalid">
-                </p>
-            </div>
-        </form>
-    </div>
-    <div class="panel-body">
-        <div class="alert alert-danger" role="alert" ng-show="stravaError">{{stravaError.message}}</div>
-        <div id="map-canvas"></div>
-    </div>
-    <div class="panel-footer" ng-show="activities">
-        <b>Total distance</b> {{totalDistance/1000 | number:1}}km, <b>Commute</b> {{commuteDistance/1000 | number:1}}km,
-        <b>Trainer</b> {{trainerDistance/1000 | number:1}}km
-        <!--<span ng-repeat="(key,value) in gearDistances">{{key}}: {{value/1000 | number:1}}km&nbsp;</span>-->
+                    </p>
+                </div>
+                <div class="form-group">
+                    <p class="input-group">
+                        <input type="button" class="btn btn-default" value="Draw heatmap"
+                               ng-click="fetchActivities(before,after)" ng-disabled="before.$invalid || after.$invalid">
+                    </p>
+                </div>
+            </form>
+        </div>
+        <div class="panel-body">
+            <div class="alert alert-danger" role="alert" ng-show="stravaError">{{stravaError.message}}</div>
+            <div id="map-canvas"></div>
+        </div>
+        <div class="panel-footer" ng-show="activities">
+            <b>Total distance</b> {{totalDistance/1000 | number:1}}km, <b>Commute</b> {{commuteDistance/1000 |
+            number:1}}km,
+            <b>Trainer</b> {{trainerDistance/1000 | number:1}}km
+            
+        </div>
     </div>
 </div>
+<div class="col-md-2">
+    <ul class="list-group" ng-show="currentActivity">
+        <li class="list-group-item">
+            {{currentActivity.name}}
+        </li>
+        <li class="list-group-item">
+            <span class="badge">{{currentActivity.distance/1000 | number:1}}</span>
+            Distance
+        </li>
+        <li class="list-group-item">
+            <span class="badge">{{3600 * currentActivity.average_speed/1000 | number:1}}</span>
+            Avg speed (km/h)
+        </li>
+        <li class="list-group-item">
+            <span class="badge">{{3600 * currentActivity.max_speed/1000 | number:1}}</span>
+            Max speed (km/h)
+        </li>
+        <li class="list-group-item">
+            <span class="badge">{{currentActivity.average_watts | number:1}}</span>
+            Avg watts
+        </li>
+        <li class="list-group-item">
+            <span class="badge">{{currentActivity.max_heartrate | number:1}}</span>
+            Max heartrate
+        </li>
+        <li class="list-group-item">
+            <span class="badge">{{currentActivity.average_heartrate | number:1}}</span>
+            Avg heartrate
+        </li>
+    </ul>
+    
+    
 
+    
+    
+    {{currentActivity.average_heartrate | number:1}}
+    {{currentActivity.max_heartrate | number:1}}
+</div>
 
 
 

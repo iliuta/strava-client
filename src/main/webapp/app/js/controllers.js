@@ -2,7 +2,7 @@ var stravaControllers = angular.module('stravaControllers', []);
 
 stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
     function ($scope, $http) {
-
+        
         var mapOptions = {
             center: { lat: 48.880821, lng: 2.242003 },
             zoom: 8
@@ -34,6 +34,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
 
             $scope.activities = null;
 
+            $scope.currentActivity = null;
+
             $scope.trainerDistance = 0;
 
             $scope.commuteDistance = 0;
@@ -52,7 +54,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
 
                 var bounds = new google.maps.LatLngBounds();
 
-                var map = new google.maps.Map(document.getElementById('map-canvas'),
+                $scope.map = new google.maps.Map(document.getElementById('map-canvas'),
                     mapOptions);
 
                 $scope.activities = data;
@@ -100,6 +102,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                             google.maps.event.addListener(activityGmapsPath, 'mouseover',
                                 function () {
                                     activityGmapsPath.setOptions({strokeColor: 'blue', strokeWeight: 4});
+                                    $scope.currentActivity = activity;
+                                    $scope.$apply();
                                 });
 
                             google.maps.event.addListener(activityGmapsPath, 'mouseout',
@@ -107,13 +111,13 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                                     activityGmapsPath.setOptions({strokeColor: 'red', strokeWeight: 2});
                                 });
 
-                            activityGmapsPath.setMap(map);
+                            activityGmapsPath.setMap($scope.map);
                         }
                     }
                 });
 
-                map.fitBounds(bounds);
-                map.panToBounds(bounds);
+                $scope.map.fitBounds(bounds);
+                $scope.map.panToBounds(bounds);
 
             }).error(function (data) {
                 $scope.stravaError = data;
