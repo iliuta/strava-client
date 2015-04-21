@@ -36,7 +36,7 @@
         
         <p>I did not test this with Internet Explorer. It seem to work properly with Chrome, Firefox and Safari.</p>
 
-        <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcomed</a> or you can connect with <a
+        <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcome</a> or you can connect with <a
                 href="http://strava.com/athletes/iliuta">me</a> on Strava.</p>
 
         <p>Enjoy!</p>

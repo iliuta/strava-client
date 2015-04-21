@@ -71,7 +71,7 @@
 
         <div class="col-md-12 panel panel-default">
             <div class="panel-body">
-                <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcomed</a> or you can connect with
+                <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcome</a> or you can connect with
                     <a
                             href="http://strava.com/athletes/iliuta">me</a> on Strava.</p></div>
         </div>
