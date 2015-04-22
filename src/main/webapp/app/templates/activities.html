@@ -84,7 +84,7 @@
             <b>Commute</b> {{commuteDistance/1000 | number:1}}km,
             <b>Trainer</b> {{trainerDistance/1000 | number:1}}km,
             <b>Manual</b> {{manualDistance/1000 | number:1}}km
-            <span ng-repeat="(key,value) in countries"><b>{{key}}</b> : {{value.nb}} activities, {{value.distance /  1000 | number : 1}}km </span>
+            <span ng-repeat="(key,value) in countries"><b><a href="" ng-click="centerMap(key)">{{key}}</a></b> : {{value.nb}} activities, {{value.distance /  1000 | number : 1}}km </span>
         </div>
     </div>
 </div>

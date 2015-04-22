@@ -3,6 +3,9 @@ var stravaControllers = angular.module('stravaControllers', []);
 stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
     function ($scope, $http) {
 
+        $scope.map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+
         var mapOptions = {
             center: { lat: 48.880821, lng: 2.242003 },
             zoom: 8
@@ -27,6 +30,19 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
             startingDay: 1,
             showWeeks: false
         };
+        
+        
+        $scope.centerMap = function(country) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode( { 'address': country}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    $scope.map.setCenter(results[0].geometry.location);
+                    $scope.map.fitBounds(results[0].geometry.viewport);
+                } else {
+                    alert('Geocoding error: ' + status);
+                }
+            });
+        }
 
 
         $scope.fetchActivities = function (before, after, type) {
