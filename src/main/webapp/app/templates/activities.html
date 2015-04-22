@@ -78,13 +78,20 @@
             <div id="map-canvas"></div>
         </div>
         <div class="panel-footer" ng-show="activities">
-            {{activities.length}} activities,
+            <p>{{activities.length}} activities,
             <b>Total distance</b> {{totalDistance/1000 | number:1}}km,
             <b>Elevation</b> {{totalElevationGain | number:0}}m,
             <b>Commute</b> {{commuteDistance/1000 | number:1}}km,
             <b>Trainer</b> {{trainerDistance/1000 | number:1}}km,
             <b>Manual</b> {{manualDistance/1000 | number:1}}km
-            <span ng-repeat="(key,value) in countries"><b><a href="" ng-click="centerMap(key)">{{key}}</a></b> : {{value.nb}} activities, {{value.distance /  1000 | number : 1}}km </span>
+	    </p>
+            <p ng-repeat="(key,value) in countries">
+		<b><a href="" ng-click="centerMap(key)">
+			{{key}}</a></b> : {{value.nb}} activities, {{value.distance /  1000 | number : 1}}km 
+		<span ng-repeat="(cityName,cityInfo) in value.cities">
+			<a href="" ng-click="centerMap(cityName+','+cityInfo.state+','+'key')">{{cityName}}</a>: {{cityInfo.nb}} activities, {{cityInfo.distance / 1000 | number : 1}}km
+		</span>
+	    </p>
         </div>
     </div>
 </div>

@@ -120,6 +120,21 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                             $scope.countries[activity.location_country].distance = activity.distance;
                             $scope.countries[activity.location_country].nb = 1;
                         }
+			var country = $scope.countries[activity.location_country];
+			if (!country.cities) {
+				country.cities = new Object();
+			}
+			if (activity.location_city) {
+				if (country.cities[activity.location_city]) {
+					country.cities[activity.location_city].distance += activity.distance;
+					country.cities[activity.location_city].nb ++
+				} else {
+					country.cities[activity.location_city] = new Object();
+					country.cities[activity.location_city].state = activity.location_state;
+					country.cities[activity.location_city].distance = activity.distance;
+					country.cities[activity.location_city].nb = 1;
+				}
+			}
                     }
 
                     if (!activity.map.summary_polyline) {
