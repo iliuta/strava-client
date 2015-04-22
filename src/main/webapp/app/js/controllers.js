@@ -38,6 +38,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
 
             $scope.trainerDistance = 0;
 
+            $scope.manualDistance = 0;
+
             $scope.commuteDistance = 0;
 
             $scope.totalDistance = 0;
@@ -62,6 +64,9 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                 $scope.activities = data;
 
                 $scope.activities.forEach(function (activity) {
+                    
+                    activity.moving_time_date = new Date(null, null, null, 0, null, activity.moving_time, null);
+                    activity.elapsed_time_date = new Date(null, null, null, 0, null, activity.elapsed_time, null);
 
                     if (activity.commute) {
                         $scope.commuteDistance += activity.distance;
@@ -69,6 +74,11 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
 
                     if (activity.trainer) {
                         $scope.trainerDistance += activity.distance;
+                    }
+                    
+                    if (activity.manual) {
+                        $scope.manualDistance += activity.distance;
+                        
                     }
 
                     $scope.totalDistance += activity.distance;

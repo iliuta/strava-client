@@ -78,10 +78,12 @@
             <div id="map-canvas"></div>
         </div>
         <div class="panel-footer" ng-show="activities">
+            {{activities.length}} activities,
             <b>Total distance</b> {{totalDistance/1000 | number:1}}km,
             <b>Elevation</b> {{totalElevationGain | number:0}}m,
             <b>Commute</b> {{commuteDistance/1000 | number:1}}km,
-            <b>Trainer</b> {{trainerDistance/1000 | number:1}}km
+            <b>Trainer</b> {{trainerDistance/1000 | number:1}}km,
+            <b>Manual</b> {{manualDistance/1000 | number:1}}km
         </div>
     </div>
 </div>
@@ -91,7 +93,7 @@
             <a href="http://www.strava.com/activities/{{currentActivity.id}}" target="_new">{{currentActivity.name}}</a>
         </li>
         <li class="list-group-item">
-            {{currentActivity.type}}
+            {{currentActivity.type}} - {{currentActivity.start_date | date : 'short'}}
         </li>
         <li class="list-group-item" ng-show="currentActivity.distance">
             <span class="badge">{{currentActivity.distance/1000 | number:1}}</span>
@@ -121,12 +123,21 @@
             <span class="badge">{{currentActivity.total_elevation_gain | number:0}}</span>
             Elevation (m)
         </li>
+        <li class="list-group-item" ng-show="currentActivity.moving_time">
+            <span class="badge">{{currentActivity.moving_time_date | date : "H'h':mm'min':ss's'"}}</span>
+            Moving time
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.elapsed_time">
+            <span class="badge">{{currentActivity.elapsed_time_date | date : "H'h':mm'min':ss's'"}}</span>
+            Elapsed time
+        </li>
         <li class="list-group-item" ng-show="currentActivity.commute">
             Commute
         </li>
         <li class="list-group-item" ng-show="currentActivity.trainer">
             Trainer
         </li>
+        
 
     </ul>
 </div>

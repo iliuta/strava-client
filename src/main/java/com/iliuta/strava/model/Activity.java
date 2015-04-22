@@ -21,12 +21,10 @@ public class Activity {
     private Map map;
     private Boolean trainer;
     private Boolean commute;
+    private Boolean manual;
     @JsonProperty(value = "resource_state")
     private int resourceState;
-
     private Gear gear;
-
-
     @JsonProperty(value = "location_city")
     private String locationCity;
     @JsonProperty(value = "location_state")
@@ -43,12 +41,39 @@ public class Activity {
     private Double averageHeartrate;
     @JsonProperty(value = "max_heartrate")
     private Double maxHeartrate;
-    
     @JsonProperty(value = "total_elevation_gain")
     private Double totalElevationGain;
-    
     @JsonProperty(value = "gear_id")
     private String gearId;
+
+    @JsonProperty(value = "moving_time")
+    private Integer movingTime;
+    @JsonProperty(value = "elapsed_time")
+    private Integer elapsedTime;
+
+    public Integer getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void setElapsedTime(Integer elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
+
+    public Integer getMovingTime() {
+        return movingTime;
+    }
+
+    public void setMovingTime(Integer movingTime) {
+        this.movingTime = movingTime;
+    }
+
+    public Boolean getManual() {
+        return manual;
+    }
+
+    public void setManual(Boolean manual) {
+        this.manual = manual;
+    }
 
     public String getLocationCity() {
         return locationCity;
