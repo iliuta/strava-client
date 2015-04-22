@@ -84,13 +84,14 @@
             <b>Commute</b> {{commuteDistance/1000 | number:1}}km,
             <b>Trainer</b> {{trainerDistance/1000 | number:1}}km,
             <b>Manual</b> {{manualDistance/1000 | number:1}}km
+            <span ng-repeat="(key,value) in countries"><b>{{key}}</b> : {{value.nb}} activities, {{value.distance /  1000 | number : 1}}km </span>
         </div>
     </div>
 </div>
 <div class="col-md-2">
     <ul class="list-group" ng-show="currentActivity">
         <li class="list-group-item">
-            <a href="http://www.strava.com/activities/{{currentActivity.id}}" target="_new">{{currentActivity.name}}</a>
+            <a href="http://www.strava.com/activities/{{currentActivity.id}}" target="_blank">{{currentActivity.name}}</a>
         </li>
         <li class="list-group-item">
             {{currentActivity.type}} - {{currentActivity.start_date | date : 'short'}}
@@ -106,6 +107,14 @@
         <li class="list-group-item" ng-show="currentActivity.max_speed">
             <span class="badge">{{3600 * currentActivity.max_speed/1000 | number:1}}</span>
             Max speed (km/h)
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.average_speed && (currentActivity.type =='Hike' || currentActivity.type =='Run' || currentActivity.type =='Walk')">
+            <span class="badge">{{1000 / currentActivity.average_speed / 60 | number:1}}</span>
+            Avg pace (min/km)
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.max_speed && (currentActivity.type =='Hike' || currentActivity.type =='Run' || currentActivity.type =='Walk')">
+            <span class="badge">{{1000 / currentActivity.max_speed / 60 | number:1}}</span>
+            Max pace (min/km)
         </li>
         <li class="list-group-item" ng-show="currentActivity.average_watts">
             <span class="badge">{{currentActivity.average_watts | number:0}}</span>
@@ -137,8 +146,6 @@
         <li class="list-group-item" ng-show="currentActivity.trainer">
             Trainer
         </li>
-        
-
     </ul>
 </div>
 

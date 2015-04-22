@@ -48,13 +48,15 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
 
             $scope.gearDistances = new Object();
 
+            $scope.countries = new Object();
+
             if (before) {
                 before = Math.floor(new Date(before).getTime() / 1000);
             }
             if (after) {
                 after = Math.floor(new Date(after).getTime() / 1000);
             }
-            $http.get('rest/activities?before=' + (before ? before : '') + '&after=' + (after ? after : '') + '&type=' + (type ? type: '')).success(function (data) {
+            $http.get('rest/activities?before=' + (before ? before : '') + '&after=' + (after ? after : '') + '&type=' + (type ? type : '')).success(function (data) {
 
                 var bounds = new google.maps.LatLngBounds();
 
@@ -64,7 +66,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                 $scope.activities = data;
 
                 $scope.activities.forEach(function (activity) {
-                    
+
                     activity.moving_time_date = new Date(null, null, null, 0, null, activity.moving_time, null);
                     activity.elapsed_time_date = new Date(null, null, null, 0, null, activity.elapsed_time, null);
 
@@ -75,10 +77,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                     if (activity.trainer) {
                         $scope.trainerDistance += activity.distance;
                     }
-                    
+
                     if (activity.manual) {
                         $scope.manualDistance += activity.distance;
-                        
+
                     }
 
                     $scope.totalDistance += activity.distance;
@@ -90,6 +92,17 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                             $scope.gearDistances[activity.gear_id] += activity.distance;
                         } else {
                             $scope.gearDistances[activity.gear_id] = activity.distance;
+                        }
+                    }
+
+                    if (activity.location_country) {
+                        if ($scope.countries[activity.location_country]) {
+                            $scope.countries[activity.location_country].distance += activity.distance;
+                            $scope.countries[activity.location_country].nb ++;
+                        } else {
+                            $scope.countries[activity.location_country] = new Object();
+                            $scope.countries[activity.location_country].distance = activity.distance;
+                            $scope.countries[activity.location_country].nb = 1;
                         }
                     }
 
@@ -122,6 +135,11 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                         google.maps.event.addListener(activityGmapsPath, 'mouseout',
                             function () {
                                 activityGmapsPath.setOptions({strokeColor: 'red', strokeWeight: 2});
+                            });
+
+                        google.maps.event.addListener(activityGmapsPath, 'click',
+                            function () {
+                                window.open("http://www.strava.com/activities/" + activity.id, "_blank");
                             });
 
                         activityGmapsPath.setMap($scope.map);
