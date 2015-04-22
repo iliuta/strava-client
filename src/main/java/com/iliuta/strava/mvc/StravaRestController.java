@@ -16,6 +16,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,43 +27,35 @@ import java.util.stream.Collectors;
 @RequestMapping("/rest")
 public class StravaRestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(StravaRestController.class);
+    private static final int PAGE_SIZE = 200;
 
     @Resource(name = "stravaRestTemplate")
     private RestOperations stravaRestTemplate;
 
     @RequestMapping("/activities")
     public List<Activity> activities(Long before, Long after, String type) {
-        ActivityList activityList = fetch200ActivitiesFromStrava(before, after);
-        // sort by date
-        List<Activity> activities = sortActivitiesByDate(activityList);
+        int page = 1;
 
-        // fetch the next 200 activities
-        while (activityList.size() == 200) {
-            activityList = fetch200ActivitiesFromStrava(null, (activities.get(activities.size() - 1).getStartDate().getTime() + 1000) / 1000);
-            // sort by date
-            List<Activity> sortedActivities = sortActivitiesByDate(activityList);
-            // add to sorted activities
-            activities.addAll(sortedActivities);
+        List<Activity> result = new ArrayList<>();
+        ActivityList activityList = fetch200ActivitiesFromStrava(before, after, page);
+        result.addAll(activityList);
+
+        while (activityList.size() == PAGE_SIZE) {
+            page++;
+            activityList = fetch200ActivitiesFromStrava(before, after, page);
+            result.addAll(activityList);
         }
 
-        // return them
+        // filter if needed and return
         if (StringUtils.hasText(type)) {
-            return activities.stream().filter(a -> type.equals(a.getType())).collect(Collectors.toList());
+            return result.stream().filter(a -> type.equals(a.getType())).collect(Collectors.toList());
         } else {
-            return activities;
+            return result;
         }
     }
 
-    private List<Activity> sortActivitiesByDate(ActivityList activityList) {
-        return activityList.stream().sorted((a1, a2) -> {
-            return a1.getStartDate().compareTo(a2.getStartDate());
-        }).map(a -> {
-            return (Activity) a;
-        }).collect(Collectors.toList());
-    }
-
-    private ActivityList fetch200ActivitiesFromStrava(Long before, Long after) {
-        String url = "https://www.strava.com/api/v3/activities?per_page=200";
+    private ActivityList fetch200ActivitiesFromStrava(Long before, Long after, int page) {
+        String url = "https://www.strava.com/api/v3/activities?per_page=" + PAGE_SIZE + "&page=" + page;
         if (before != null) {
             url = url + "&before=" + before;
         }
