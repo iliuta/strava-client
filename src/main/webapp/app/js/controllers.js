@@ -3,6 +3,7 @@ var stravaControllers = angular.module('stravaControllers', []);
 stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$locale',
     function ($scope, $http, $filter, $locale) {
         
+        //$scope.dateFormat = $locale.DATETIME_FORMATS.shortDate;
         $scope.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 
         var mapOptions = {
@@ -47,14 +48,14 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             var today = new Date();
             var firstDayOfYear = new Date(today.getFullYear() + "");
             $scope.after = $filter('date')(firstDayOfYear, $scope.dateFormat);
-            $scope.fetchActivities(null, firstDayOfYear.getFullYear()+'-'+(firstDayOfYear.getMonth()+1)+"-"+firstDayOfYear.getDate(), type);
+            $scope.fetchActivities(null, firstDayOfYear, type);
 
         };
         $scope.fetchActivitiesThisMonth = function (type) {
             var today = new Date();
             var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
             $scope.after = $filter('date')(firstDayOfMonth, $scope.dateFormat);
-            $scope.fetchActivities(null, firstDayOfMonth.getFullYear()+'-'+(firstDayOfMonth.getMonth()+1)+"-"+firstDayOfMonth.getDate(), type);
+            $scope.fetchActivities(null, firstDayOfMonth, type);
 
         };
 
