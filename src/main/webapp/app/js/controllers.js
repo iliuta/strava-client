@@ -42,7 +42,13 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                     alert('Geocoding error: ' + status);
                 }
             });
-        }
+        };
+        
+        $scope.fetchActivitiesThisYear = function(type) {
+            $scope.after = "2015/01/01";
+            $scope.fetchActivities(null, $scope.after, type);
+            
+        };
 
 
         $scope.fetchActivities = function (before, after, type) {
