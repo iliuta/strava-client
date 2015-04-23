@@ -82,7 +82,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             $scope.countries = new Object();
 
             if (before) {
-                before = Math.floor(new Date(before).getTime() / 1000);
+                before = Math.floor((new Date(before).getTime() + 86400000) / 1000);
             }
             if (after) {
                 after = Math.floor(new Date(after).getTime() / 1000);
