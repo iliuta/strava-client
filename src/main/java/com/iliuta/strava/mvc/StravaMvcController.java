@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.common.exceptions.InvalidRequestException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestOperations;
@@ -32,7 +33,7 @@ public class StravaMvcController {
                 .getForObject("https://www.strava.com/api/v3/athlete", AthleteProfile.class);
         model.addAttribute("profile", athleteProfile);
         String userLocale = LocaleContextHolder.getLocale().getLanguage().toLowerCase();
-        if (LocaleContextHolder.getLocale().getCountry() != null) {
+        if (StringUtils.hasText(LocaleContextHolder.getLocale().getCountry())) {
             userLocale = userLocale + "-" + LocaleContextHolder.getLocale().getCountry().toLowerCase();
         }
         model.addAttribute("locale", userLocale);
