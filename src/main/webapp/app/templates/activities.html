@@ -6,10 +6,10 @@
                     <label for="dateAfter">From</label>
 
                     <p class="input-group">
-                        <input id="dateAfter" type="text" class="form-control" datepicker-popup="yyyy/MM/dd"
+                        <input id="dateAfter" type="text" class="form-control" datepicker-popup="{{dateFormat}}"
                                ng-model="after"
                                datepicker-options="dateOptions" is-open="datePickerOpenedAfter"
-                               close-text="Close" placeholder="YYYY/MM/DD"/>
+                               close-text="Close" placeholder="{{dateFormat}}"/>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-click="openDatePickerAfter($event)">
                         <i class="glyphicon glyphicon-calendar"></i></button>
@@ -20,10 +20,10 @@
                     <label for="dateBefore">To</label>
 
                     <p class="input-group">
-                        <input id="dateBefore" type="text" class="form-control" datepicker-popup="yyyy/MM/dd"
+                        <input id="dateBefore" type="text" class="form-control" datepicker-popup="{{dateFormat}}"
                                ng-model="before"
                                datepicker-options="dateOptions" is-open="datePickerOpenedBefore"
-                               close-text="Close" placeholder="YYYY/MM/DD"/>
+                               close-text="Close" placeholder="{{dateFormat}}"/>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-click="openDatePickerBefore($event)">
                         <i class="glyphicon glyphicon-calendar"></i></button>
@@ -83,26 +83,28 @@
         </div>
         <div class="panel-footer" ng-show="activities">
             <p>{{activities.length}} activities,
-            <b>Total distance</b> {{totalDistance/1000 | number:1}}km,
-            <b>Elevation</b> {{totalElevationGain | number:0}}m,
-            <b>Commute</b> {{commuteDistance/1000 | number:1}}km,
-            <b>Trainer</b> {{trainerDistance/1000 | number:1}}km,
-            <b>Manual</b> {{manualDistance/1000 | number:1}}km
-	    </p>
+                <b>Total distance</b> {{totalDistance/1000 | number:1}}km,
+                <b>Elevation</b> {{totalElevationGain | number:0}}m,
+                <b>Commute</b> {{commuteDistance/1000 | number:1}}km,
+                <b>Trainer</b> {{trainerDistance/1000 | number:1}}km,
+                <b>Manual</b> {{manualDistance/1000 | number:1}}km
+            </p>
+
             <p ng-repeat="(key,value) in countries">
-		<b><a href="" ng-click="centerMap(key)">
-			{{key}}</a></b> : {{value.nb}} activities, {{value.distance /  1000 | number : 1}}km 
+                <b><a href="" ng-click="centerMap(key)">
+                    {{key}}</a></b> : {{value.nb}} activities, {{value.distance / 1000 | number : 1}}km
 		<span ng-repeat="(cityName,cityInfo) in value.cities">
 			<a href="" ng-click="centerMap(cityName+','+cityInfo.state+','+'key')">{{cityName}}</a>: {{cityInfo.nb}} activities, {{cityInfo.distance / 1000 | number : 1}}km
 		</span>
-	    </p>
+            </p>
         </div>
     </div>
 </div>
 <div class="col-md-2">
     <ul class="list-group" ng-show="currentActivity">
         <li class="list-group-item">
-            <a href="http://www.strava.com/activities/{{currentActivity.id}}" target="_blank">{{currentActivity.name}}</a>
+            <a href="http://www.strava.com/activities/{{currentActivity.id}}"
+               target="_blank">{{currentActivity.name}}</a>
         </li>
         <li class="list-group-item">
             {{currentActivity.type}} - {{currentActivity.start_date | date : 'short'}}
@@ -119,11 +121,13 @@
             <span class="badge">{{3600 * currentActivity.max_speed/1000 | number:1}}</span>
             Max speed (km/h)
         </li>
-        <li class="list-group-item" ng-show="currentActivity.average_speed && (currentActivity.type =='Hike' || currentActivity.type =='Run' || currentActivity.type =='Walk')">
+        <li class="list-group-item"
+            ng-show="currentActivity.average_speed && (currentActivity.type =='Hike' || currentActivity.type =='Run' || currentActivity.type =='Walk')">
             <span class="badge">{{1000 / currentActivity.average_speed / 60 | number:1}}</span>
             Avg pace (min/km)
         </li>
-        <li class="list-group-item" ng-show="currentActivity.max_speed && (currentActivity.type =='Hike' || currentActivity.type =='Run' || currentActivity.type =='Walk')">
+        <li class="list-group-item"
+            ng-show="currentActivity.max_speed && (currentActivity.type =='Hike' || currentActivity.type =='Run' || currentActivity.type =='Walk')">
             <span class="badge">{{1000 / currentActivity.max_speed / 60 | number:1}}</span>
             Max pace (min/km)
         </li>

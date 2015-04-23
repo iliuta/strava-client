@@ -1,10 +1,11 @@
 var stravaControllers = angular.module('stravaControllers', []);
 
-stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
-    function ($scope, $http) {
+stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter',
+    function ($scope, $http, $filter) {
 
-        $scope.map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
+        $scope.dateFormat = "yyyy/MM/dd";
+        
+        console.log(navigator.language);
 
         var mapOptions = {
             center: { lat: 48.880821, lng: 2.242003 },
@@ -30,11 +31,11 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
             startingDay: 1,
             showWeeks: false
         };
-        
-        
-        $scope.centerMap = function(country) {
+
+
+        $scope.centerMap = function (country) {
             var geocoder = new google.maps.Geocoder();
-            geocoder.geocode( { 'address': country}, function(results, status) {
+            geocoder.geocode({ 'address': country}, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     $scope.map.setCenter(results[0].geometry.location);
                     $scope.map.fitBounds(results[0].geometry.viewport);
@@ -43,11 +44,20 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                 }
             });
         };
-        
-        $scope.fetchActivitiesThisYear = function(type) {
-            $scope.after = "2015/01/01";
+
+        $scope.fetchActivitiesThisYear = function (type) {
+            var today = new Date();
+            var firstDayOfYear = new Date(today.getFullYear() + "");
+            $scope.after = $filter('date')(firstDayOfYear, $scope.dateFormat);
             $scope.fetchActivities(null, $scope.after, type);
-            
+
+        };
+        $scope.fetchActivitiesThisMonth = function (type) {
+            var today = new Date();
+            var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            $scope.after = $filter('date')(firstDayOfMonth, $scope.dateFormat);
+            $scope.fetchActivities(null, $scope.after, type);
+
         };
 
 
@@ -120,27 +130,27 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
                     if (activity.location_country) {
                         if ($scope.countries[activity.location_country]) {
                             $scope.countries[activity.location_country].distance += activity.distance;
-                            $scope.countries[activity.location_country].nb ++;
+                            $scope.countries[activity.location_country].nb++;
                         } else {
                             $scope.countries[activity.location_country] = new Object();
                             $scope.countries[activity.location_country].distance = activity.distance;
                             $scope.countries[activity.location_country].nb = 1;
                         }
-			var country = $scope.countries[activity.location_country];
-			if (!country.cities) {
-				country.cities = new Object();
-			}
-			if (activity.location_city) {
-				if (country.cities[activity.location_city]) {
-					country.cities[activity.location_city].distance += activity.distance;
-					country.cities[activity.location_city].nb ++
-				} else {
-					country.cities[activity.location_city] = new Object();
-					country.cities[activity.location_city].state = activity.location_state;
-					country.cities[activity.location_city].distance = activity.distance;
-					country.cities[activity.location_city].nb = 1;
-				}
-			}
+                        var country = $scope.countries[activity.location_country];
+                        if (!country.cities) {
+                            country.cities = new Object();
+                        }
+                        if (activity.location_city) {
+                            if (country.cities[activity.location_city]) {
+                                country.cities[activity.location_city].distance += activity.distance;
+                                country.cities[activity.location_city].nb++
+                            } else {
+                                country.cities[activity.location_city] = new Object();
+                                country.cities[activity.location_city].state = activity.location_state;
+                                country.cities[activity.location_city].distance = activity.distance;
+                                country.cities[activity.location_city].nb = 1;
+                            }
+                        }
                     }
 
                     if (!activity.map.summary_polyline) {
@@ -189,5 +199,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http',
             }).error(function (data) {
                 $scope.stravaError = data;
             });
-        }
+        };
+
+
+        $scope.fetchActivitiesThisMonth(null);
     }]);
