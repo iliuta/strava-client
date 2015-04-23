@@ -50,7 +50,9 @@
 
     <mvc:annotation-driven />
 
-    <!--Basic application beans. -->
+    <bean id="localeResolver"
+          class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver"/>
+    
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
