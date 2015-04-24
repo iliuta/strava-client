@@ -2,12 +2,16 @@ package com.iliuta.strava.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by apapusoi on 17/04/15.
  */
-public class Activity {
+public class Activity implements Serializable {
+
+    private static final long serialVersionUID = -3933894456335733531L;
+    
     private String id;
     private String name;
 

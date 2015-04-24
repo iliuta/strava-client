@@ -2,10 +2,14 @@ package com.iliuta.strava.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by apapusoi on 20/04/15.
  */
-public class Gear {
+public class Gear implements Serializable {
+
+    private static final long serialVersionUID = 4098391326445948604L;
     private String id;
     private boolean primary;
     private String name;
