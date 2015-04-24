@@ -2,19 +2,23 @@ package com.iliuta.strava.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by apapusoi on 17/12/14.
  */
-public class AthleteProfile {
+public class AthleteProfile implements Serializable {
+
+    private static final long serialVersionUID = 8871787906154936368L;
+
     private long id;
     @JsonProperty(value = "resource_state")
     private int resourceState;
-    @JsonProperty(value="firstname")
+    @JsonProperty(value = "firstname")
     private String firstName;
-    @JsonProperty(value="lastname")
+    @JsonProperty(value = "lastname")
     private String lastName;
     @JsonProperty(value = "profile_medium")
     private String profileMedium;

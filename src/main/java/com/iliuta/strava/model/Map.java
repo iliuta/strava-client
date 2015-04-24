@@ -2,10 +2,14 @@ package com.iliuta.strava.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by apapusoi on 17/04/15.
  */
-public class Map {
+public class Map implements Serializable {
+
+    private static final long serialVersionUID = 3029438133816319390L;
 
     private String id;
     private String polyline;

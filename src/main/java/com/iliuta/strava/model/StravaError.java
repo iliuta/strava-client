@@ -1,9 +1,14 @@
 package com.iliuta.strava.model;
 
+import java.io.Serializable;
+
 /**
  * Created by apapusoi on 20/04/15.
  */
-public class StravaError {
+public class StravaError implements Serializable {
+
+    private static final long serialVersionUID = 1810128527105287526L;
+
     private String message;
 
     private String detailedMessage;
