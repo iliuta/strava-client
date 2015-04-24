@@ -32,9 +32,9 @@
         </form>
         </p>
 
-        <p>This application uses Strava and Google Maps free APIs. These APIs are subject to bandwidth usage limits. From time to time, some bandwidth related error messages could be displayed.</p>
+        <p>This application uses Strava and Google Maps free APIs. No data is stored locally on the server.</p>
         
-        <p>I did not test this with Internet Explorer. It seem to work properly with Chrome, Firefox and Safari.</p>
+        <p>I haven't tested this with Internet Explorer. It seem to work properly with Chrome, Firefox and Safari.</p>
 
         <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcome</a> or you can connect with <a
                 href="http://strava.com/athletes/iliuta">me</a> on Strava.</p>
