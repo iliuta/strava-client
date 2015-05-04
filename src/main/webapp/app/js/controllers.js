@@ -139,19 +139,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             $scope.stravaError = data;
         };
 
-        $scope.openDatePickerBefore = function ($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            $scope.datePickerOpenedBefore = true;
-        };
-
-        $scope.openDatePickerAfter = function ($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            $scope.datePickerOpenedAfter = true;
-        };
 
         $scope.dateOptions = {
             formatYear: 'yyyy',
@@ -175,7 +162,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
         $scope.fetchActivitiesThisYear = function (type) {
             var today = new Date();
             var firstDayOfYear = new Date(today.getFullYear() + "");
-            $scope.after = $filter('date')(firstDayOfYear, $scope.dateFormat);
+            $scope.after = firstDayOfYear;
             $scope.fetchActivities(null, firstDayOfYear, type);
 
         };
@@ -183,7 +170,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
         $scope.fetchActivitiesThisMonth = function (type) {
             var today = new Date();
             var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-            $scope.after = $filter('date')(firstDayOfMonth, $scope.dateFormat);
+            $scope.after = firstDayOfMonth;
             $scope.fetchActivities(null, firstDayOfMonth, type);
 
         };
