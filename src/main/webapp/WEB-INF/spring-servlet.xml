@@ -45,7 +45,7 @@
                     client-secret="${strava.client.secret}"
                     access-token-uri="https://www.strava.com/oauth/token"
                     client-authentication-scheme="form"
-                    user-authorization-uri="https://www.strava.com/oauth/authorize?response_type=code"/>
+                    user-authorization-uri="https://www.strava.com/oauth/authorize?response_type=code&amp;scope=view_private"/>
 
 
     <mvc:annotation-driven />
