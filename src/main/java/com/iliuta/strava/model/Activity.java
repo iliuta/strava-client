@@ -11,12 +11,12 @@ import java.util.Date;
 public class Activity implements Serializable {
 
     private static final long serialVersionUID = -3933894456335733531L;
-    
+
     private String id;
     private String name;
 
+    private AthleteProfile athlete;
     private Double distance;
-
     private String type;
     @JsonProperty(value = "start_date")
     private Date startDate;
@@ -49,11 +49,18 @@ public class Activity implements Serializable {
     private Double totalElevationGain;
     @JsonProperty(value = "gear_id")
     private String gearId;
-
     @JsonProperty(value = "moving_time")
     private Integer movingTime;
     @JsonProperty(value = "elapsed_time")
     private Integer elapsedTime;
+
+    public AthleteProfile getAthlete() {
+        return athlete;
+    }
+
+    public void setAthlete(AthleteProfile athlete) {
+        this.athlete = athlete;
+    }
 
     public Integer getElapsedTime() {
         return elapsedTime;

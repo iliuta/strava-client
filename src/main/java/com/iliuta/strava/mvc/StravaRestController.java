@@ -54,6 +54,16 @@ public class StravaRestController {
         }
     }
 
+    @RequestMapping("/friends-activities")
+    public List<Activity> friendsActivities(Long before) {
+        String url = "https://www.strava.com/api/v3/activities/following";
+        if (before != null) {
+            url = url + "&before=" + before;
+        }
+
+        return stravaRestTemplate.getForObject(url, ActivityList.class);
+    }
+
     private ActivityList fetch200ActivitiesFromStrava(Long before, Long after, int page) {
         String url = "https://www.strava.com/api/v3/activities?per_page=" + PAGE_SIZE + "&page=" + page;
         if (before != null) {
@@ -62,8 +72,7 @@ public class StravaRestController {
         if (after != null) {
             url = url + "&after=" + after;
         }
-        return stravaRestTemplate
-                .getForObject(url, ActivityList.class);
+        return stravaRestTemplate.getForObject(url, ActivityList.class);
     }
 
     public void setStravaRestTemplate(OAuth2RestTemplate stravaRestTemplate) {

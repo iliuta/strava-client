@@ -38,7 +38,30 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Strava personal heatmap (beta)</a>
+            <a class="navbar-brand" href="">Strava personal heatmap (beta)</a>
+
+            <%--<h1>${profile.firstName}</h1>
+
+            <ul class="list-group">
+
+                <c:forEach var="bike" items="${profile.bikes}">
+                    <li class="list-group-item"><b>${bike.name}</b> <fmt:formatNumber type="number"
+                                                                                      maxFractionDigits="1"
+                                                                                      value="${bike.distance/1000}"/>km
+                    </li>
+                </c:forEach>
+            </ul>
+
+            <ul class="list-group">
+                <c:forEach var="shoe" items="${profile.shoes}">
+                    <li class="list-group-item"><b>${shoe.name}</b> <fmt:formatNumber type="number"
+                                                                                      maxFractionDigits="1"
+                                                                                      value="${shoe.distance/1000}"/>km
+                    </li>
+                </c:forEach>
+            </ul>
+             --%>
+
         </div>
     </div>
 </nav>
@@ -47,21 +70,7 @@
 <div class="container-fluid">
 
     <div class="row">
-        <div class="col-md-2">
-            <h1>${profile.firstName}</h1>
 
-            <c:forEach var="bike" items="${profile.bikes}">
-                <p class="bg-info"><b>${bike.name}</b> <fmt:formatNumber type="number" maxFractionDigits="1"
-                                                                         value="${bike.distance/1000}"/>km </p>
-            </c:forEach>
-
-            <c:forEach var="shoe" items="${profile.shoes}">
-                <p class="bg-info"><b>${shoe.name}</b> <fmt:formatNumber type="number" maxFractionDigits="1"
-                                                                         value="${shoe.distance/1000}"/>km </p>
-            </c:forEach>
-
-
-        </div>
         <div ng-view="">
 
         </div>

@@ -1,81 +1,93 @@
-<div class="col-md-8">
+<div class="col-md-10">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="dateAfter">From</label>
+            <accordion close-others="true">
+                <accordion-group heading="Mine" is-open="true" is-disabled="status.isFirstDisabled"  ng-click="fetchActivitiesThisMonth()">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="dateAfter">From</label>
 
-                    <p class="input-group">
-                        <input id="dateAfter" type="text" class="form-control" datepicker-popup="{{dateFormat}}"
-                               ng-model="after"
-                               datepicker-options="dateOptions" is-open="datePickerOpenedAfter"
-                               close-text="Close" placeholder="{{dateFormat}}"/>
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="openDatePickerAfter($event)">
-                        <i class="glyphicon glyphicon-calendar"></i></button>
-                </span>
-                    </p>
-                </div>
-                <div class="form-group">
-                    <label for="dateBefore">To</label>
+                            <p class="input-group">
+                                <input id="dateAfter" type="text" class="form-control" datepicker-popup="{{dateFormat}}"
+                                       ng-model="after"
+                                       datepicker-options="dateOptions" is-open="datePickerOpenedAfter"
+                                       close-text="Close" placeholder="{{dateFormat}}"/>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="openDatePickerAfter($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateBefore">To</label>
 
-                    <p class="input-group">
-                        <input id="dateBefore" type="text" class="form-control" datepicker-popup="{{dateFormat}}"
-                               ng-model="before"
-                               datepicker-options="dateOptions" is-open="datePickerOpenedBefore"
-                               close-text="Close" placeholder="{{dateFormat}}"/>
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="openDatePickerBefore($event)">
-                        <i class="glyphicon glyphicon-calendar"></i></button>
-                </span>
-                    </p>
-                </div>
-                <div class="form-group">
-                    <p class="input-group">
-                        <select class="form-control" ng-model="type">
-                            <option></option>
-                            <option>Ride</option>
-                            <option>Run</option>
-                            <option>Swim</option>
-                            <option>Hike</option>
-                            <option>Walk</option>
-                            <option>AlpineSki</option>
-                            <option>BackcountrySki</option>
-                            <option>Canoeing</option>
-                            <option>CrossCountrySkiing</option>
-                            <option>Crossfit</option>
-                            <option>Elliptical</option>
-                            <option>IceSkate</option>
-                            <option>InlineSkate</option>
-                            <option>Kayaking</option>
-                            <option>Kitesurf</option>
-                            <option>NordicSki</option>
-                            <option>RockClimbing</option>
-                            <option>RollerSki</option>
-                            <option>Rowing</option>
-                            <option>Snowboard</option>
-                            <option>Snowshoe</option>
-                            <option>StairStepper</option>
-                            <option>StandUpPaddling</option>
-                            <option>Surfing</option>
-                            <option>WeightTraining</option>
-                            <option>Windsurf</option>
-                            <option>Workout</option>
-                            <option>Yoga</option>
-                        </select>
-                    </p>
-                </div>
-                <div class="form-group">
-                    <p class="input-group">
-                        <input type="button" class="btn btn-default" value="Draw heatmap"
-                               ng-click="fetchActivities(before,after,type)">
-                        <input type="button" class="btn btn-default" value="This year"
-                               ng-click="fetchActivitiesThisYear(type)">
-                        <input type="button" class="btn btn-default" value="This month"
-                               ng-click="fetchActivitiesThisMonth(type)">
-                    </p>
-                </div>
-            </form>
+                            <p class="input-group">
+                                <input id="dateBefore" type="text" class="form-control"
+                                       datepicker-popup="{{dateFormat}}"
+                                       ng-model="before"
+                                       datepicker-options="dateOptions" is-open="datePickerOpenedBefore"
+                                       close-text="Close" placeholder="{{dateFormat}}"/>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="openDatePickerBefore($event)">
+                                        <i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <p class="input-group">
+                                <select class="form-control" ng-model="type">
+                                    <option></option>
+                                    <option>Ride</option>
+                                    <option>Run</option>
+                                    <option>Swim</option>
+                                    <option>Hike</option>
+                                    <option>Walk</option>
+                                    <option>AlpineSki</option>
+                                    <option>BackcountrySki</option>
+                                    <option>Canoeing</option>
+                                    <option>CrossCountrySkiing</option>
+                                    <option>Crossfit</option>
+                                    <option>Elliptical</option>
+                                    <option>IceSkate</option>
+                                    <option>InlineSkate</option>
+                                    <option>Kayaking</option>
+                                    <option>Kitesurf</option>
+                                    <option>NordicSki</option>
+                                    <option>RockClimbing</option>
+                                    <option>RollerSki</option>
+                                    <option>Rowing</option>
+                                    <option>Snowboard</option>
+                                    <option>Snowshoe</option>
+                                    <option>StairStepper</option>
+                                    <option>StandUpPaddling</option>
+                                    <option>Surfing</option>
+                                    <option>WeightTraining</option>
+                                    <option>Windsurf</option>
+                                    <option>Workout</option>
+                                    <option>Yoga</option>
+                                </select>
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <p class="input-group">
+                                <input type="button" class="btn btn-default" value="Draw heatmap"
+                                       ng-click="fetchActivities(before,after,type)">
+                                <input type="button" class="btn btn-default" value="This year"
+                                       ng-click="fetchActivitiesThisYear(type)">
+                                <input type="button" class="btn btn-default" value="This month"
+                                       ng-click="fetchActivitiesThisMonth(type)">
+                                <input type="button" class="btn btn-default" value="Friends"
+                                       ng-click="fetchFriendsActivities()">
+                            </p>
+                        </div>
+                    </form>
+                </accordion-group>
+                <accordion-group heading="Friends" ng-click="fetchFriendsActivities()">
+                    Friends' activities
+                </accordion-group>
+
+            </accordion>
+
         </div>
         <div class="panel-body">
             <div class="alert alert-danger" role="alert" ng-show="stravaError">{{stravaError.message}}</div>
@@ -102,6 +114,11 @@
 </div>
 <div class="col-md-2">
     <ul class="list-group" ng-show="currentActivity">
+        <li class="list-group-item">
+            <img src="{{currentActivity.athlete.profile}}">
+            <a href="http://www.strava.com/athletes/{{currentActivity.athlete.id}}"
+               target="_blank">{{currentActivity.athlete.firstname}} {{currentActivity.athlete.lastname}}</a>
+        </li>
         <li class="list-group-item">
             <a href="http://www.strava.com/activities/{{currentActivity.id}}"
                target="_blank">{{currentActivity.name}}</a>
