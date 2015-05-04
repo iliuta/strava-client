@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <accordion close-others="true">
-                <accordion-group heading="Mine" is-open="true" is-disabled="status.isFirstDisabled"  ng-click="fetchActivitiesThisMonth()">
+                <accordion-group heading="Mine" is-open="true">
                     <form class="form-inline">
                         <div class="form-group">
                             <label for="dateAfter">From</label>
@@ -80,8 +80,12 @@
                         </div>
                     </form>
                 </accordion-group>
-                <accordion-group heading="Friends" ng-click="fetchFriendsActivities()">
-                    Friends' activities
+                <accordion-group heading="Friends">
+			<div class="form-group">
+                            <p class="input-group">
+                                <input type="button" class="btn btn-default" value="Draw heatmap"
+                                       ng-click="fetchFriendsActivities()">
+			</div>
                 </accordion-group>
 
             </accordion>
