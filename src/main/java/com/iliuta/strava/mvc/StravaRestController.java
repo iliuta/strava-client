@@ -35,6 +35,8 @@ public class StravaRestController {
     @RequestMapping("/activities")
     public List<Activity> activities(Long before, Long after, String type) {
         int page = 1;
+        
+        LOGGER.debug("Fetch my activities before={} after={} type={}", before, after, type);
 
         List<Activity> result = new ArrayList<>();
         ActivityList activityList = fetch200ActivitiesFromStrava(before, after, page);
@@ -55,13 +57,19 @@ public class StravaRestController {
     }
 
     @RequestMapping("/friends-activities")
-    public List<Activity> friendsActivities(Long before) {
-        String url = "https://www.strava.com/api/v3/activities/following";
+    public List<Activity> friendsActivities(Long before, String type) {
+        LOGGER.debug("Fetch friends' activities before={} type={}", before, type);
+        String url = "https://www.strava.com/api/v3/activities/following?per_page=100";
         if (before != null) {
             url = url + "&before=" + before;
         }
 
-        return stravaRestTemplate.getForObject(url, ActivityList.class);
+        ActivityList result = stravaRestTemplate.getForObject(url, ActivityList.class);
+        if (StringUtils.hasText(type)) {
+            return result.stream().filter(a -> type.equals(a.getType())).collect(Collectors.toList());
+        } else {
+            return result;
+        }
     }
 
     private ActivityList fetch200ActivitiesFromStrava(Long before, Long after, int page) {

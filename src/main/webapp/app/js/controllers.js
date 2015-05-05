@@ -159,19 +159,19 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             });
         };
 
-        $scope.fetchActivitiesThisYear = function (type) {
+        $scope.fetchMyActivitiesThisYear = function (type) {
             var today = new Date();
             var firstDayOfYear = new Date(today.getFullYear() + "");
             $scope.after = firstDayOfYear;
-            $scope.fetchActivities(null, firstDayOfYear, type);
+            $scope.fetchMyActivities(null, firstDayOfYear, type);
 
         };
         
-        $scope.fetchActivitiesThisMonth = function (type) {
+        $scope.fetchMyActivitiesThisMonth = function (type) {
             var today = new Date();
             var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
             $scope.after = firstDayOfMonth;
-            $scope.fetchActivities(null, firstDayOfMonth, type);
+            $scope.fetchMyActivities(null, firstDayOfMonth, type);
 
         };
 
@@ -183,18 +183,22 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
 
         };
 
-        $scope.fetchActivities = function (before, after, type) {
+        $scope.fetchMyActivities = function (before, after, type) {
             initScopeProperties();
 
+            var beforeEpoch;
+            
             if (before) {
-                before = Math.floor((new Date(before).getTime() + 86400000) / 1000);
+                beforeEpoch = Math.floor((new Date(before).getTime() + 86400000) / 1000);
             }
+            
+            var afterEpoch;
             if (after) {
-                after = Math.floor(new Date(after).getTime() / 1000);
+                afterEpoch = Math.floor(new Date(after).getTime() / 1000);
             }
-            $http.get('rest/activities?before=' + (before ? before : '') + '&after=' + (after ? after : '') + '&type=' + (type ? type : '')).success(onSuccessActivities).error(onErrorActivities);
+            $http.get('rest/activities?before=' + (beforeEpoch ? beforeEpoch : '') + '&after=' + (afterEpoch ? afterEpoch : '') + '&type=' + (type ? type : '')).success(onSuccessActivities).error(onErrorActivities);
         };
 
         // default behaviour, open my activities of the current month
-        $scope.fetchActivitiesThisMonth(null);
+        $scope.fetchMyActivitiesThisMonth(null);
     }]);

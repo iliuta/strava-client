@@ -59,21 +59,22 @@
                         <div class="form-group">
                             <p class="input-group">
                                 <input type="button" class="btn btn-default" value="Draw heatmap"
-                                       ng-click="fetchActivities(before,after,type)">
+                                       ng-click="fetchMyActivities(before,after,type)">
                                 <input type="button" class="btn btn-default" value="This year"
-                                       ng-click="fetchActivitiesThisYear(type)">
+                                       ng-click="fetchMyActivitiesThisYear(type)">
                                 <input type="button" class="btn btn-default" value="This month"
-                                       ng-click="fetchActivitiesThisMonth(type)">
+                                       ng-click="fetchMyActivitiesThisMonth(type)">
                             </p>
                         </div>
                     </form>
                 </accordion-group>
                 <accordion-group heading="Friends">
-			<div class="form-group">
-                            <p class="input-group">
-                                <input type="button" class="btn btn-default" value="Draw heatmap"
-                                       ng-click="fetchFriendsActivities()">
-			</div>
+                    <div class="form-group">
+                        <p class="input-group">
+                            <input type="button" class="btn btn-default" value="Draw heatmap"
+                                   ng-click="fetchFriendsActivities()">
+                        </p>
+                    </div>
                 </accordion-group>
 
             </accordion>
