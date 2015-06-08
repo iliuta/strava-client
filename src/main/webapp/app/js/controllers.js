@@ -34,11 +34,15 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             $scope.totalElapsedTime = 0;
 
             $scope.totalElapsedTimeDate = null;
-            
-            $scope.avgMovingSpeed = 0;
 
-            $scope.avgMovingSpeedDate = null;
+            $scope.totalMovingTimeCommute = 0;
             
+            $scope.totalMovingTimeCommuteDate = null;
+            
+            $scope.totalMovingTimeNoCommute = 0;
+            
+            $scope.totalMovingTimeNoCommuteDate = null;
+
             $scope.countries = new Object();
         }
 
@@ -63,6 +67,9 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
 
                 if (activity.commute) {
                     $scope.commuteDistance += activity.distance;
+                    $scope.totalMovingTimeCommute += activity.moving_time;
+                } else {
+                    $scope.totalMovingTimeNoCommute += activity.moving_time;
                 }
 
                 if (activity.trainer) {
@@ -71,7 +78,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
 
                 if (activity.manual) {
                     $scope.manualDistance += activity.distance;
-
                 }
 
                 $scope.totalDistance += activity.distance;
@@ -147,6 +153,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             $scope.totalMovingTimeDate = new Date(null, null, null, 0, null, $scope.totalMovingTime, null);
 
             $scope.totalElapsedTimeDate = new Date(null, null, null, 0, null, $scope.totalElapsedTime, null);
+            
+            $scope.totalMovingTimeCommuteDate = new Date(null, null, null, 0, null, $scope.totalMovingTimeCommute, null);
+
+            $scope.totalMovingTimeNoCommuteDate = new Date(null, null, null, 0, null, $scope.totalMovingTimeNoCommute, null);
 
             $scope.map.fitBounds(bounds);
             $scope.map.panToBounds(bounds);

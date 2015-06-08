@@ -88,12 +88,16 @@
             <p>{{activities.length}} activities,
                 <b>Total distance</b> {{totalDistance/1000 | number:1}}km,
                 <b>Elevation</b> {{totalElevationGain | number:0}}m,
-                <b>Commute</b> {{commuteDistance/1000 | number:1}}km,
-                <b>Trainer</b> {{trainerDistance/1000 | number:1}}km,
-                <b>Manual</b> {{manualDistance/1000 | number:1}}km,
                 <b>Moving time</b> {{totalMovingTimeDate | date : "H'h':mm'min':ss's'"}},
                 <b>Elapsed time</b> {{totalElapsedTimeDate | date : "H'h':mm'min':ss's'"}},
-                <b>Avg speed</b> {{3600 * totalDistance / totalMovingTime / 1000 | number:1}}km/h
+                <b>Avg speed</b> {{3600 * totalDistance / totalMovingTime / 1000 | number:1}}km/h,
+                <b>Commute</b> {{commuteDistance/1000 | number:1}}km,
+                <b>Moving time commute</b> {{totalMovingTimeCommuteDate | date : "H'h':mm'min':ss's'"}},
+                <b>Avg speed commute</b> {{3600 * commuteDistance / totalMovingTimeCommute / 1000 | number:1}}km/h,
+                <b>Trainer</b> {{trainerDistance/1000 | number:1}}km,
+                <b>Manual</b> {{manualDistance/1000 | number:1}}km,
+                <b>Moving time no commute</b> {{totalMovingTimeNoCommuteDate | date : "H'h':mm'min':ss's'"}},
+                <b>Avg speed no commute</b> {{3600 * (totalDistance - commuteDistance) / totalMovingTimeNoCommute / 1000 | number:1}}km/h
             </p>
 
             <p ng-repeat="(key,value) in countries">

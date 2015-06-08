@@ -37,7 +37,7 @@ public class StravaMvcController {
             userLocale = userLocale + "-" + LocaleContextHolder.getLocale().getCountry().toLowerCase();
         }
         model.addAttribute("locale", userLocale);
-        LOGGER.info("AthleteProfile retrieved: id={}, locale={}", athleteProfile.getId(), LocaleContextHolder.getLocale());
+        LOGGER.info("AthleteProfile retrieved: id={} {}, locale={}", athleteProfile.getId(), athleteProfile.getFirstName(), LocaleContextHolder.getLocale());
         return "strava";
     }
 
