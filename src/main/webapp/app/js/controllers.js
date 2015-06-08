@@ -28,7 +28,17 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             $scope.totalDistance = 0;
 
             $scope.totalElevationGain = 0;
+            
+            $scope.totalMovingTime = 0;
+            
+            $scope.totalElapsedTime = 0;
 
+            $scope.totalElapsedTimeDate = null;
+            
+            $scope.avgMovingSpeed = 0;
+
+            $scope.avgMovingSpeedDate = null;
+            
             $scope.countries = new Object();
         }
 
@@ -47,6 +57,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
                 activity.moving_time_date = new Date(null, null, null, 0, null, activity.moving_time, null);
                 activity.elapsed_time_date = new Date(null, null, null, 0, null, activity.elapsed_time, null);
 
+                $scope.totalMovingTime += activity.moving_time;
+
+                $scope.totalElapsedTime += activity.elapsed_time;
+
                 if (activity.commute) {
                     $scope.commuteDistance += activity.distance;
                 }
@@ -63,7 +77,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
                 $scope.totalDistance += activity.distance;
 
                 $scope.totalElevationGain += activity.total_elevation_gain;
-
+                
                 if (activity.location_country) {
                     if ($scope.countries[activity.location_country]) {
                         $scope.countries[activity.location_country].distance += activity.distance;
@@ -129,6 +143,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
                     activityGmapsPath.setMap($scope.map);
                 }
             });
+
+            $scope.totalMovingTimeDate = new Date(null, null, null, 0, null, $scope.totalMovingTime, null);
+
+            $scope.totalElapsedTimeDate = new Date(null, null, null, 0, null, $scope.totalElapsedTime, null);
 
             $scope.map.fitBounds(bounds);
             $scope.map.panToBounds(bounds);
