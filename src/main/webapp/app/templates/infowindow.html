@@ -1,0 +1,66 @@
+    <ul class="list-group" ng-show="currentActivity">
+        <li class="list-group-item">
+            <img src="{{currentActivity.athlete.profile}}">
+            <a href="http://www.strava.com/athletes/{{currentActivity.athlete.id}}"
+               target="_blank">{{currentActivity.athlete.firstname}} {{currentActivity.athlete.lastname}}</a>
+        </li>
+        <li class="list-group-item">
+            <a href="http://www.strava.com/activities/{{currentActivity.id}}"
+               target="_blank">{{currentActivity.name}}</a>
+        </li>
+        <li class="list-group-item">
+            {{currentActivity.type}} - {{currentActivity.start_date | date : 'short'}}
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.distance">
+            <span class="badge">{{currentActivity.distance/1000 | number:1}}</span>
+            Distance (km)
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.average_speed">
+            <span class="badge">{{3600 * currentActivity.average_speed/1000 | number:1}}</span>
+            Avg speed (km/h)
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.max_speed">
+            <span class="badge">{{3600 * currentActivity.max_speed/1000 | number:1}}</span>
+            Max speed (km/h)
+        </li>
+        <li class="list-group-item"
+            ng-show="currentActivity.average_speed && (currentActivity.type =='Hike' || currentActivity.type =='Run' || currentActivity.type =='Walk')">
+            <span class="badge">{{1000 / currentActivity.average_speed / 60 | number:1}}</span>
+            Avg pace (min/km)
+        </li>
+        <li class="list-group-item"
+            ng-show="currentActivity.max_speed && (currentActivity.type =='Hike' || currentActivity.type =='Run' || currentActivity.type =='Walk')">
+            <span class="badge">{{1000 / currentActivity.max_speed / 60 | number:1}}</span>
+            Max pace (min/km)
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.average_watts">
+            <span class="badge">{{currentActivity.average_watts | number:0}}</span>
+            Avg watts
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.max_heartrate">
+            <span class="badge">{{currentActivity.max_heartrate | number:0}}</span>
+            Max heartrate
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.average_heartrate">
+            <span class="badge">{{currentActivity.average_heartrate | number:0}}</span>
+            Avg heartrate
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.total_elevation_gain">
+            <span class="badge">{{currentActivity.total_elevation_gain | number:0}}</span>
+            Elevation (m)
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.moving_time">
+            <span class="badge">{{currentActivity.moving_time | duration}}</span>
+            Moving time
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.elapsed_time">
+            <span class="badge">{{currentActivity.elapsed_time | duration}}</span>
+            Elapsed time
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.commute">
+            Commute
+        </li>
+        <li class="list-group-item" ng-show="currentActivity.trainer">
+            Trainer
+        </li>
+    </ul>

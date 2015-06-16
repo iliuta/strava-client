@@ -1,7 +1,21 @@
 var stravaControllers = angular.module('stravaControllers', []);
 
-stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$locale',
-    function ($scope, $http, $filter, $locale) {
+stravaControllers.factory('CompilerService', function($rootScope, $compile) {
+    return {
+        compileInfoWindow : function($scope) {
+            var template = '<div ng-include src="\'app/templates/infowindow.html\'"></div>';
+            var compiled = $compile(template)($scope);
+            $scope.$apply();
+            return compiled[0].parentNode;
+        }
+    }
+});
+
+stravaControllers.controller('ActivitiesCtrl', ['CompilerService', '$scope', '$http', '$filter', '$locale', 
+    function (CompilerService, $scope, $http, $filter, $locale) {
+
+        
+        
 
         $scope.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 
@@ -41,6 +55,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
         }
 
         function initScopeProperties(withGear) {
+
             $scope.withGear = withGear;
             
             $scope.stravaError = null;
@@ -86,10 +101,15 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
                 });
 
                 google.maps.event.addListener(activityGmapsPath, 'mouseover',
-                    function () {
+                    function (event) {
                         activityGmapsPath.setOptions({strokeColor: 'blue', strokeWeight: 4});
                         $scope.currentActivity = activity;
                         $scope.$apply();
+                        $scope.infoWindow.setPosition(event.latLng);
+                        if (!$scope.infoWindowCompiled) {
+                            $scope.infoWindow.setContent(CompilerService.compileInfoWindow($scope));
+                            $scope.infoWindowCompiled = true;
+                        }
                     });
 
                 google.maps.event.addListener(activityGmapsPath, 'mouseout',
@@ -97,9 +117,11 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
                         activityGmapsPath.setOptions({strokeColor: 'red', strokeWeight: 2});
                     });
 
+
                 google.maps.event.addListener(activityGmapsPath, 'click',
-                    function () {
-                        window.open("http://www.strava.com/activities/" + activity.id, "_blank");
+                    function (event) {
+                        $scope.infoWindow.setPosition(event.latLng);
+                        $scope.infoWindow.open(map, activityGmapsPath);
                     });
 
                 activityGmapsPath.setMap(map);
@@ -178,6 +200,9 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
         }
 
         $scope.drawActivitiesOnMap = function(activities) {
+            $scope.infoWindow = new google.maps.InfoWindow();
+            $scope.infoWindowCompiled = false;
+
             var bounds = new google.maps.LatLngBounds();
             $scope.map = new google.maps.Map(document.getElementById('map-canvas'),
                 mapOptions);
