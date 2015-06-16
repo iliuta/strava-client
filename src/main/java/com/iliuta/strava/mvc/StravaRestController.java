@@ -2,16 +2,14 @@ package com.iliuta.strava.mvc;
 
 import com.iliuta.strava.model.Activity;
 import com.iliuta.strava.model.ActivityList;
+import com.iliuta.strava.model.AthleteProfile;
 import com.iliuta.strava.model.StravaError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
@@ -25,6 +23,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/rest")
+@SessionAttributes("athleteProfile")
 public class StravaRestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(StravaRestController.class);
     private static final int PAGE_SIZE = 200;
@@ -54,6 +53,15 @@ public class StravaRestController {
         } else {
             return result;
         }
+    }
+    
+    
+    @RequestMapping("/profile")
+    public AthleteProfile profile(@ModelAttribute("athleteProfile") AthleteProfile athleteProfile) throws StravaClientException {
+        if (athleteProfile==null) {
+            throw new StravaClientException("No athlete profile.");
+        }
+        return athleteProfile;
     }
 
     @RequestMapping("/friends-activities")
@@ -88,9 +96,9 @@ public class StravaRestController {
     }
 
 
-    @ExceptionHandler(RestClientException.class)
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected StravaError handleRestClientException(RestClientException rce) {
+    protected StravaError handleRestClientException(Exception rce) {
         LOGGER.error("Strava error", rce);
         StravaError error = new StravaError();
         error.setMessage("An error occured while acessing Strava.");

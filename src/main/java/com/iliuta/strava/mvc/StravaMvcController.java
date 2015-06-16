@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.client.RestOperations;
 
 import javax.annotation.Resource;
@@ -19,6 +21,7 @@ import javax.annotation.Resource;
  * Created by apapusoi on 17/12/14.
  */
 @Controller
+@SessionAttributes("athleteProfile")
 public class StravaMvcController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StravaMvcController.class);
@@ -28,10 +31,8 @@ public class StravaMvcController {
     private RestOperations stravaRestTemplate;
 
     @RequestMapping("/profile")
-    public String userProfile(Model model) {
-        AthleteProfile athleteProfile = stravaRestTemplate
-                .getForObject("https://www.strava.com/api/v3/athlete", AthleteProfile.class);
-        model.addAttribute("profile", athleteProfile);
+    public String userProfile(Model model, @ModelAttribute("athleteProfile") AthleteProfile athleteProfile) {
+        //model.addAttribute("profile", athleteProfile);
         String userLocale = LocaleContextHolder.getLocale().getLanguage().toLowerCase();
         if (StringUtils.hasText(LocaleContextHolder.getLocale().getCountry())) {
             userLocale = userLocale + "-" + LocaleContextHolder.getLocale().getCountry().toLowerCase();
@@ -39,6 +40,12 @@ public class StravaMvcController {
         model.addAttribute("locale", userLocale);
         LOGGER.info("AthleteProfile retrieved: id={} {}, locale={}", athleteProfile.getId(), athleteProfile.getFirstName(), LocaleContextHolder.getLocale());
         return "strava";
+    }
+
+    @ModelAttribute("athleteProfile")
+    private AthleteProfile getAthleteProfile() {
+        return stravaRestTemplate
+                    .getForObject("https://www.strava.com/api/v3/athlete", AthleteProfile.class);
     }
 
     public void setStravaRestTemplate(OAuth2RestTemplate stravaRestTemplate) {

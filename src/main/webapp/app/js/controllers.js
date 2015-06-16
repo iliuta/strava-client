@@ -3,13 +3,23 @@ var stravaControllers = angular.module('stravaControllers', []);
 stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$locale',
     function ($scope, $http, $filter, $locale) {
 
-
         $scope.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 
         var mapOptions = {
             center: { lat: 48.880821, lng: 2.242003 },
             zoom: 8
         };
+
+
+        var onAjaxError = function (data) {
+            console.log(data);
+            $scope.stravaError = data;
+        };
+
+
+        $http.get('rest/profile').success(function (data) {
+            $scope.athleteProfile = data;
+        }).error(onAjaxError);
 
 
         function initScopeProperties() {
@@ -46,8 +56,68 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             $scope.totalMovingTimeNoCommuteFormatted = null;
 
             $scope.countries = new Object();
+            
+            $scope.totalsByGear = new Object();
         }
 
+
+        function drawActivityPolylineOnMap(activity, bounds, map) {
+            if (!activity.map.summary_polyline) {
+                console.log(activity.name);
+            } else {
+                var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
+
+                decodedPath.forEach(function (point, index) {
+                        var loc = new google.maps.LatLng(point.lat(), point.lng());
+                        bounds.extend(loc);
+                    }
+                );
+
+                var activityGmapsPath = new google.maps.Polyline({
+                    path: decodedPath,
+                    geodesic: true,
+                    strokeColor: 'red',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
+                });
+
+                google.maps.event.addListener(activityGmapsPath, 'mouseover',
+                    function () {
+                        activityGmapsPath.setOptions({strokeColor: 'blue', strokeWeight: 4});
+                        $scope.currentActivity = activity;
+                        $scope.$apply();
+                    });
+
+                google.maps.event.addListener(activityGmapsPath, 'mouseout',
+                    function () {
+                        activityGmapsPath.setOptions({strokeColor: 'red', strokeWeight: 2});
+                    });
+
+                google.maps.event.addListener(activityGmapsPath, 'click',
+                    function () {
+                        window.open("http://www.strava.com/activities/" + activity.id, "_blank");
+                    });
+
+                activityGmapsPath.setMap(map);
+            }
+        }
+
+        function findGearName(gear_id) {
+            if ($scope.athleteProfile) {
+                for (var bikeIndex in $scope.athleteProfile.bikes) {
+                    var bike = $scope.athleteProfile.bikes[bikeIndex];
+                    if (bike.id == gear_id) {
+                        return bike.name;
+                    }
+                }
+                for (var shoeIndex in $scope.athleteProfile.shoes) {
+                    var shoe = $scope.athleteProfile.shoes[shoeIndex];
+                    if (shoe.id == gear_id) {
+                        return shoe.name;
+                    }
+                }
+            }
+        }
 
         var onSuccessActivities = function (data) {
 
@@ -57,6 +127,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
                 mapOptions);
 
             $scope.activities = data;
+            
 
             $scope.activities.forEach(function (activity) {
 
@@ -86,6 +157,19 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
 
                 $scope.totalElevationGain += activity.total_elevation_gain;
                 
+                if (activity.gear_id) {
+                    if ($scope.totalsByGear[activity.gear_id]) {
+                        $scope.totalsByGear[activity.gear_id].gearName = findGearName(activity.gear_id);
+                        $scope.totalsByGear[activity.gear_id].distance += activity.distance;
+                        $scope.totalsByGear[activity.gear_id].nb ++;
+                    } else {
+                        $scope.totalsByGear[activity.gear_id] = new Object();
+                        $scope.totalsByGear[activity.gear_id].gearName = findGearName(activity.gear_id);
+                        $scope.totalsByGear[activity.gear_id].distance = activity.distance;
+                        $scope.totalsByGear[activity.gear_id].nb = 1;
+                    }
+                }
+                
                 if (activity.location_country) {
                     if ($scope.countries[activity.location_country]) {
                         $scope.countries[activity.location_country].distance += activity.distance;
@@ -112,44 +196,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
                     }
                 }
 
-                if (!activity.map.summary_polyline) {
-                    console.log(activity.name);
-                } else {
-                    var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
-
-                    decodedPath.forEach(function (point, index) {
-                            var loc = new google.maps.LatLng(point.lat(), point.lng());
-                            bounds.extend(loc);
-                        }
-                    );
-
-                    var activityGmapsPath = new google.maps.Polyline({
-                        path: decodedPath,
-                        geodesic: true,
-                        strokeColor: 'red',
-                        strokeOpacity: 1.0,
-                        strokeWeight: 2
-                    });
-
-                    google.maps.event.addListener(activityGmapsPath, 'mouseover',
-                        function () {
-                            activityGmapsPath.setOptions({strokeColor: 'blue', strokeWeight: 4});
-                            $scope.currentActivity = activity;
-                            $scope.$apply();
-                        });
-
-                    google.maps.event.addListener(activityGmapsPath, 'mouseout',
-                        function () {
-                            activityGmapsPath.setOptions({strokeColor: 'red', strokeWeight: 2});
-                        });
-
-                    google.maps.event.addListener(activityGmapsPath, 'click',
-                        function () {
-                            window.open("http://www.strava.com/activities/" + activity.id, "_blank");
-                        });
-
-                    activityGmapsPath.setMap($scope.map);
-                }
+                drawActivityPolylineOnMap(activity, bounds, $scope.map);
             });
 
             $scope.totalMovingTimeFormatted = formatTime($scope.totalMovingTime);
@@ -164,11 +211,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             $scope.map.panToBounds(bounds);
 
         };
-
-        var onErrorActivities = function (data) {
-            $scope.stravaError = data;
-        };
-
 
         $scope.dateOptions = {
             formatYear: 'yyyy',
@@ -217,16 +259,16 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             initScopeProperties();
 
             var beforeEpoch;
-            
+
             if (before) {
                 beforeEpoch = Math.floor((new Date(before).getTime() + 86400000) / 1000);
             }
-            
+
             var afterEpoch;
             if (after) {
                 afterEpoch = Math.floor(new Date(after).getTime() / 1000);
             }
-            $http.get('rest/activities?before=' + (beforeEpoch ? beforeEpoch : '') + '&after=' + (afterEpoch ? afterEpoch : '') + '&type=' + (type ? type : '')).success(onSuccessActivities).error(onErrorActivities);
+            $http.get('rest/activities?before=' + (beforeEpoch ? beforeEpoch : '') + '&after=' + (afterEpoch ? afterEpoch : '') + '&type=' + (type ? type : '')).success(onSuccessActivities).error(onAjaxError);
         };
 
 

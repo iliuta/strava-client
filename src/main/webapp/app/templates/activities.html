@@ -100,6 +100,11 @@
                 <b>Avg speed no commute</b> {{3600 * (totalDistance - commuteDistance) / totalMovingTimeNoCommute / 1000 | number:1}}km/h
             </p>
 
+            <p>
+                <span ng-repeat="(key,value) in totalsByGear">
+                    <b>{{value.gearName}}</b> : {{value.nb}} activities, {{value.distance / 1000 | number : 1}}km
+                </span>
+            </p>
             <p ng-repeat="(key,value) in countries">
                 <b><a href="" ng-click="centerMap(key)">
                     {{key}}</a></b> : {{value.nb}} activities, {{value.distance / 1000 | number : 1}}km
