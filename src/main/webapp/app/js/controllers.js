@@ -117,6 +117,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
                     }
                 }
             }
+            return "unnamed gear";
         }
 
         var onSuccessActivities = function (data) {
