@@ -10,54 +10,58 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             zoom: 8
         };
 
-
         var onAjaxError = function (data) {
             console.log(data);
             $scope.stravaError = data;
         };
 
-
+        // get athlete profile at the beginning
         $http.get('rest/profile').success(function (data) {
             $scope.athleteProfile = data;
         }).error(onAjaxError);
 
 
-        function initScopeProperties() {
-            $scope.stravaError = null;
+        // object to store some statistics
+        function Totals() {
+            this.nb = 0;
+            this.distance = 0;
+            this.elevationGain = 0;
+            this.movingTime = 0;
+            this.elapsedTime = 0;
+            this.activities = [];
 
-            $scope.activities = null;
+            this.add = function (activity) {
+                this.activities.push(activity);
+                this.distance += activity.distance;
+                this.movingTime += activity.moving_time;
+                this.elapsedTime += activity.elapsed_time;
+                this.elevationGain += activity.total_elevation_gain;
+                this.nb++;
+            }
+        }
+
+        function initScopeProperties(withGear) {
+            $scope.withGear = withGear;
+            
+            $scope.stravaError = null;
 
             $scope.currentActivity = null;
 
-            $scope.trainerDistance = 0;
+            $scope.activities = null;
 
-            $scope.manualDistance = 0;
+            $scope.globalTotals = new Totals();
 
-            $scope.commuteDistance = 0;
+            $scope.trainerTotals = new Totals();
 
-            $scope.totalDistance = 0;
+            $scope.manualTotals = new Totals();
 
-            $scope.totalElevationGain = 0;
-            
-            $scope.totalMovingTime = 0;
+            $scope.commuteTotals = new Totals();
 
-            $scope.totalMovingFormatted = 0;
-            
-            $scope.totalElapsedTime = 0;
+            $scope.noCommuteTotals = new Totals();
 
-            $scope.totalElapsedTimeFormatted = null;
+            $scope.countryTotals = new Object();
 
-            $scope.totalMovingTimeCommute = 0;
-            
-            $scope.totalMovingTimeCommuteFormatted = null;
-            
-            $scope.totalMovingTimeNoCommute = 0;
-            
-            $scope.totalMovingTimeNoCommuteFormatted = null;
-
-            $scope.countries = new Object();
-            
-            $scope.totalsByGear = new Object();
+            $scope.gearTotals = new Object();
         }
 
 
@@ -120,105 +124,77 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             return "unnamed gear";
         }
 
-        var onSuccessActivities = function (data) {
 
-            var bounds = new google.maps.LatLngBounds();
-
-            $scope.map = new google.maps.Map(document.getElementById('map-canvas'),
-                mapOptions);
-
-            $scope.activities = data;
-            
-
+        function computeAllTotals(activities) {
             $scope.activities.forEach(function (activity) {
 
-                activity.moving_time_date = new Date(null, null, null, 0, null, activity.moving_time, null);
-                activity.elapsed_time_date = new Date(null, null, null, 0, null, activity.elapsed_time, null);
-
-                $scope.totalMovingTime += activity.moving_time;
-
-                $scope.totalElapsedTime += activity.elapsed_time;
+                $scope.globalTotals.add(activity);
 
                 if (activity.commute) {
-                    $scope.commuteDistance += activity.distance;
-                    $scope.totalMovingTimeCommute += activity.moving_time;
+                    $scope.commuteTotals.add(activity);
                 } else {
-                    $scope.totalMovingTimeNoCommute += activity.moving_time;
+                    $scope.noCommuteTotals.add(activity);
                 }
 
                 if (activity.trainer) {
-                    $scope.trainerDistance += activity.distance;
+                    $scope.trainerTotals.add(activity);
                 }
 
                 if (activity.manual) {
-                    $scope.manualDistance += activity.distance;
+                    $scope.manualTotals.add(activity);
                 }
 
-                $scope.totalDistance += activity.distance;
 
-                $scope.totalElevationGain += activity.total_elevation_gain;
-                
-                if (activity.gear_id) {
-                    if ($scope.totalsByGear[activity.gear_id]) {
-                        $scope.totalsByGear[activity.gear_id].gearName = findGearName(activity.gear_id);
-                        $scope.totalsByGear[activity.gear_id].distance += activity.distance;
-                        $scope.totalsByGear[activity.gear_id].nb ++;
-                    } else {
-                        $scope.totalsByGear[activity.gear_id] = new Object();
-                        $scope.totalsByGear[activity.gear_id].gearName = findGearName(activity.gear_id);
-                        $scope.totalsByGear[activity.gear_id].distance = activity.distance;
-                        $scope.totalsByGear[activity.gear_id].nb = 1;
+                if ($scope.withGear && activity.gear_id) {
+                    if (!$scope.gearTotals[activity.gear_id]) {
+                        $scope.gearTotals[activity.gear_id] = new Totals();
                     }
+                    $scope.gearTotals[activity.gear_id].add(activity);
+                    $scope.gearTotals[activity.gear_id].gearName = findGearName(activity.gear_id);
                 }
-                
+
                 if (activity.location_country) {
-                    if ($scope.countries[activity.location_country]) {
-                        $scope.countries[activity.location_country].distance += activity.distance;
-                        $scope.countries[activity.location_country].nb++;
-                    } else {
-                        $scope.countries[activity.location_country] = new Object();
-                        $scope.countries[activity.location_country].distance = activity.distance;
-                        $scope.countries[activity.location_country].nb = 1;
+                    if (!$scope.countryTotals[activity.location_country]) {
+                        $scope.countryTotals[activity.location_country] = new Totals();
                     }
-                    var country = $scope.countries[activity.location_country];
+                    $scope.countryTotals[activity.location_country].add(activity);
+
+                    var country = $scope.countryTotals[activity.location_country];
+
                     if (!country.cities) {
                         country.cities = new Object();
                     }
+
                     if (activity.location_city) {
-                        if (country.cities[activity.location_city]) {
-                            country.cities[activity.location_city].distance += activity.distance;
-                            country.cities[activity.location_city].nb++
-                        } else {
-                            country.cities[activity.location_city] = new Object();
-                            country.cities[activity.location_city].state = activity.location_state;
-                            country.cities[activity.location_city].distance = activity.distance;
-                            country.cities[activity.location_city].nb = 1;
+                        if (!country.cities[activity.location_city]) {
+                            country.cities[activity.location_city] = new Totals();
                         }
+                        country.cities[activity.location_city].add(activity);
+                        country.cities[activity.location_city].state = activity.location_state;
                     }
                 }
-
-                drawActivityPolylineOnMap(activity, bounds, $scope.map);
             });
 
-            $scope.totalMovingTimeFormatted = formatTime($scope.totalMovingTime);
+        }
 
-            $scope.totalElapsedTimeFormatted = formatTime($scope.totalElapsedTime);
-            
-            $scope.totalMovingTimeCommuteFormatted = formatTime($scope.totalMovingTimeCommute);
-
-            $scope.totalMovingTimeNoCommuteFormatted = formatTime($scope.totalMovingTimeNoCommute);
-
+        $scope.drawActivitiesOnMap = function(activities) {
+            var bounds = new google.maps.LatLngBounds();
+            $scope.map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
+            activities.forEach(function (activity) {
+                drawActivityPolylineOnMap(activity, bounds, $scope.map);
+            });
             $scope.map.fitBounds(bounds);
             $scope.map.panToBounds(bounds);
+        }
+
+
+        var onSuccessActivities = function (activities) {
+            $scope.activities = activities;
+            computeAllTotals(activities);
+            $scope.drawActivitiesOnMap(activities);
 
         };
-
-        $scope.dateOptions = {
-            formatYear: 'yyyy',
-            startingDay: 1,
-            showWeeks: false
-        };
-
 
         $scope.centerMap = function (country) {
             var geocoder = new google.maps.Geocoder();
@@ -239,7 +215,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             $scope.fetchMyActivities(null, firstDayOfYear, type);
 
         };
-        
+
         $scope.fetchMyActivitiesThisMonth = function (type) {
             var today = new Date();
             var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -249,7 +225,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
         };
 
         $scope.fetchFriendsActivities = function () {
-            initScopeProperties();
+            initScopeProperties(false);
             $http.get('rest/friends-activities').success(onSuccessActivities).error(function (data) {
                 $scope.stravaError = data;
             });
@@ -257,7 +233,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
         };
 
         $scope.fetchMyActivities = function (before, after, type) {
-            initScopeProperties();
+            initScopeProperties(true);
 
             var beforeEpoch;
 
@@ -272,40 +248,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$scope', '$http', '$filter', '$
             $http.get('rest/activities?before=' + (beforeEpoch ? beforeEpoch : '') + '&after=' + (afterEpoch ? afterEpoch : '') + '&type=' + (type ? type : '')).success(onSuccessActivities).error(onAjaxError);
         };
 
-
-        formatTime = function (seconds) {
-            var result = "";
-            var minutes = Math.floor(seconds / 60);
-
-            var reminderSeconds = seconds % 60;
-
-            result = reminderSeconds + "s";
-
-            if (minutes > 60) {
-                var hours = Math.floor(minutes / 60);
-
-                var reminderMinutes = minutes % 60;
-
-                result = reminderMinutes + "min:" + result;
-
-                if (hours > 24) {
-                    var days = Math.floor(hours / 24);
-
-                    var reminderHours = hours % 24;
-
-                    result = days + "d:" + reminderHours + "h:" + result;
-
-                } else if (hours > 0) {
-                    result = hours + "h:" + result;
-
-                }
-            } else if (minutes > 0) {
-                result = minutes + "min:" + result;
-            }
-            
-            return result;
-
-        };
 
         // default behaviour, open my activities of the current month
         $scope.fetchMyActivitiesThisMonth(null);
