@@ -93,6 +93,7 @@
                 <th>Elevation gain</th>
                 <th>Moving time</th>
                 <th>Elapsed time</th>
+                <th>Motionless time</th>
                 <th>Avg speed</th>
                 </thead>
                 <tbody>
@@ -105,6 +106,7 @@
                     <td>{{globalTotals.elevationGain | number:0}}m</td>
                     <td>{{globalTotals.movingTime | duration}}</td>
                     <td>{{globalTotals.elapsedTime | duration}}</td>
+                    <td>{{globalTotals.elapsedTime - globalTotals.movingTime | duration}}</td>
                     <td>{{3600 * globalTotals.distance / globalTotals.movingTime / 1000 |
                         number:1}}km/h
                     </td>
@@ -117,6 +119,7 @@
                     <td>{{commuteTotals.elevationGain | number:0}}m</td>
                     <td>{{commuteTotals.movingTime | duration}}</td>
                     <td>{{commuteTotals.elapsedTime | duration}}</td>
+                    <td>{{commuteTotals.elapsedTime - commuteTotals.movingTime | duration}}</td>
                     <td>{{3600 * commuteTotals.distance / commuteTotals.movingTime / 1000 | number:1}}km/h</td>
                 </tr>
 
@@ -127,6 +130,7 @@
                     <td></td>
                     <td>{{trainerTotals.movingTime | duration}}</td>
                     <td>{{trainerTotals.elapsedTime | duration}}</td>
+                    <td>{{trainerTotals.elapsedTime - trainerTotals.movingTime | duration}}</td>
                     <td>{{3600 * trainerTotals.distance / trainerTotals.movingTime / 1000 | number:1}}km/h</td>
                 </tr>
 
@@ -137,6 +141,7 @@
                     <td></td>
                     <td>{{manualTotals.movingTime | duration}}</td>
                     <td>{{manualTotals.elapsedTime | duration}}</td>
+                    <td>{{manualTotals.elapsedTime - manualTotals.movingTime | duration}}</td>
                     <td>{{3600 * manualTotals.distance / manualTotals.movingTime / 1000 | number:1}}km/h</td>
                 </tr>
                 <tr ng-show="noCommuteTotals.nb > 0 && commuteTotals.nb > 0">
@@ -146,6 +151,7 @@
                     <td>{{noCommuteTotals.elevationGain | number:0}}m</td>
                     <td>{{noCommuteTotals.movingTime | duration}}</td>
                     <td>{{noCommuteTotals.elapsedTime | duration}}</td>
+                    <td>{{noCommuteTotals.elapsedTime - noCommuteTotals.movingTime | duration}}</td>
                     <td>{{3600 * noCommuteTotals.distance / noCommuteTotals.movingTime / 1000 | number:1}}km/h</td>
                     
                 </tr>
@@ -159,6 +165,7 @@
                     <td>{{value.elevationGain | number:0}}m</td>
                     <td>{{value.movingTime | duration}}</td>
                     <td>{{value.elapsedTime | duration}}</td>
+                    <td>{{value.elapsedTime - value.movingTime | duration}}</td>
                     <td>{{3600 * value.distance / value.movingTime / 1000 | number:1}}km/h</td>
                 </tr>
                 
