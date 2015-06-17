@@ -1,21 +1,7 @@
 var stravaControllers = angular.module('stravaControllers', []);
 
-stravaControllers.factory('CompilerService', function($rootScope, $compile) {
-    return {
-        compileInfoWindow : function($scope) {
-            var template = '<div ng-include src="\'app/templates/infowindow.html\'"></div>';
-            var compiled = $compile(template)($scope);
-            $scope.$apply();
-            return compiled[0].parentNode;
-        }
-    }
-});
-
-stravaControllers.controller('ActivitiesCtrl', ['CompilerService', '$scope', '$http', '$filter', '$locale', 
-    function (CompilerService, $scope, $http, $filter, $locale) {
-
-        
-        
+stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '$filter', '$locale',
+    function ($compile, $scope, $http, $filter, $locale) {
 
         $scope.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 
@@ -57,7 +43,7 @@ stravaControllers.controller('ActivitiesCtrl', ['CompilerService', '$scope', '$h
         function initScopeProperties(withGear) {
 
             $scope.withGear = withGear;
-            
+
             $scope.stravaError = null;
 
             $scope.currentActivity = null;
@@ -77,6 +63,13 @@ stravaControllers.controller('ActivitiesCtrl', ['CompilerService', '$scope', '$h
             $scope.countryTotals = new Object();
 
             $scope.gearTotals = new Object();
+        }
+
+        function compileInfoWindow() {
+            var template = '<div ng-include src="\'app/templates/infowindow.html\'"></div>';
+            var compiled = $compile(template)($scope);
+            $scope.$apply();
+            return compiled[0].parentNode;
         }
 
 
@@ -107,7 +100,7 @@ stravaControllers.controller('ActivitiesCtrl', ['CompilerService', '$scope', '$h
                         $scope.$apply();
                         $scope.infoWindow.setPosition(event.latLng);
                         if (!$scope.infoWindowCompiled) {
-                            $scope.infoWindow.setContent(CompilerService.compileInfoWindow($scope));
+                            $scope.infoWindow.setContent(compileInfoWindow());
                             $scope.infoWindowCompiled = true;
                         }
                     });
@@ -199,7 +192,7 @@ stravaControllers.controller('ActivitiesCtrl', ['CompilerService', '$scope', '$h
 
         }
 
-        $scope.drawActivitiesOnMap = function(activities) {
+        $scope.drawActivitiesOnMap = function (activities) {
             $scope.infoWindow = new google.maps.InfoWindow();
             $scope.infoWindowCompiled = false;
 
