@@ -21,11 +21,12 @@
 
 
     <div class="jumbotron">
-        <h1>Strava personal heatmap</h1>
 
-        <div class="row well">
+        <div class="row">
 
             <div class="col-lg-12">
+                <h1>Strava personal heatmap</h1>
+                
                 <img src="app/img/screenshot.png" alt="screenshot" style="float:left" class="img-responsive">
 
                 <form id="loginForm" class="form-inline" action="<c:url value="/login.do"/>" method="post">
