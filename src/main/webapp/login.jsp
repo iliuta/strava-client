@@ -22,6 +22,25 @@
 
     <div class="jumbotron">
         <h1>Strava personal heatmap</h1>
+        
+        <div>
+
+            <img src="app/img/screenshot.png" alt="screenshot" class="img-responsive">
+            <form id="loginForm" class="form-inline" action="<c:url value="/login.do"/>" method="post">
+                <input type="submit" class="btn btn-primary btn-lg" value="Connect with Strava"/>
+            </form>
+
+            <p>This application uses Strava and Google Maps free APIs. No data is stored locally on the server.</p>
+
+            <p>I haven't tested this with Internet Explorer. It seem to work properly with Chrome, Firefox and
+                Safari.</p>
+
+            <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcome</a> or you can connect with
+                <a href="http://strava.com/athletes/iliuta">me</a> on Strava.</p>
+
+            <p>Enjoy!</p>
+            
+        </div>
 
         <div class="media">
             <div class="media-left">
