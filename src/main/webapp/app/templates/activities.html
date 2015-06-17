@@ -58,25 +58,24 @@
                         </div>
                         <div class="form-group">
                             <p class="input-group">
-                                <input type="button" class="btn btn-sm" value="Draw heatmap"
+                                <input type="button" class="btn btn-primary btn-sm" value="Draw heatmap"
                                        ng-click="fetchMyActivities(before,after,type)">
-                                <input type="button" class="btn btn-sm" value="This year"
+                                <input type="button" class="btn btn-primary btn-sm" value="This year"
                                        ng-click="fetchMyActivitiesThisYear(type)">
-                                <input type="button" class="btn btn-sm" value="This month"
+                                <input type="button" class="btn btn-primary btn-sm" value="This month"
                                        ng-click="fetchMyActivitiesThisMonth(type)">
                             </p>
                         </div>
                     </form>
-                    
                 </tab>
                 <tab heading="Friends">
                     <div class="form-group">
                         <p class="input-group">
-                            <input type="button" class="btn btn-sm" value="Draw heatmap"
+                            <input type="button" class="btn btn-primary btn-sm" value="Draw heatmap"
                                    ng-click="fetchFriendsActivities()">
                         </p>
                     </div>
-                    
+
                 </tab>
             </tabset>
         </div>
@@ -153,7 +152,7 @@
                     <td>{{noCommuteTotals.elapsedTime | duration}}</td>
                     <td>{{noCommuteTotals.elapsedTime - noCommuteTotals.movingTime | duration}}</td>
                     <td>{{3600 * noCommuteTotals.distance / noCommuteTotals.movingTime / 1000 | number:1}}km/h</td>
-                    
+
                 </tr>
                 <tr ng-show="withGear">
                     <td colspan="7"><b>Gear</b></td>
@@ -168,7 +167,7 @@
                     <td>{{value.elapsedTime - value.movingTime | duration}}</td>
                     <td>{{3600 * value.distance / value.movingTime / 1000 | number:1}}km/h</td>
                 </tr>
-                
+
                 </tbody>
             </table>
 
