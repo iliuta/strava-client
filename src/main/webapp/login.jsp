@@ -49,7 +49,8 @@
             <h4>What's new</h4>
             <ul>
                 <li>Activity details now displayed directly on the map</li>
-                <li>Better totals statistics</li>
+                <li>Better displayed totals statistics</li>
+                <li>Statistics by gear</li>
                 <li>Improved mobile responsiveness</li>
             </ul>
         </div>
