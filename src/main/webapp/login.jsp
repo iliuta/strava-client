@@ -23,25 +23,37 @@
     <div class="jumbotron">
         <h1>Strava personal heatmap</h1>
 
-        <p>Display your personal heatmap from Strava.</p>
+        <div class="media">
+            <div class="media-left">
+                <img src="app/img/screenshot.png" alt="screenshot" class="img-responsive">
+                <form id="loginForm" class="form-inline" action="<c:url value="/login.do"/>" method="post">
+                    <input type="submit" class="btn btn-primary btn-lg" value="Connect with Strava"/>
+                </form>
+            </div>
+            <div class="media-body">
 
-        <p>
+                <p>This application uses Strava and Google Maps free APIs. No data is stored locally on the server.</p>
 
-        <form id="loginForm" class="form-inline" action="<c:url value="/login.do"/>" method="post">
-            <input type="submit" class="btn btn-primary btn-lg" value="Connect with Strava"/>
-        </form>
-        </p>
+                <p>I haven't tested this with Internet Explorer. It seem to work properly with Chrome, Firefox and
+                    Safari.</p>
 
-        <p>This application uses Strava and Google Maps free APIs. No data is stored locally on the server.</p>
-        
-        <p>I haven't tested this with Internet Explorer. It seem to work properly with Chrome, Firefox and Safari.</p>
+                <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcome</a> or you can connect with
+                    <a href="http://strava.com/athletes/iliuta">me</a> on Strava.</p>
 
-        <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcome</a> or you can connect with <a
-                href="http://strava.com/athletes/iliuta">me</a> on Strava.</p>
+                <p>Enjoy!</p>
+            </div>
 
-        <p>Enjoy!</p>
+        </div>
 
-        
+        <div class="well">
+            <h4>What's new</h4>
+            <ul>
+                <li>Activity details now displayed directly on the map</li>
+                <li>Better totals statistics</li>
+                <li>Improved mobile responsiveness</li>
+            </ul>
+        </div>
+
 
     </div>
 
