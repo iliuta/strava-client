@@ -23,33 +23,38 @@
     <div class="jumbotron">
         <h1>Strava personal heatmap</h1>
 
-        <div>
-            
-            <img src="app/img/screenshot.png" alt="screenshot" style="float:left" class="img-responsive">
-            <form id="loginForm" class="form-inline" action="<c:url value="/login.do"/>" method="post">
-                <input type="submit" class="btn btn-primary btn-lg" value="Connect with Strava"/>
-            </form>
-            <p>
-                This application uses Strava and Google Maps free APIs. No data is stored locally on the server.
-                I haven't tested this with Internet Explorer. It seem to work properly with Chrome, Firefox and
-                Safari.
-                Suggestions and remarks are <a href="http://twitter.com/iliuta">welcome</a> or you can connect with
-                <a href="http://strava.com/athletes/iliuta">me</a> on Strava.
-                Enjoy!
-            </p>
-            
+        <div class="row well">
 
-            
+            <div class="col-lg-12">
+                <img src="app/img/screenshot.png" alt="screenshot" style="float:left" class="img-responsive">
+
+                <form id="loginForm" class="form-inline" action="<c:url value="/login.do"/>" method="post">
+                    <input type="submit" class="btn btn-primary btn-lg" value="Connect with Strava"/>
+                </form>
+                <p>
+                    This application uses Strava and Google Maps free APIs. No data is stored locally on the server.
+                    I haven't tested this with Internet Explorer. It seem to work properly with Chrome, Firefox and
+                    Safari.
+                    Suggestions and remarks are <a href="http://twitter.com/iliuta">welcome</a> or you can connect with
+                    <a href="http://strava.com/athletes/iliuta">me</a> on Strava.
+                    Enjoy!
+                </p>
+
+            </div>
+
+
         </div>
 
-        <div class="well">
-            <h4>What's new</h4>
-            <ul>
-                <li>Activity details now displayed directly on the map</li>
-                <li>Better displayed totals statistics</li>
-                <li>Statistics by gear</li>
-                <li>Improved mobile responsiveness</li>
-            </ul>
+        <div class="row well">
+            <div class="col-lg-12">
+                <h4>What's new</h4>
+                <ul>
+                    <li>Activity details now displayed directly on the map</li>
+                    <li>Better displayed totals statistics</li>
+                    <li>Statistics by gear</li>
+                    <li>Improved mobile responsiveness</li>
+                </ul>
+            </div>
         </div>
 
 
