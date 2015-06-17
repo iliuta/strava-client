@@ -24,6 +24,7 @@
     <sec:http pattern="/*.ico" security="none" />
     <sec:http pattern="/index.jsp" security="none" />
     <sec:http pattern="/login.jsp" security="none" />
+    <sec:http pattern="/app/img/**" security="none" />
     <sec:http
           auto-config="false"
           authentication-manager-ref="oAuthAuthenticationManager">
@@ -31,7 +32,9 @@
                     login-page="/login.jsp" login-processing-url="/login.do" />
         <sec:logout logout-success-url="/index.jsp" logout-url="/logout.do" />
         <sec:anonymous />
-        <sec:intercept-url pattern="app/img" filters="none" />
+
+        
+
         <sec:intercept-url pattern="/**" access="ROLE_USER"/>
 
         <sec:custom-filter ref="oauth2ClientFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
