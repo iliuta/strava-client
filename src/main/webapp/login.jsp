@@ -22,27 +22,24 @@
 
     <div class="jumbotron">
         <h1>Strava personal heatmap</h1>
-        
-        <div class="media">
-            <div class="media-left">
-                <img src="app/img/screenshot.png" alt="screenshot" class="img-responsive">
-                <form id="loginForm" class="form-inline" action="<c:url value="/login.do"/>" method="post">
-                    <input type="submit" class="btn btn-primary btn-lg" value="Connect with Strava"/>
-                </form>
-            </div>
-            <div class="media-body">
 
-                <p>This application uses Strava and Google Maps free APIs. No data is stored locally on the server.</p>
+        <div>
+            
+            <img src="app/img/screenshot.png" alt="screenshot" style="float:left" class="img-responsive">
+            <form id="loginForm" class="form-inline" action="<c:url value="/login.do"/>" method="post">
+                <input type="submit" class="btn btn-primary btn-lg" value="Connect with Strava"/>
+            </form>
+            <p>
+                This application uses Strava and Google Maps free APIs. No data is stored locally on the server.
+                I haven't tested this with Internet Explorer. It seem to work properly with Chrome, Firefox and
+                Safari.
+                Suggestions and remarks are <a href="http://twitter.com/iliuta">welcome</a> or you can connect with
+                <a href="http://strava.com/athletes/iliuta">me</a> on Strava.
+                Enjoy!
+            </p>
+            
 
-                <p>I haven't tested this with Internet Explorer. It seem to work properly with Chrome, Firefox and
-                    Safari.</p>
-
-                <p>Suggestions and remarks are <a href="http://twitter.com/iliuta">welcome</a> or you can connect with
-                    <a href="http://strava.com/athletes/iliuta">me</a> on Strava.</p>
-
-                <p>Enjoy!</p>
-            </div>
-
+            
         </div>
 
         <div class="well">
@@ -57,27 +54,28 @@
 
 
     </div>
+</div>
 
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-        ga('create', 'UA-62082824-1', 'auto');
-        ga('send', 'pageview');
+    ga('create', 'UA-62082824-1', 'auto');
+    ga('send', 'pageview');
 
-    </script>
+</script>
 
 </body>
 </html>
