@@ -1,6 +1,6 @@
-var stravaAppFilters = angular.module('stravaAppFilters', []).filter('duration', function() {
-    
-    return function(seconds) {
+var stravaAppFilters = angular.module('stravaAppFilters', []).filter('duration', function () {
+
+    return function (seconds) {
         var result = "";
         var minutes = Math.floor(seconds / 60);
 
@@ -32,6 +32,20 @@ var stravaAppFilters = angular.module('stravaAppFilters', []).filter('duration',
 
         return result;
     };
+}).filter('profileImage', function () {
+
+    return function (profileImageUrl) {
+        var result = "";
+
+        if (profileImageUrl && profileImageUrl.startsWith("http")) {
+            result = profileImageUrl;
+        } else {
+            result = "https://d3nn82uaxijpm6.cloudfront.net/assets/avatar/athlete/large-63758b9942e3f074c3ecb84db07928ee.png";
+
+        }
+
+        return result;
+    };
 });
 
 var stravaApp = angular.module('stravaApp', [
@@ -42,7 +56,7 @@ var stravaApp = angular.module('stravaApp', [
 ]);
 
 stravaApp.config(['$routeProvider',
-    function($routeProvider) {
+    function ($routeProvider) {
         $routeProvider.
             when('/activities', {
                 templateUrl: 'app/templates/activities.html',

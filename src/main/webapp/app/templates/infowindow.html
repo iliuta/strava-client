@@ -1,9 +1,15 @@
     <ul class="list-group" ng-show="currentActivity">
-        <li class="list-group-item">
-            <img src="{{currentActivity.athlete.profile}}">
+        <li class="list-group-item" ng-show="currentActivity.athlete.profile">
+            <img src="{{currentActivity.athlete.profile | profileImage}}">
             <a href="http://www.strava.com/athletes/{{currentActivity.athlete.id}}"
                target="_blank">{{currentActivity.athlete.firstname}} {{currentActivity.athlete.lastname}}</a>
         </li>
+        <li class="list-group-item" ng-show="! currentActivity.athlete.profile">
+            <img src="{{athleteProfile.profile | profileImage}}">
+            <a href="http://www.strava.com/athletes/{{athleteProfile.id}}"
+               target="_blank">{{athleteProfile.firstname}} {{athleteProfile.lastname}}</a>
+        </li>
+
         <li class="list-group-item">
             <a href="http://www.strava.com/activities/{{currentActivity.id}}"
                target="_blank">{{currentActivity.name}}</a>
