@@ -1,185 +1,225 @@
 <div class="col-md-12">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <tabset>
-                <tab heading="Mine">
-                    <form class="form-inline">
-                        <div class="form-group">
-                            <label for="dateAfter">From</label>
+<div class="panel panel-default">
+<div class="panel-heading">
+    <tabset>
+        <tab heading="Mine">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="dateAfter">From</label>
 
-                            <p class="input-group">
-                                <input id="dateAfter" type="date" class="form-control input-sm" placeholder="YYYY-MM-DD"
-                                       ng-model="after">
-                            </p>
-                        </div>
-                        <div class="form-group">
-                            <label for="dateBefore">To</label>
+                    <p class="input-group">
+                        <input id="dateAfter" type="date" class="form-control input-sm" placeholder="YYYY-MM-DD"
+                               ng-model="after">
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label for="dateBefore">To</label>
 
-                            <p class="input-group">
-                                <input id="dateBefore" type="date" class="form-control input-sm"
-                                       placeholder="YYYY-MM-DD"
-                                       ng-model="before">
-                            </p>
-                        </div>
-                        <div class="form-group">
-                            <p class="input-group">
-                                <select class="form-control input-sm" ng-model="type">
-                                    <option></option>
-                                    <option>Ride</option>
-                                    <option>Run</option>
-                                    <option>Swim</option>
-                                    <option>Hike</option>
-                                    <option>Walk</option>
-                                    <option>AlpineSki</option>
-                                    <option>BackcountrySki</option>
-                                    <option>Canoeing</option>
-                                    <option>CrossCountrySkiing</option>
-                                    <option>Crossfit</option>
-                                    <option>Elliptical</option>
-                                    <option>IceSkate</option>
-                                    <option>InlineSkate</option>
-                                    <option>Kayaking</option>
-                                    <option>Kitesurf</option>
-                                    <option>NordicSki</option>
-                                    <option>RockClimbing</option>
-                                    <option>RollerSki</option>
-                                    <option>Rowing</option>
-                                    <option>Snowboard</option>
-                                    <option>Snowshoe</option>
-                                    <option>StairStepper</option>
-                                    <option>StandUpPaddling</option>
-                                    <option>Surfing</option>
-                                    <option>WeightTraining</option>
-                                    <option>Windsurf</option>
-                                    <option>Workout</option>
-                                    <option>Yoga</option>
-                                </select>
-                            </p>
-                        </div>
-                        <div class="form-group">
-                            <p class="input-group">
-                                <input type="button" class="btn btn-primary btn-sm" value="Draw heatmap"
-                                       ng-click="fetchMyActivities(before,after,type)">
-                                <input type="button" class="btn btn-primary btn-sm" value="This year"
-                                       ng-click="fetchMyActivitiesThisYear(type)">
-                                <input type="button" class="btn btn-primary btn-sm" value="This month"
-                                       ng-click="fetchMyActivitiesThisMonth(type)">
-                            </p>
-                        </div>
-                    </form>
-                </tab>
-                <tab heading="Friends">
-                    <div class="form-group">
-                        <p class="input-group">
-                            <input type="button" class="btn btn-primary btn-sm" value="Draw heatmap"
-                                   ng-click="fetchFriendsActivities()">
-                        </p>
-                    </div>
+                    <p class="input-group">
+                        <input id="dateBefore" type="date" class="form-control input-sm"
+                               placeholder="YYYY-MM-DD"
+                               ng-model="before">
+                    </p>
+                </div>
+                <div class="form-group">
+                    <p class="input-group">
+                        <select class="form-control input-sm" ng-model="type">
+                            <option></option>
+                            <option>Ride</option>
+                            <option>Run</option>
+                            <option>Swim</option>
+                            <option>Hike</option>
+                            <option>Walk</option>
+                            <option>AlpineSki</option>
+                            <option>BackcountrySki</option>
+                            <option>Canoeing</option>
+                            <option>CrossCountrySkiing</option>
+                            <option>Crossfit</option>
+                            <option>Elliptical</option>
+                            <option>IceSkate</option>
+                            <option>InlineSkate</option>
+                            <option>Kayaking</option>
+                            <option>Kitesurf</option>
+                            <option>NordicSki</option>
+                            <option>RockClimbing</option>
+                            <option>RollerSki</option>
+                            <option>Rowing</option>
+                            <option>Snowboard</option>
+                            <option>Snowshoe</option>
+                            <option>StairStepper</option>
+                            <option>StandUpPaddling</option>
+                            <option>Surfing</option>
+                            <option>WeightTraining</option>
+                            <option>Windsurf</option>
+                            <option>Workout</option>
+                            <option>Yoga</option>
+                        </select>
+                    </p>
+                </div>
+                <div class="form-group">
+                    <p class="input-group">
+                        <input type="button" class="btn btn-primary btn-sm" value="Draw heatmap"
+                               ng-click="fetchMyActivities(before,after,type)">
+                        <input type="button" class="btn btn-primary btn-sm" value="This year"
+                               ng-click="fetchMyActivitiesThisYear(type)">
+                        <input type="button" class="btn btn-primary btn-sm" value="This month"
+                               ng-click="fetchMyActivitiesThisMonth(type)">
+                    </p>
+                </div>
+            </form>
+        </tab>
+        <tab heading="Friends">
+            <div class="form-group">
+                <p class="input-group">
+                    <input type="button" class="btn btn-primary btn-sm" value="Draw heatmap"
+                           ng-click="fetchFriendsActivities()">
+                </p>
+            </div>
 
-                </tab>
-            </tabset>
-        </div>
-        <div class="panel-body">
-            <div class="alert alert-danger" role="alert" ng-show="stravaError">{{stravaError.message}}</div>
-            <div id="map-canvas"></div>
-        </div>
-        <div class="panel-footer table-responsive" ng-show="globalTotals.nb > 0">
-            <table class="table table-hover table-condensed">
-                <thead>
-                <th></th>
-                <th>Activities</th>
-                <th>Distance</th>
-                <th>Elevation gain</th>
-                <th>Moving time</th>
-                <th>Elapsed time</th>
-                <th>Motionless time</th>
-                <th>Avg speed</th>
-                </thead>
-                <tbody>
-                <tr ng-show="globalTotals.nb > 0">
-                    <td><b><a href="" ng-click="drawActivitiesOnMap(globalTotals.activities)">Total</a></b></td>
-                    <td>
-                        {{globalTotals.nb}}
-                    </td>
-                    <td>{{globalTotals.distance/1000 | number:1}}km</td>
-                    <td>{{globalTotals.elevationGain | number:0}}m</td>
-                    <td>{{globalTotals.movingTime | duration}}</td>
-                    <td>{{globalTotals.elapsedTime | duration}}</td>
-                    <td>{{globalTotals.elapsedTime - globalTotals.movingTime | duration}}</td>
-                    <td>{{3600 * globalTotals.distance / globalTotals.movingTime / 1000 |
-                        number:1}}km/h
-                    </td>
-                </tr>
+        </tab>
+    </tabset>
+</div>
+<div class="panel-body">
+    <div class="alert alert-danger" role="alert" ng-show="stravaError">{{stravaError.message}}</div>
+    <div id="map-canvas"></div>
+</div>
+<div class="panel-footer table-responsive" ng-show="globalTotals.nb > 0">
+    <table class="table table-hover table-condensed">
+        <thead>
+        <th></th>
+        <th>Activities</th>
+        <th>Distance</th>
+        <th>Elevation gain</th>
+        <th>Moving time</th>
+        <th>Elapsed time</th>
+        <th>Motionless time</th>
+        <th>Avg speed</th>
+        </thead>
+        <tbody>
+        <tr ng-show="globalTotals.nb > 0">
+            <td><b><a href="" ng-click="drawActivitiesOnMap(globalTotals.activities)">Total</a></b></td>
+            <td>
+                {{globalTotals.nb}}
+            </td>
+            <td>{{globalTotals.distance/1000 | number:1}}km</td>
+            <td>{{globalTotals.elevationGain | number:0}}m</td>
+            <td>{{globalTotals.movingTime | duration}}</td>
+            <td>{{globalTotals.elapsedTime | duration}}</td>
+            <td>{{globalTotals.elapsedTime - globalTotals.movingTime | duration}}</td>
+            <td>{{3600 * globalTotals.distance / globalTotals.movingTime / 1000 |
+                number:1}}km/h
+            </td>
+        </tr>
 
-                <tr ng-show="commuteTotals.nb > 0">
-                    <td><b><a href="" ng-click="drawActivitiesOnMap(commuteTotals.activities)">Commute</a></b></td>
-                    <td>{{commuteTotals.nb}}</td>
-                    <td>{{commuteTotals.distance/1000 | number:1}}km</td>
-                    <td>{{commuteTotals.elevationGain | number:0}}m</td>
-                    <td>{{commuteTotals.movingTime | duration}}</td>
-                    <td>{{commuteTotals.elapsedTime | duration}}</td>
-                    <td>{{commuteTotals.elapsedTime - commuteTotals.movingTime | duration}}</td>
-                    <td>{{3600 * commuteTotals.distance / commuteTotals.movingTime / 1000 | number:1}}km/h</td>
-                </tr>
+        <tr ng-show="commuteTotals.nb > 0">
+            <td><b><a href="" ng-click="drawActivitiesOnMap(commuteTotals.activities)">Commute</a></b></td>
+            <td>{{commuteTotals.nb}}</td>
+            <td>{{commuteTotals.distance/1000 | number:1}}km</td>
+            <td>{{commuteTotals.elevationGain | number:0}}m</td>
+            <td>{{commuteTotals.movingTime | duration}}</td>
+            <td>{{commuteTotals.elapsedTime | duration}}</td>
+            <td>{{commuteTotals.elapsedTime - commuteTotals.movingTime | duration}}</td>
+            <td>{{3600 * commuteTotals.distance / commuteTotals.movingTime / 1000 | number:1}}km/h</td>
+        </tr>
 
-                <tr ng-show="trainerTotals.nb > 0">
-                    <td><b>Trainer</b></td>
-                    <td>{{trainerTotals.nb}}</td>
-                    <td>{{trainerTotals.distance/1000 | number:1}}km</td>
-                    <td></td>
-                    <td>{{trainerTotals.movingTime | duration}}</td>
-                    <td>{{trainerTotals.elapsedTime | duration}}</td>
-                    <td>{{trainerTotals.elapsedTime - trainerTotals.movingTime | duration}}</td>
-                    <td>{{3600 * trainerTotals.distance / trainerTotals.movingTime / 1000 | number:1}}km/h</td>
-                </tr>
+        <tr ng-show="trainerTotals.nb > 0">
+            <td><b>Trainer</b></td>
+            <td>{{trainerTotals.nb}}</td>
+            <td>{{trainerTotals.distance/1000 | number:1}}km</td>
+            <td></td>
+            <td>{{trainerTotals.movingTime | duration}}</td>
+            <td>{{trainerTotals.elapsedTime | duration}}</td>
+            <td>{{trainerTotals.elapsedTime - trainerTotals.movingTime | duration}}</td>
+            <td>{{3600 * trainerTotals.distance / trainerTotals.movingTime / 1000 | number:1}}km/h</td>
+        </tr>
 
-                <tr ng-show="manualTotals.nb > 0">
-                    <td><b>Manual</b></td>
-                    <td>{{manualTotals.nb}}</td>
-                    <td>{{manualTotals.distance/1000 | number:1}}km</td>
-                    <td></td>
-                    <td>{{manualTotals.movingTime | duration}}</td>
-                    <td>{{manualTotals.elapsedTime | duration}}</td>
-                    <td>{{manualTotals.elapsedTime - manualTotals.movingTime | duration}}</td>
-                    <td>{{3600 * manualTotals.distance / manualTotals.movingTime / 1000 | number:1}}km/h</td>
-                </tr>
-                <tr ng-show="noCommuteTotals.nb > 0 && commuteTotals.nb > 0">
-                    <td><b><a href="" ng-click="drawActivitiesOnMap(noCommuteTotals.activities)">No commute</a></b></td>
-                    <td>{{noCommuteTotals.nb}}</td>
-                    <td>{{noCommuteTotals.distance/1000 | number:1}}km</td>
-                    <td>{{noCommuteTotals.elevationGain | number:0}}m</td>
-                    <td>{{noCommuteTotals.movingTime | duration}}</td>
-                    <td>{{noCommuteTotals.elapsedTime | duration}}</td>
-                    <td>{{noCommuteTotals.elapsedTime - noCommuteTotals.movingTime | duration}}</td>
-                    <td>{{3600 * noCommuteTotals.distance / noCommuteTotals.movingTime / 1000 | number:1}}km/h</td>
+        <tr ng-show="manualTotals.nb > 0">
+            <td><b>Manual</b></td>
+            <td>{{manualTotals.nb}}</td>
+            <td>{{manualTotals.distance/1000 | number:1}}km</td>
+            <td></td>
+            <td>{{manualTotals.movingTime | duration}}</td>
+            <td>{{manualTotals.elapsedTime | duration}}</td>
+            <td>{{manualTotals.elapsedTime - manualTotals.movingTime | duration}}</td>
+            <td>{{3600 * manualTotals.distance / manualTotals.movingTime / 1000 | number:1}}km/h</td>
+        </tr>
+        <tr ng-show="noCommuteTotals.nb > 0 && commuteTotals.nb > 0">
+            <td><b><a href="" ng-click="drawActivitiesOnMap(noCommuteTotals.activities)">No commute</a></b></td>
+            <td>{{noCommuteTotals.nb}}</td>
+            <td>{{noCommuteTotals.distance/1000 | number:1}}km</td>
+            <td>{{noCommuteTotals.elevationGain | number:0}}m</td>
+            <td>{{noCommuteTotals.movingTime | duration}}</td>
+            <td>{{noCommuteTotals.elapsedTime | duration}}</td>
+            <td>{{noCommuteTotals.elapsedTime - noCommuteTotals.movingTime | duration}}</td>
+            <td>{{3600 * noCommuteTotals.distance / noCommuteTotals.movingTime / 1000 | number:1}}km/h</td>
 
-                </tr>
-                <tr ng-show="withGear">
-                    <td colspan="7"><b>Gear</b></td>
-                </tr>
-                <tr ng-show="withGear" ng-repeat="(key,value) in gearTotals">
-                    <td><b><a href="" ng-click="drawActivitiesOnMap(value.activities)">{{value.gearName}}</a></b></td>
-                    <td>{{value.nb}}</td>
-                    <td>{{value.distance / 1000 | number : 1}}km</td>
-                    <td>{{value.elevationGain | number:0}}m</td>
-                    <td>{{value.movingTime | duration}}</td>
-                    <td>{{value.elapsedTime | duration}}</td>
-                    <td>{{value.elapsedTime - value.movingTime | duration}}</td>
-                    <td>{{3600 * value.distance / value.movingTime / 1000 | number:1}}km/h</td>
-                </tr>
-
-                </tbody>
-            </table>
-
-            <p ng-repeat="(key,value) in countryTotals">
-                <b><a href="" ng-click="drawActivitiesOnMap(value.activities)">
-                    {{key}}</a></b> : {{value.nb}} activities, {{value.distance / 1000 | number : 1}}km
-		            <span ng-repeat="(cityName,cityInfo) in value.cities">
-			            <a href="" ng-click="drawActivitiesOnMap(cityInfo.activities)">{{cityName}}</a>: {{cityInfo.nb}} activities, {{cityInfo.distance / 1000 | number : 1}}km
-		            </span>
-            </p>
-        </div>
-    </div>
+        </tr>
+        </tbody>
+        <tbody>
+        <tr ng-show="withGear">
+            <td colspan="7">
+                <a href="" data-toggle="collapse" data-target="#gearCollapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
+                Stats by gear
+            </td>
+        </tr>
+        <tbody id="gearCollapse" class="collapse out">
+        <tr ng-show="withGear" ng-repeat="(key,value) in gearTotals">
+            <td><b><a href="" ng-click="drawActivitiesOnMap(value.activities)">{{value.gearName}}</a></b></td>
+            <td>{{value.nb}}</td>
+            <td>{{value.distance / 1000 | number : 1}}km</td>
+            <td>{{value.elevationGain | number:0}}m</td>
+            <td>{{value.movingTime | duration}}</td>
+            <td>{{value.elapsedTime | duration}}</td>
+            <td>{{value.elapsedTime - value.movingTime | duration}}</td>
+            <td>{{3600 * value.distance / value.movingTime / 1000 | number:1}}km/h</td>
+        </tr>
+        </tbody>
+        <tbody>
+        <tr>
+            <td colspan="7">
+                <a href="" data-toggle="collapse" data-target="#geographicCollapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
+                Stats by location
+            </td>
+        </tr>
+        </tbody>
+        <tbody id="geographicCollapse" class="collapse out">
+        <tr ng-repeat-start="(countryName,countryInfo) in countryTotals">
+            <td><b><a href="" ng-click="drawActivitiesOnMap(countryInfo.activities)">{{countryName}}</a></b></td>
+            <td>{{countryInfo.nb}}</td>
+            <td>{{countryInfo.distance / 1000 | number : 1}}km</td>
+            <td>{{countryInfo.elevationGain | number:0}}m</td>
+            <td>{{countryInfo.movingTime | duration}}</td>
+            <td>{{countryInfo.elapsedTime | duration}}</td>
+            <td>{{countryInfo.elapsedTime - countryInfo.movingTime | duration}}</td>
+            <td>{{3600 * countryInfo.distance / countryInfo.movingTime / 1000 | number:1}}km/h</td>
+        </tr>
+        <tr ng-repeat-start="(stateName,stateInfo) in countryInfo.states">
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;<b><a href="" ng-click="drawActivitiesOnMap(stateInfo.activities)">{{stateName}}</a></b></td>
+            <td>{{stateInfo.nb}}</td>
+            <td>{{stateInfo.distance/1000 | number:1}}km</td>
+            <td>{{stateInfo.elevationGain | number:0}}m</td>
+            <td>{{stateInfo.movingTime | duration}}</td>
+            <td>{{stateInfo.elapsedTime | duration}}</td>
+            <td>{{stateInfo.elapsedTime - stateInfo.movingTime | duration}}</td>
+            <td>{{3600 * stateInfo.distance / stateInfo.movingTime / 1000 | number:1}}km/h</td>
+        </tr>
+        <tr ng-repeat="(cityName,cityInfo) in stateInfo.cities">
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><a href="" ng-click="drawActivitiesOnMap(cityInfo.activities)">{{cityName}}</a></b></td>
+            <td>{{cityInfo.nb}}</td>
+            <td>{{cityInfo.distance/1000 | number:1}}km</td>
+            <td>{{cityInfo.elevationGain | number:0}}m</td>
+            <td>{{cityInfo.movingTime | duration}}</td>
+            <td>{{cityInfo.elapsedTime | duration}}</td>
+            <td>{{cityInfo.elapsedTime - stateInfo.movingTime | duration}}</td>
+            <td>{{3600 * cityInfo.distance / cityInfo.movingTime / 1000 | number:1}}km/h</td>
+        </tr>
+        <tr ng-repeat-end></tr>
+        <tr ng-repeat-end></tr>
+        
+        </tbody>
+    </table>
+</div>
+</div>
 </div>
 
 

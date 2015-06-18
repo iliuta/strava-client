@@ -176,16 +176,30 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
                     var country = $scope.countryTotals[activity.location_country];
 
-                    if (!country.cities) {
-                        country.cities = new Object();
+                    if (!country.states) {
+                        country.states = new Object();
+                    }
+
+                    if (!activity.location_state) {
+                        activity.location_state = "";
+                    }
+                    if (!country.states[activity.location_state]) {
+                        country.states[activity.location_state] = new Totals();
+                    }
+                    country.states[activity.location_state].add(activity);
+
+
+                    var state = country.states[activity.location_state];
+
+                    if (!state.cities) {
+                        state.cities = new Object();
                     }
 
                     if (activity.location_city) {
-                        if (!country.cities[activity.location_city]) {
-                            country.cities[activity.location_city] = new Totals();
+                        if (!state.cities[activity.location_city]) {
+                            state.cities[activity.location_city] = new Totals();
                         }
-                        country.cities[activity.location_city].add(activity);
-                        country.cities[activity.location_city].state = activity.location_state;
+                        state.cities[activity.location_city].add(activity);
                     }
                 }
             });
