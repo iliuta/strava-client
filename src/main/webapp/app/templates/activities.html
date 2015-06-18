@@ -210,7 +210,7 @@
             <td>{{cityInfo.elevationGain | number:0}}m</td>
             <td>{{cityInfo.movingTime | duration}}</td>
             <td>{{cityInfo.elapsedTime | duration}}</td>
-            <td>{{cityInfo.elapsedTime - stateInfo.movingTime | duration}}</td>
+            <td>{{cityInfo.elapsedTime - cityInfo.movingTime | duration}}</td>
             <td>{{3600 * cityInfo.distance / cityInfo.movingTime / 1000 | number:1}}km/h</td>
         </tr>
         <tr ng-repeat-end></tr>
