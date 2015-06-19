@@ -97,7 +97,8 @@
         </thead>
         <tbody>
         <tr ng-show="globalTotals.nb > 0">
-            <td><b><a href="" ng-click="drawActivitiesOnMap(globalTotals.activities)">Total</a></b></td>
+            <td><a href="" data-toggle="collapse" data-target="#globalCollapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a><b>
+                <a href="" ng-click="drawActivitiesOnMap(globalTotals.activities)">Total</a></b></td>
             <td>
                 {{globalTotals.nb}}
             </td>
@@ -110,9 +111,24 @@
                 number:1}}km/h
             </td>
         </tr>
+        </tbody>
+        <tbody id="globalCollapse" class="collapse out">
+        <tr ng-show="globalTotals.nb > 0" ng-repeat="activity in globalTotals.activities">
+            <td><b>{{activity.name}}</b></td>
+            <td></td>
+            <td>{{activity.distance/1000 | number:1}}km</td>
+            <td>{{activity.total_elevation_gain | number:0}}m</td>
+            <td>{{activity.moving_time | duration}}</td>
+            <td>{{activity.elapsed_time | duration}}</td>
+            <td>{{activity.elapsed_time - activity.moving_time | duration}}</td>
+            <td>{{3600 * activity.distance / activity.moving_time / 1000 | number:1}}km/h</td>
+        </tr>
+        </tbody>
 
+        <tbody>
         <tr ng-show="commuteTotals.nb > 0">
-            <td><b><a href="" ng-click="drawActivitiesOnMap(commuteTotals.activities)">Commute</a></b></td>
+            <td><a href="" data-toggle="collapse" data-target="#commuterCollapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a><b>
+                <a href="" ng-click="drawActivitiesOnMap(commuteTotals.activities)">Commute</a></b></td>
             <td>{{commuteTotals.nb}}</td>
             <td>{{commuteTotals.distance/1000 | number:1}}km</td>
             <td>{{commuteTotals.elevationGain | number:0}}m</td>
@@ -121,9 +137,23 @@
             <td>{{commuteTotals.elapsedTime - commuteTotals.movingTime | duration}}</td>
             <td>{{3600 * commuteTotals.distance / commuteTotals.movingTime / 1000 | number:1}}km/h</td>
         </tr>
-
+        </tbody>
+        <tbody id="commuterCollapse" class="collapse out">
+        <tr ng-show="commuteTotals.nb > 0" ng-repeat="activity in commuteTotals.activities">
+            <td><b>{{activity.name}}</b></td>
+            <td></td>
+            <td>{{activity.distance/1000 | number:1}}km</td>
+            <td>{{activity.total_elevation_gain | number:0}}m</td>
+            <td>{{activity.moving_time | duration}}</td>
+            <td>{{activity.elapsed_time | duration}}</td>
+            <td>{{activity.elapsed_time - activity.moving_time | duration}}</td>
+            <td>{{3600 * activity.distance / activity.moving_time / 1000 | number:1}}km/h</td>
+        </tr>
+        </tbody>
+        <tbody>
         <tr ng-show="trainerTotals.nb > 0">
-            <td><b>Trainer</b></td>
+            <td><a href="" data-toggle="collapse" data-target="#trainerCollapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
+                <b>Trainer</b></td>
             <td>{{trainerTotals.nb}}</td>
             <td>{{trainerTotals.distance/1000 | number:1}}km</td>
             <td></td>
@@ -132,9 +162,22 @@
             <td>{{trainerTotals.elapsedTime - trainerTotals.movingTime | duration}}</td>
             <td>{{3600 * trainerTotals.distance / trainerTotals.movingTime / 1000 | number:1}}km/h</td>
         </tr>
-
+        </tbody>
+        <tbody id="trainerCollapse" class="collapse out">
+        <tr ng-show="trainerTotals.nb > 0" ng-repeat="activity in trainerTotals.activities">
+            <td><b>{{activity.name}}</b></td>
+            <td></td>
+            <td>{{activity.distance/1000 | number:1}}km</td>
+            <td>{{activity.total_elevation_gain | number:0}}m</td>
+            <td>{{activity.moving_time | duration}}</td>
+            <td>{{activity.elapsed_time | duration}}</td>
+            <td>{{activity.elapsed_time - activity.moving_time | duration}}</td>
+            <td>{{3600 * activity.distance / activity.moving_time / 1000 | number:1}}km/h</td>
+        </tr>
+        </tbody>
+        <tbody>
         <tr ng-show="manualTotals.nb > 0">
-            <td><b>Manual</b></td>
+            <td><a href="" data-toggle="collapse" data-target="#manualCollapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a><b>Manual</b></td>
             <td>{{manualTotals.nb}}</td>
             <td>{{manualTotals.distance/1000 | number:1}}km</td>
             <td></td>
@@ -143,8 +186,25 @@
             <td>{{manualTotals.elapsedTime - manualTotals.movingTime | duration}}</td>
             <td>{{3600 * manualTotals.distance / manualTotals.movingTime / 1000 | number:1}}km/h</td>
         </tr>
+        </tbody>
+        <tbody id="manualCollapse" class="collapse out">
+        <tr ng-show="manualTotals.nb > 0" ng-repeat="activity in manualTotals.activities">
+            <td><b>{{activity.name}}</b></td>
+            <td></td>
+            <td>{{activity.distance/1000 | number:1}}km</td>
+            <td>{{activity.total_elevation_gain | number:0}}m</td>
+            <td>{{activity.moving_time | duration}}</td>
+            <td>{{activity.elapsed_time | duration}}</td>
+            <td>{{activity.elapsed_time - activity.moving_time | duration}}</td>
+            <td>{{3600 * activity.distance / activity.moving_time / 1000 | number:1}}km/h</td>
+        </tr>
+        </tbody>
+        <tbody>
         <tr ng-show="noCommuteTotals.nb > 0 && commuteTotals.nb > 0">
-            <td><b><a href="" ng-click="drawActivitiesOnMap(noCommuteTotals.activities)">No commute</a></b></td>
+            <td>
+                <a href="" data-toggle="collapse" data-target="#noCommuteCollapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
+                <b><a href="" ng-click="drawActivitiesOnMap(noCommuteTotals.activities)">No commute</a></b>
+            </td>
             <td>{{noCommuteTotals.nb}}</td>
             <td>{{noCommuteTotals.distance/1000 | number:1}}km</td>
             <td>{{noCommuteTotals.elevationGain | number:0}}m</td>
@@ -152,15 +212,28 @@
             <td>{{noCommuteTotals.elapsedTime | duration}}</td>
             <td>{{noCommuteTotals.elapsedTime - noCommuteTotals.movingTime | duration}}</td>
             <td>{{3600 * noCommuteTotals.distance / noCommuteTotals.movingTime / 1000 | number:1}}km/h</td>
-
+        </tr>
+        </tbody>
+        <tbody id="noCommuteCollapse" class="collapse out">
+        <tr ng-show="noCommuteTotals.nb > 0 && commuteTotals.nb > 0" ng-repeat="activity in noCommuteTotals.activities">
+            <td><b>{{activity.name}}</b></td>
+            <td></td>
+            <td>{{activity.distance/1000 | number:1}}km</td>
+            <td>{{activity.total_elevation_gain | number:0}}m</td>
+            <td>{{activity.moving_time | duration}}</td>
+            <td>{{activity.elapsed_time | duration}}</td>
+            <td>{{activity.elapsed_time - activity.moving_time | duration}}</td>
+            <td>{{3600 * activity.distance / activity.moving_time / 1000 | number:1}}km/h</td>
         </tr>
         </tbody>
         <tbody>
         <tr ng-show="withGear">
-            <td colspan="7">
-                <a href="" data-toggle="collapse" data-target="#gearCollapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
+            <td>
+                <a href="" data-toggle="collapse" data-target="#gearCollapse"><span
+                        class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
                 Stats by gear
             </td>
+            <td colspan="7"></td>
         </tr>
         <tbody id="gearCollapse" class="collapse out">
         <tr ng-show="withGear" ng-repeat="(key,value) in gearTotals">
@@ -176,10 +249,12 @@
         </tbody>
         <tbody>
         <tr>
-            <td colspan="7">
-                <a href="" data-toggle="collapse" data-target="#geographicCollapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
+            <td>
+                <a href="" data-toggle="collapse" data-target="#geographicCollapse"><span
+                        class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
                 Stats by location
             </td>
+            <td colspan="7"></td>
         </tr>
         </tbody>
         <tbody id="geographicCollapse" class="collapse out">
@@ -194,7 +269,9 @@
             <td>{{3600 * countryInfo.distance / countryInfo.movingTime / 1000 | number:1}}km/h</td>
         </tr>
         <tr ng-repeat-start="(stateName,stateInfo) in countryInfo.states">
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;<b><a href="" ng-click="drawActivitiesOnMap(stateInfo.activities)">{{stateName}}</a></b></td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;<b><a href=""
+                                              ng-click="drawActivitiesOnMap(stateInfo.activities)">{{stateName}}</a></b>
+            </td>
             <td>{{stateInfo.nb}}</td>
             <td>{{stateInfo.distance/1000 | number:1}}km</td>
             <td>{{stateInfo.elevationGain | number:0}}m</td>
@@ -204,7 +281,9 @@
             <td>{{3600 * stateInfo.distance / stateInfo.movingTime / 1000 | number:1}}km/h</td>
         </tr>
         <tr ng-repeat="(cityName,cityInfo) in stateInfo.cities">
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><a href="" ng-click="drawActivitiesOnMap(cityInfo.activities)">{{cityName}}</a></b></td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><a href=""
+                                                                      ng-click="drawActivitiesOnMap(cityInfo.activities)">{{cityName}}</a></b>
+            </td>
             <td>{{cityInfo.nb}}</td>
             <td>{{cityInfo.distance/1000 | number:1}}km</td>
             <td>{{cityInfo.elevationGain | number:0}}m</td>
@@ -215,7 +294,7 @@
         </tr>
         <tr ng-repeat-end></tr>
         <tr ng-repeat-end></tr>
-        
+
         </tbody>
     </table>
 </div>
