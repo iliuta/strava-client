@@ -207,11 +207,12 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         }
 
         $scope.drawActivitiesOnMap = function (activities) {
+            $('html,body').animate({scrollTop: $('#map-canvas').offset().top});
             $scope.infoWindow = new google.maps.InfoWindow();
             $scope.infoWindowCompiled = false;
 
             var bounds = new google.maps.LatLngBounds();
-            $scope.map = new google.maps.Map(document.getElementById('map-canvas'),
+            $scope.map = new google.maps.Map($('#map-canvas')[0],
                 mapOptions);
             activities.forEach(function (activity) {
                 drawActivityPolylineOnMap(activity, bounds, $scope.map);
