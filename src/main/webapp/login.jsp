@@ -50,6 +50,7 @@
             <div class="col-lg-12">
                 <h4>What's new</h4>
                 <ul>
+                    <li>Added clubs activities display</li>
                     <li>Show each activity details into the table down the page.</li>
                     <li>Better gear and location grouping.</li>
                     <li>Activity details now displayed directly on the map</li>
