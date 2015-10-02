@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
 import javax.annotation.Resource;
@@ -34,7 +33,7 @@ public class StravaRestController {
     @RequestMapping("/activities")
     public List<Activity> activities(Long before, Long after, String type) {
         int page = 1;
-        
+
         LOGGER.debug("Fetch my activities before={} after={} type={}", before, after, type);
 
         List<Activity> result = new ArrayList<>();
@@ -54,11 +53,11 @@ public class StravaRestController {
             return result;
         }
     }
-    
-    
+
+
     @RequestMapping("/profile")
     public AthleteProfile profile(@ModelAttribute("athleteProfile") AthleteProfile athleteProfile) throws StravaClientException {
-        if (athleteProfile==null) {
+        if (athleteProfile == null) {
             throw new StravaClientException("No athlete profile.");
         }
         return athleteProfile;
@@ -68,6 +67,22 @@ public class StravaRestController {
     public List<Activity> friendsActivities(Long before, String type) {
         LOGGER.debug("Fetch friends' activities before={} type={}", before, type);
         String url = "https://www.strava.com/api/v3/activities/following?per_page=100";
+        if (before != null) {
+            url = url + "&before=" + before;
+        }
+
+        ActivityList result = stravaRestTemplate.getForObject(url, ActivityList.class);
+        if (StringUtils.hasText(type)) {
+            return result.stream().filter(a -> type.equals(a.getType())).collect(Collectors.toList());
+        } else {
+            return result;
+        }
+    }
+
+    @RequestMapping("/club-activities/{clubId}")
+    public List<Activity> clubActivities(Long before, String type, @PathVariable String clubId) {
+        LOGGER.debug("Fetch club {} activities before={} type={}", clubId, before, type);
+        String url = "https://www.strava.com/api/v3/clubs/" + clubId + "/activities?per_page=100";
         if (before != null) {
             url = url + "&before=" + before;
         }

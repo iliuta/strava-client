@@ -50,6 +50,15 @@ public class AthleteProfile implements Serializable {
     private String sex;
     private List<Bike> bikes;
     private List<Shoe> shoes;
+    private List<Club> clubs;
+
+    public List<Club> getClubs() {
+        return clubs;
+    }
+
+    public void setClubs(List<Club> clubs) {
+        this.clubs = clubs;
+    }
 
     public boolean isPremium() {
         return premium;

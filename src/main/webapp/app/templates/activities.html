@@ -77,6 +77,17 @@
             </div>
 
         </tab>
+        <tab heading="Clubs"  ng-show="athleteProfile.clubs">
+            <div class="form-group">
+                <p class="input-group">
+                    <span ng-repeat="club in athleteProfile.clubs">
+                        <img src="{{club.profile_medium | profileImage}}" class="btn btn-primary btn-sm" title="{{club.name}}"
+                           ng-click="fetchClubActivities(club.id)">
+                    </span>
+                </p>
+            </div>
+
+        </tab>
     </tabset>
 </div>
 <div class="panel-body">
@@ -84,7 +95,7 @@
     <div id="map-canvas"></div>
 </div>
 <div class="panel-footer table-responsive" ng-show="globalTotals.nb > 0">
-    <table class="table table-hover table-condensed">
+    <table class="table">
         <thead>
         <th></th>
         <th>Activities</th>

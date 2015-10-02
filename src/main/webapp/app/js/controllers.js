@@ -265,6 +265,13 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         };
 
+        $scope.fetchClubActivities = function (clubId) {
+            initScopeProperties(false);
+            $http.get('rest/club-activities/' + clubId).success(onSuccessActivities).error(function (data) {
+                $scope.stravaError = data;
+            });
+        };
+
         $scope.fetchMyActivities = function (before, after, type) {
             initScopeProperties(true);
 
