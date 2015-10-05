@@ -53,6 +53,16 @@ public class Activity implements Serializable {
     private Integer movingTime;
     @JsonProperty(value = "elapsed_time")
     private Integer elapsedTime;
+    @JsonProperty(value = "total_photo_count")
+    private Integer totalPhotoCount;
+
+    public Integer getTotalPhotoCount() {
+        return totalPhotoCount;
+    }
+
+    public void setTotalPhotoCount(Integer totalPhotoCount) {
+        this.totalPhotoCount = totalPhotoCount;
+    }
 
     public AthleteProfile getAthlete() {
         return athlete;

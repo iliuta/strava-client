@@ -64,6 +64,8 @@
                                ng-click="fetchMyActivitiesThisYear(type)">
                         <input type="button" class="btn btn-primary btn-sm" value="This month"
                                ng-click="fetchMyActivitiesThisMonth(type)">
+                        <input ng-show="activities" type="button" class="btn btn-primary btn-sm" value="Display photos"
+                               ng-click="fetchPhotos(activities)">
                     </p>
                 </div>
             </form>

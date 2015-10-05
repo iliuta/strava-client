@@ -226,8 +226,59 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             $scope.activities = activities;
             computeAllTotals(activities);
             $scope.drawActivitiesOnMap(activities);
-
         };
+
+        $scope.fetchPhotos = function (activities) {
+            activities.forEach(function (activity) {
+                if (activity.total_photo_count && activity.total_photo_count > 0) {
+                    $http.get('rest/photos/' + activity.id).success(function (photos) {
+                        photos.forEach(function (photo) {
+                            if (photo.location && photo.location.length == 2) {
+                                var photoLatLng = new google.maps.LatLng(photo.location[0], photo.location[1]);
+                                /*var iwPhoto = new google.maps.InfoWindow();
+                                 iwPhoto.setContent("<img src='" + photo.urls[0] + "'>");
+
+                                 iwPhoto.setPosition(photoLatLng);
+                                 iwPhoto.open($scope.map);*/
+
+
+                                var image = {
+                                    url: photo.urls[300],
+                                    // This marker is 20 pixels wide by 32 pixels high.
+                                    scaledSize: new google.maps.Size(50, 50),
+                                    // The origin for this image is (0, 0).
+                                    origin: new google.maps.Point(0, 0),
+                                    // The anchor for this image is the base of the flagpole at (0, 32).
+                                    anchor: new google.maps.Point(0, 32)
+                                    
+                                };
+                                var marker = new google.maps.Marker({
+                                    position: photoLatLng,
+                                    clickable: true,
+                                    map: $scope.map,
+                                    title: photo.urls[300],
+                                    icon: image
+                                });
+                                
+                                var photoOpenUrl = photo.urls[300];
+                                if (photo.source && photo.source==2) {
+                                    photoOpenUrl = photo.ref;
+                                }
+
+                                marker.addListener('click', function() {
+                                    window.open(photoOpenUrl);
+                                });
+                            }
+                        });
+                    }).error(function (data) {
+                        console.log(data);
+                        $scope.stravaError = data;
+                    });
+
+                }
+            });
+
+        }
 
         $scope.centerMap = function (country) {
             var geocoder = new google.maps.Geocoder();

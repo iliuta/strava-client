@@ -1,9 +1,6 @@
 package com.iliuta.strava.mvc;
 
-import com.iliuta.strava.model.Activity;
-import com.iliuta.strava.model.ActivityList;
-import com.iliuta.strava.model.AthleteProfile;
-import com.iliuta.strava.model.StravaError;
+import com.iliuta.strava.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -93,6 +90,15 @@ public class StravaRestController {
         } else {
             return result;
         }
+    }
+
+    @RequestMapping("/photos/{activityId}")
+    public List<Photo> activityPhotos(@PathVariable String activityId) {
+        LOGGER.debug("Fetch photos for activity {}", activityId);
+        String url = "https://www.strava.com/api/v3/activities/" + activityId + "/photos?photo_sources=true&size=300";
+
+        PhotoList result = stravaRestTemplate.getForObject(url, PhotoList.class);
+        return result;
     }
 
     private ActivityList fetch200ActivitiesFromStrava(Long before, Long after, int page) {
