@@ -337,3 +337,25 @@
 
 
 
+<div id="photoModal" class="modal bs-example-modal-sm" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="{{currentPhotoUrl}}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <p ng-show="currentPhoto.caption">{{currentPhoto.caption}}</p>
+                        <a ng-show="currentPhoto.ref && currentPhoto.source==2" href="{{currentPhoto.ref}}" target="_blank">Show on Instagram</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -266,7 +266,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                                 }
 
                                 marker.addListener('click', function() {
-                                    window.open(photoOpenUrl);
+                                    $scope.currentPhotoUrl = photo.urls[300];
+                                    $scope.currentPhoto = photo;
+                                    $scope.$apply();
+                                    $('#photoModal').modal('show');
                                 });
                             }
                         });
