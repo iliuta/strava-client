@@ -30,7 +30,7 @@
                 <img src="app/img/screenshot.png" alt="screenshot" style="float:left" class="img-responsive">
 
                 <form id="loginForm" class="form-inline" action="<c:url value="/login.do"/>" method="post">
-                    <input type="submit" class="btn btn-primary btn-lg" value="Connect with Strava"/>
+                    <button class="btn btn-link" type="submit"><img src="app/img/ConnectWithStrava.png"></button>
                 </form>
                 <p>
                     This application uses Strava and Google Maps free APIs. No data is stored locally on the server.
