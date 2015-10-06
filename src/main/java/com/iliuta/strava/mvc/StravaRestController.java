@@ -6,11 +6,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestOperations;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -129,6 +131,19 @@ public class StravaRestController {
 
     }
 
+    @ExceptionHandler(OAuth2Exception.class)
+    @ResponseStatus(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED)
+    protected StravaError handleOauth2Exception(OAuth2Exception oae, HttpSession session) {
+        LOGGER.error("Strava error {}", oae.getSummary());
+        StravaError error = new StravaError();
+        error.setMessage("Strava authentication error.");
+        error.setDetailedMessage(oae.getMessage());
+        error.setCode(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.value());
+        session.invalidate();
+        return error;
+
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected StravaError handleOtherException(Exception rce) {
@@ -137,6 +152,5 @@ public class StravaRestController {
         error.setMessage("An error occured while acessing Strava.");
         error.setDetailedMessage(rce.getMessage());
         return error;
-
     }
 }
