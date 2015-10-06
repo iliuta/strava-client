@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestOperations;
@@ -116,10 +117,21 @@ public class StravaRestController {
         this.stravaRestTemplate = stravaRestTemplate;
     }
 
+    @ExceptionHandler(UserRedirectRequiredException.class)
+    @ResponseStatus(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED)
+    protected StravaError handleUserRedirectRequiredException(UserRedirectRequiredException rce) {
+        LOGGER.error("Strava error", rce);
+        StravaError error = new StravaError();
+        error.setMessage("Your session has expired.");
+        error.setDetailedMessage(rce.getMessage());
+        error.setCode(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.value());
+        return error;
+
+    }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected StravaError handleRestClientException(Exception rce) {
+    protected StravaError handleOtherException(Exception rce) {
         LOGGER.error("Strava error", rce);
         StravaError error = new StravaError();
         error.setMessage("An error occured while acessing Strava.");

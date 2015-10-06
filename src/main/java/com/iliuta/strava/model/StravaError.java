@@ -9,9 +9,17 @@ public class StravaError implements Serializable {
 
     private static final long serialVersionUID = 1810128527105287526L;
 
+    private int code;
     private String message;
-
     private String detailedMessage;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 
     public String getDetailedMessage() {
         return detailedMessage;

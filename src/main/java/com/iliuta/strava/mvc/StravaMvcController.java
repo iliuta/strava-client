@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
 import org.springframework.security.oauth2.common.exceptions.InvalidRequestException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.client.RestOperations;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by apapusoi on 17/12/14.
@@ -45,7 +48,7 @@ public class StravaMvcController {
     @ModelAttribute("athleteProfile")
     private AthleteProfile getAthleteProfile() {
         return stravaRestTemplate
-                    .getForObject("https://www.strava.com/api/v3/athlete", AthleteProfile.class);
+                .getForObject("https://www.strava.com/api/v3/athlete", AthleteProfile.class);
     }
 
     public void setStravaRestTemplate(OAuth2RestTemplate stravaRestTemplate) {
