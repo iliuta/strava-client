@@ -235,8 +235,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 if (photo.location && photo.location.length == 2) {
                     var photoLatLng = new google.maps.LatLng(photo.location[0], photo.location[1]);
 
+                    var photoUrl = photo.urls[300];
+
                     var image = {
-                        url: photo.urls[300],
+                        url: photoUrl,
                         scaledSize: new google.maps.Size(50, 50),
                         origin: new google.maps.Point(0, 0),
                         anchor: new google.maps.Point(0, 32)
@@ -246,17 +248,12 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                         position: photoLatLng,
                         clickable: true,
                         map: $scope.map,
-                        title: photo.urls[300],
+                        title: photoUrl,
                         icon: image
                     });
 
-                    var photoOpenUrl = photo.urls[300];
-                    if (photo.source && photo.source == 2) {
-                        photoOpenUrl = photo.ref;
-                    }
-
                     marker.addListener('click', function () {
-                        $scope.currentPhotoUrl = photo.urls[300];
+                        $scope.currentPhotoUrl = photoUrl;
                         $scope.currentPhoto = photo;
                         $scope.$apply();
                         $('#photoModal').modal('show');
