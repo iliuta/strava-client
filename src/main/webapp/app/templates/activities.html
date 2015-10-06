@@ -70,18 +70,11 @@
                 </div>
             </form>
         </tab>
-        <tab heading="Friends">
+        <tab heading="Others">
             <div class="form-group">
                 <p class="input-group">
-                    <input type="button" class="btn btn-primary btn-sm" value="Draw heatmap"
+                    <input type="button" class="btn btn-primary btn-sm" value="Contacts"
                            ng-click="fetchFriendsActivities()">
-                </p>
-            </div>
-
-        </tab>
-        <tab heading="Clubs"  ng-show="athleteProfile.clubs">
-            <div class="form-group">
-                <p class="input-group">
                     <span ng-repeat="club in athleteProfile.clubs">
                         <img src="{{club.profile_medium | profileImage}}" class="btn btn-primary btn-sm" title="{{club.name}}"
                            ng-click="fetchClubActivities(club.id)">
