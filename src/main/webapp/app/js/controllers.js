@@ -86,13 +86,13 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             } else {
                 var decodedPath = L.Polyline.fromEncoded(activity.map.summary_polyline);
 
-                var osmPath = L.polyline(decodedPath.getLatLngs(), {color: 'red', weight: 2}).addTo(map);
+                var osmPath = L.polyline(decodedPath.getLatLngs(), {color: 'red', weight: 3}).addTo(map);
 
                 osmPath.bindPopup($scope.popup);
 
                 osmPath.addEventListener('mouseover',
                     function (event) {
-                        osmPath.setStyle({color: 'blue', weight: 4});
+                        osmPath.setStyle({color: 'blue', weight: 6});
                         $scope.currentActivity = activity;
                         $scope.$apply();
                         if (!$scope.infoWindowCompiled) {
@@ -105,7 +105,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
                 osmPath.addEventListener('mouseout',
                     function () {
-                        osmPath.setStyle({color: 'red', weight: 2});
+                        osmPath.setStyle({color: 'red', weight: 3});
                     });
 
 
