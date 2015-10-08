@@ -20,7 +20,7 @@
 
         #map-canvas {
             width: 100%;
-            height: 500px;
+            height: 700px;
         }
 
         body {

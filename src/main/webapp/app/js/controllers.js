@@ -79,17 +79,12 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         }
 
 
-        function drawActivityPolylineOnMap(activity, bounds, map) {
+        function drawActivityPolylineOnMap(activity, map) {
             if (!activity.map.summary_polyline) {
                 console.log(activity.name);
                 return null;
             } else {
                 var decodedPath = L.Polyline.fromEncoded(activity.map.summary_polyline);
-
-                decodedPath.getLatLngs().forEach(function (point, index) {
-                        bounds.extend(point);
-                    }
-                );
 
                 var osmPath = L.polyline(decodedPath.getLatLngs(), {color: 'red', weight: 2}).addTo(map);
 
@@ -214,24 +209,26 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
             if ($scope.polylinesLayerGroup) {
                 $scope.polylinesLayerGroup.clearLayers();
-                //$scope.map.removeLayer($scope.polylinesLayerGroup);
             }
-
 
             $scope.infoWindowCompiled = false;
             // initialize the bounds with some point
-            var bounds = new L.latLngBounds([48.880821, 2.242003], [48.880821, 2.242003]);
-
+            var bounds = null;
 
             $scope.polylinesLayerGroup = L.layerGroup();
             $scope.polylinesLayerGroup.addTo($scope.map);
+            
             activities.forEach(function (activity) {
-                var polyline = drawActivityPolylineOnMap(activity, bounds, $scope.map);
+                var polyline = drawActivityPolylineOnMap(activity, $scope.map);
                 if (polyline) {
+                    if (!bounds) {
+                        bounds = polyline.getBounds();
+                    } else {
+                        bounds.extend(polyline.getBounds());
+                    }
                     $scope.polylinesLayerGroup.addLayer(polyline);
                 }
             });
-
 
             $scope.map.fitBounds(bounds);
             $scope.map.panInsideBounds(bounds);
@@ -298,15 +295,22 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         };
 
         $scope.centerMap = function (country) {
-            var geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ 'address': country}, function (results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    $scope.map.setCenter(results[0].geometry.location);
-                    $scope.map.fitBounds(results[0].geometry.viewport);
-                } else {
-                    alert('Geocoding error: ' + status);
-                }
+            console.log(country);
+            $http.jsonp("http://nominatim.openstreetmap.org/search/" + country + "?format=json&addressdetails=0&limit=1&json_callback=JSON_CALLBACK").success(function (data) {
+                console.log(data);
+            }).error(function (data) {
+                console.log(data);
             });
+
+            /*var geocoder = new google.maps.Geocoder();
+             geocoder.geocode({ 'address': country}, function (results, status) {
+             if (status == google.maps.GeocoderStatus.OK) {
+             $scope.map.setCenter(results[0].geometry.location);
+             $scope.map.fitBounds(results[0].geometry.viewport);
+             } else {
+             alert('Geocoding error: ' + status);
+             }
+             });*/
         };
 
         $scope.fetchMyActivitiesThisYear = function (type) {

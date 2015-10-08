@@ -1,6 +1,6 @@
 <div class="col-md-12">
 <div class="panel panel-default">
-<div class="panel-heading">
+<div id="mapTop" class="panel-heading">
     <tabset>
         <tab heading="Mine">
             <form class="form-inline">
@@ -85,7 +85,7 @@
         </tab>
     </tabset>
 </div>
-<div id="mapTop" class="panel-body">
+<div class="panel-body">
     <div class="alert alert-danger" role="alert" ng-show="stravaError">{{stravaError.message}} <span ng-show="stravaError.code==511">Please <a href="javascript:window.location.reload();">reload</a>.</span></div>
     <div id="map-canvas"></div>
 </div>
