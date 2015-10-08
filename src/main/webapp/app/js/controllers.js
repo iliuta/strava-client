@@ -111,6 +111,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
                 osmPath.addEventListener('click',
                     function (event) {
+                        $scope.currentActivity = activity;
+                        $scope.$apply();
                         $scope.popup.setContent(compileInfoWindow());
                         $scope.popup.setLatLng(event.latlng);
                     });
