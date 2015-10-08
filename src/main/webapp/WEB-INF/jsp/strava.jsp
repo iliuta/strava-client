@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
 
     <title>Strava personal heatmap (beta)</title>
 
@@ -28,9 +28,6 @@
         }
 
     </style>
-    <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyAyxz5c3X3Dw9a1gYTtRyYhiT0ixJpcNqU">
-    </script>
 
 </head>
 <body>
@@ -89,6 +86,7 @@
 </div>
 
 
+<script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -98,6 +96,7 @@
 <script src="bower_components/angular-i18n/angular-locale_${locale}.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="bower_components/Leaflet.encoded/Polyline.encoded.js"></script>
 <script src="app/js/app.js"></script>
 <script src="app/js/controllers.js"></script>
 

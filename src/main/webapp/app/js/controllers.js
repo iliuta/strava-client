@@ -5,10 +5,16 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         $scope.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 
-        var mapOptions = {
-            center: { lat: 48.880821, lng: 2.242003 },
-            zoom: 8
-        };
+
+        $scope.map = L.map('map-canvas').setView([48.880821, 2.242003], 8);
+
+        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+        var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 18, attribution: osmAttrib});
+
+        $scope.popup = L.popup();
+
+        osm.addTo($scope.map);
 
         var onAjaxError = function (data) {
             console.log(data);
@@ -76,48 +82,45 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         function drawActivityPolylineOnMap(activity, bounds, map) {
             if (!activity.map.summary_polyline) {
                 console.log(activity.name);
+                return null;
             } else {
-                var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
+                var decodedPath = L.Polyline.fromEncoded(activity.map.summary_polyline);
 
-                decodedPath.forEach(function (point, index) {
-                        var loc = new google.maps.LatLng(point.lat(), point.lng());
-                        bounds.extend(loc);
+                decodedPath.getLatLngs().forEach(function (point, index) {
+                        bounds.extend(point);
                     }
                 );
 
-                var activityGmapsPath = new google.maps.Polyline({
-                    path: decodedPath,
-                    geodesic: true,
-                    strokeColor: 'red',
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2
-                });
+                var osmPath = L.polyline(decodedPath.getLatLngs(), {color: 'red', weight: 2}).addTo(map);
 
-                google.maps.event.addListener(activityGmapsPath, 'mouseover',
+                osmPath.bindPopup($scope.popup);
+
+                osmPath.addEventListener('mouseover',
                     function (event) {
-                        activityGmapsPath.setOptions({strokeColor: 'blue', strokeWeight: 4});
+                        osmPath.setStyle({color: 'blue', weight: 4});
                         $scope.currentActivity = activity;
                         $scope.$apply();
-                        $scope.infoWindow.setPosition(event.latLng);
                         if (!$scope.infoWindowCompiled) {
-                            $scope.infoWindow.setContent(compileInfoWindow());
+                            $scope.popup.setContent(compileInfoWindow());
                             $scope.infoWindowCompiled = true;
                         }
+                        $scope.popup.setLatLng(event.latlng);
                     });
 
-                google.maps.event.addListener(activityGmapsPath, 'mouseout',
+
+                osmPath.addEventListener('mouseout',
                     function () {
-                        activityGmapsPath.setOptions({strokeColor: 'red', strokeWeight: 2});
+                        osmPath.setStyle({color: 'red', weight: 2});
                     });
 
 
-                google.maps.event.addListener(activityGmapsPath, 'click',
+                osmPath.addEventListener('click',
                     function (event) {
-                        $scope.infoWindow.setPosition(event.latLng);
-                        $scope.infoWindow.open(map, activityGmapsPath);
+                        $scope.popup.setContent(compileInfoWindow());
+                        $scope.popup.setLatLng(event.latlng);
                     });
 
-                activityGmapsPath.setMap(map);
+                return osmPath;
             }
         }
 
@@ -207,18 +210,31 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         }
 
         $scope.drawActivitiesOnMap = function (activities) {
-            $('html,body').animate({scrollTop: $('#map-canvas').offset().top});
-            $scope.infoWindow = new google.maps.InfoWindow();
-            $scope.infoWindowCompiled = false;
+            $('html,body').animate({scrollTop: $('#mapTop').offset().top});
 
-            var bounds = new google.maps.LatLngBounds();
-            $scope.map = new google.maps.Map($('#map-canvas')[0],
-                mapOptions);
+            if ($scope.polylinesLayerGroup) {
+                $scope.polylinesLayerGroup.clearLayers();
+                //$scope.map.removeLayer($scope.polylinesLayerGroup);
+            }
+
+
+            $scope.infoWindowCompiled = false;
+            // initialize the bounds with some point
+            var bounds = new L.latLngBounds([48.880821, 2.242003], [48.880821, 2.242003]);
+
+
+            $scope.polylinesLayerGroup = L.layerGroup();
+            $scope.polylinesLayerGroup.addTo($scope.map);
             activities.forEach(function (activity) {
-                drawActivityPolylineOnMap(activity, bounds, $scope.map);
+                var polyline = drawActivityPolylineOnMap(activity, bounds, $scope.map);
+                if (polyline) {
+                    $scope.polylinesLayerGroup.addLayer(polyline);
+                }
             });
+
+
             $scope.map.fitBounds(bounds);
-            $scope.map.panToBounds(bounds);
+            $scope.map.panInsideBounds(bounds);
         }
 
 
@@ -230,34 +246,31 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         };
 
         var drawPhotos = function (photos) {
-            console.log(photos);
             photos.forEach(function (photo) {
                 if (photo.location && photo.location.length == 2) {
-                    var photoLatLng = new google.maps.LatLng(photo.location[0], photo.location[1]);
+                    var photoLatLng = new L.latLng(photo.location[0], photo.location[1]);
 
                     var photoUrl = photo.urls[300];
 
-                    var image = {
-                        url: photoUrl,
-                        scaledSize: new google.maps.Size(50, 50),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(0, 32)
-                    };
+                    var image = L.icon({
+                        iconUrl: photoUrl,
+                        iconSize: [50, 50],
+                        iconAnchor: [0, 32]
+                    });
 
-                    var marker = new google.maps.Marker({
-                        position: photoLatLng,
-                        clickable: true,
-                        map: $scope.map,
+                    var marker = L.marker(photoLatLng, {
+                        riseOnHover: true,
                         title: photoUrl,
                         icon: image
                     });
 
-                    marker.addListener('click', function () {
+                    marker.addEventListener('click', function () {
                         $scope.currentPhotoUrl = photoUrl;
                         $scope.currentPhoto = photo;
                         $scope.$apply();
                         $('#photoModal').modal('show');
                     });
+                    marker.addTo($scope.map);
                 }
             });
 
