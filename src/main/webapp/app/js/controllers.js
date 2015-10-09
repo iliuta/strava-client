@@ -30,6 +30,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
 
         $scope.popup = L.popup();
+        $scope.popup.setContent(compileInfoWindow());
 
         var baseMaps = {
             "OpenStreetMap": osm,
@@ -139,6 +140,11 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                     });
 
 
+                /*osmPath.addEventListener('mousedown',
+                    function (event) {
+                        $scope.popup.setContent(compileInfoWindow());
+                     });*/
+                
                 osmPath.addEventListener('click',
                     function (event) {
                         $scope.currentActivity = activity;
@@ -146,6 +152,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                         $scope.popup.setContent(compileInfoWindow());
                         $scope.popup.setLatLng(event.latlng);
                     });
+
 
                 return osmPath;
             }
