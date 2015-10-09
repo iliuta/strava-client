@@ -6,28 +6,58 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         $scope.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 
 
-        $scope.map = L.map('map-canvas').setView([48.880821, 2.242003], 8);
+        //$scope.map = L.map('map-canvas').setView([48.880821, 2.242003], 8);
 
         var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
         var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 18, attribution: osmAttrib});
+        var ocm = L.tileLayer("http://a.tile.thunderforest.com/cycle/{z}/{x}/{y}.png");
+        var google = L.tileLayer('//mt{s}.googleapis.com/vt?x={x}&y={y}&z={z}', {
+            maxZoom: 18,
+            subdomains: [ 0, 1, 2, 3 ]
+        });
+        var mapboxToken = "pk.eyJ1IjoiaWxpdXRhIiwiYSI6ImNpZmplb2RoODAweWV0amtuMnV6NG41N3QifQ.ielyh5hPAkTB9AquOPeuYQ";
+        var runBikeHike =
+            L.tileLayer("https://api.mapbox.com/v4/mapbox.run-bike-hike/{z}/{x}/{y}.png?access_token=" + mapboxToken,
+                {
+                    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+                });
+        var satellite =
+            L.tileLayer("https://api.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.png?access_token=" + mapboxToken,
+                {
+                    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+                });
+
 
         $scope.popup = L.popup();
 
-        osm.addTo($scope.map);
+        var baseMaps = {
+            "OpenStreetMap": osm,
+            "OpenCycleMap": ocm,
+            "Mapbox Terrain": runBikeHike,
+            "Mapbox Streets Satellite": satellite
+        };
+
+        $scope.map = L.map('map-canvas', {
+            center: [39.73, -104.99],
+            zoom: 8,
+            layers: [osm]
+        });
+        L.control.layers(baseMaps).addTo($scope.map);
+
 
         var onAjaxError = function (data) {
             console.log(data);
             $scope.stravaError = data;
         };
 
-        // get athlete profile at the beginning
+// get athlete profile at the beginning
         $http.get('rest/profile').success(function (data) {
             $scope.athleteProfile = data;
         }).error(onAjaxError);
 
 
-        // object to store some statistics
+// object to store some statistics
         function Totals() {
             this.nb = 0;
             this.distance = 0;
@@ -86,26 +116,26 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             } else {
                 var decodedPath = L.Polyline.fromEncoded(activity.map.summary_polyline);
 
-                var osmPath = L.polyline(decodedPath.getLatLngs(), {color: 'red', weight: 3}).addTo(map);
+                var osmPath = L.polyline(decodedPath.getLatLngs(), {color: '#FF0000', weight: 5}).addTo(map);
 
                 osmPath.bindPopup($scope.popup);
 
                 osmPath.addEventListener('mouseover',
                     function (event) {
-                        osmPath.setStyle({color: 'blue', weight: 6});
-                        $scope.currentActivity = activity;
-                        $scope.$apply();
-                        if (!$scope.infoWindowCompiled) {
-                            $scope.popup.setContent(compileInfoWindow());
-                            $scope.infoWindowCompiled = true;
-                        }
-                        $scope.popup.setLatLng(event.latlng);
+                        osmPath.setStyle({color: 'blue', weight: 7});
+                        /*$scope.currentActivity = activity;
+                         $scope.$apply();
+                         if (!$scope.infoWindowCompiled) {
+                         $scope.popup.setContent(compileInfoWindow());
+                         $scope.infoWindowCompiled = true;
+                         }
+                         $scope.popup.setLatLng(event.latlng);*/
                     });
 
 
                 osmPath.addEventListener('mouseout',
                     function () {
-                        osmPath.setStyle({color: 'red', weight: 3});
+                        osmPath.setStyle({color: '#FF0000', weight: 5});
                     });
 
 
@@ -213,13 +243,11 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 $scope.polylinesLayerGroup.clearLayers();
             }
 
-            $scope.infoWindowCompiled = false;
-            // initialize the bounds with some point
             var bounds = null;
 
             $scope.polylinesLayerGroup = L.layerGroup();
             $scope.polylinesLayerGroup.addTo($scope.map);
-            
+
             activities.forEach(function (activity) {
                 var polyline = drawActivityPolylineOnMap(activity, $scope.map);
                 if (polyline) {
@@ -234,7 +262,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
             $scope.map.fitBounds(bounds);
             $scope.map.panInsideBounds(bounds);
-        }
+        };
 
 
         var onSuccessActivities = function (activities) {
@@ -296,25 +324,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             }
         };
 
-        $scope.centerMap = function (country) {
-            console.log(country);
-            $http.jsonp("http://nominatim.openstreetmap.org/search/" + country + "?format=json&addressdetails=0&limit=1&json_callback=JSON_CALLBACK").success(function (data) {
-                console.log(data);
-            }).error(function (data) {
-                console.log(data);
-            });
-
-            /*var geocoder = new google.maps.Geocoder();
-             geocoder.geocode({ 'address': country}, function (results, status) {
-             if (status == google.maps.GeocoderStatus.OK) {
-             $scope.map.setCenter(results[0].geometry.location);
-             $scope.map.fitBounds(results[0].geometry.viewport);
-             } else {
-             alert('Geocoding error: ' + status);
-             }
-             });*/
-        };
-
         $scope.fetchMyActivitiesThisYear = function (type) {
             var today = new Date();
             var firstDayOfYear = new Date(today.getFullYear() + "");
@@ -363,6 +372,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         };
 
 
-        // default behaviour, open my activities of the current month
+// default behaviour, open my activities of the current month
         $scope.fetchMyActivitiesThisMonth(null);
-    }]);
+    }])
+;
