@@ -116,7 +116,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             } else {
                 var decodedPath = L.Polyline.fromEncoded(activity.map.summary_polyline);
 
-                var osmPath = L.polyline(decodedPath.getLatLngs(), {color: '#FF0000', weight: 5}).addTo(map);
+                var osmPath = L.polyline(decodedPath.getLatLngs(), {color: '#FF0000', weight: 2}).addTo(map);
 
                 osmPath.bindPopup($scope.popup);
 
@@ -135,7 +135,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
                 osmPath.addEventListener('mouseout',
                     function () {
-                        osmPath.setStyle({color: '#FF0000', weight: 5});
+                        osmPath.setStyle({color: '#FF0000', weight: 2});
                     });
 
 
