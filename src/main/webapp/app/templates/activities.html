@@ -181,7 +181,7 @@
         <tbody id="trainerCollapse" class="collapse out">
         <tr ng-show="trainerTotals.nb > 0" ng-repeat="activity in trainerTotals.activities">
             <td>
-                <a href="" ng-click="drawActivityOnMap(activity)"><b>{{activity.name}}</b></a>
+                <b>{{activity.name}}</b>
                 <a href="http://www.strava.com/athletes/{{activity.athlete.id}}" ng-show="activity.athlete.profile" target="_blank">{{activity.athlete.firstname}} {{activity.athlete.lastname}}</a>
                 {{activity.start_date | date : 'short'}}
             </td>
