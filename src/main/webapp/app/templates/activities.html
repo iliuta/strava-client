@@ -122,7 +122,7 @@
         <tbody id="globalCollapse" class="collapse out">
         <tr ng-show="globalTotals.nb > 0" ng-repeat="activity in globalTotals.activities">
             <td>
-                <b>{{activity.name}}</b>
+                <a href="" ng-click="drawActivityOnMap(activity)"><b>{{activity.name}}</b></a>
                 <a href="http://www.strava.com/athletes/{{activity.athlete.id}}" ng-show="activity.athlete.profile" target="_blank">{{activity.athlete.firstname}} {{activity.athlete.lastname}}</a>
                 {{activity.start_date | date : 'short'}}
             </td>
@@ -152,7 +152,7 @@
         <tbody id="commuterCollapse" class="collapse out">
         <tr ng-show="commuteTotals.nb > 0" ng-repeat="activity in commuteTotals.activities">
             <td>
-                <b>{{activity.name}}</b>
+                <a href="" ng-click="drawActivityOnMap(activity)"><b>{{activity.name}}</b></a>
                 <a href="http://www.strava.com/athletes/{{activity.athlete.id}}" ng-show="activity.athlete.profile" target="_blank">{{activity.athlete.firstname}} {{activity.athlete.lastname}}</a>
                 {{activity.start_date | date : 'short'}}
             </td>
@@ -181,7 +181,7 @@
         <tbody id="trainerCollapse" class="collapse out">
         <tr ng-show="trainerTotals.nb > 0" ng-repeat="activity in trainerTotals.activities">
             <td>
-                <b>{{activity.name}}</b>
+                <a href="" ng-click="drawActivityOnMap(activity)"><b>{{activity.name}}</b></a>
                 <a href="http://www.strava.com/athletes/{{activity.athlete.id}}" ng-show="activity.athlete.profile" target="_blank">{{activity.athlete.firstname}} {{activity.athlete.lastname}}</a>
                 {{activity.start_date | date : 'short'}}
             </td>
@@ -209,7 +209,7 @@
         <tbody id="manualCollapse" class="collapse out">
         <tr ng-show="manualTotals.nb > 0" ng-repeat="activity in manualTotals.activities">
             <td>
-                <b>{{activity.name}}</b>
+                <a href="" ng-click="drawActivityOnMap(activity)"><b>{{activity.name}}</b></a>
                 <a href="http://www.strava.com/athletes/{{activity.athlete.id}}" ng-show="activity.athlete.profile" target="_blank">{{activity.athlete.firstname}} {{activity.athlete.lastname}}</a>
                 {{activity.start_date | date : 'short'}}
             </td>
@@ -240,7 +240,7 @@
         <tbody id="noCommuteCollapse" class="collapse out">
         <tr ng-show="noCommuteTotals.nb > 0 && commuteTotals.nb > 0" ng-repeat="activity in noCommuteTotals.activities">
             <td>
-                <b>{{activity.name}}</b>
+                <a href="" ng-click="drawActivityOnMap(activity)"><b>{{activity.name}}</b></a>
                 <a href="http://www.strava.com/athletes/{{activity.athlete.id}}" ng-show="activity.athlete.profile" target="_blank">{{activity.athlete.firstname}} {{activity.athlete.lastname}}</a>
                 {{activity.start_date | date : 'short'}}
             </td>

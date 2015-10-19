@@ -243,6 +243,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         }
 
+        $scope.drawActivityOnMap = function(activity) {
+            $scope.drawActivitiesOnMap([activity]);
+        };
+        
         $scope.drawActivitiesOnMap = function (activities) {
             $('html,body').animate({scrollTop: $('#mapTop').offset().top});
 
