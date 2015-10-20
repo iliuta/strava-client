@@ -60,6 +60,8 @@
             <div class="col-lg-12">
                 <h4>What's new</h4>
                 <ul>
+                    <li>Statistics by distance: bike and run</li>
+                    <li>Now you can click on an activity on the list</li>
                     <li>Added photos display button</li>
                     <li>Added clubs activities display</li>
                     <li>Show each activity details into the table down the page.</li>

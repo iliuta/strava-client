@@ -30,7 +30,9 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
 
         $scope.popup = L.popup();
-        $scope.popup.setContent(compileInfoWindow());
+        var template = '<div ng-include src="\'app/templates/infowindow.html\'"></div>';
+        var compiled = $compile(template)($scope);
+        $scope.popup.setContent(compiled[0].parentNode);
 
         var baseMaps = {
             "OpenStreetMap": osm,
@@ -42,7 +44,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         $scope.map = L.map('map-canvas', {
             center: [39.73, -104.99],
             zoom: 8,
-            layers: [osm]
+            layers: [runBikeHike]
         });
         L.control.layers(baseMaps).addTo($scope.map);
 
@@ -59,7 +61,9 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
 
 // object to store some statistics
-        function Totals() {
+        function Totals(id, title) {
+            this.id = id;
+            this.title = title;
             this.nb = 0;
             this.distance = 0;
             this.elevationGain = 0;
@@ -87,19 +91,57 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
             $scope.activities = null;
 
-            $scope.globalTotals = new Totals();
+            $scope.totals = [];
 
-            $scope.trainerTotals = new Totals();
+            $scope.globalTotals = new Totals("total", "Total");
+            $scope.totals.push($scope.globalTotals);
 
-            $scope.manualTotals = new Totals();
+            $scope.trainerTotals = new Totals("trainer", "Trainer");
+            $scope.totals.push($scope.trainerTotals);
 
-            $scope.commuteTotals = new Totals();
+            $scope.manualTotals = new Totals("manual", "Manual");
+            $scope.totals.push($scope.manualTotals);
 
-            $scope.noCommuteTotals = new Totals();
+            $scope.commuteTotals = new Totals("commute", "Commute");
+            $scope.totals.push($scope.commuteTotals);
+
+            $scope.noCommuteTotals = new Totals("noCommute", "No commute");
+            $scope.totals.push($scope.noCommuteTotals);
+
+            $scope.bikeDistanceTotals0_50 = new Totals("bike0_50", "Bike 0-50km");
+            $scope.totals.push($scope.bikeDistanceTotals0_50);
+
+            $scope.bikeDistanceTotals50_100 = new Totals("bike50_100", "Bike 50-100km");
+            $scope.totals.push($scope.bikeDistanceTotals50_100);
+
+            $scope.bikeDistanceTotals100_150 = new Totals("bike100_150", "Bike 100-150km");
+            $scope.totals.push($scope.bikeDistanceTotals100_150);
+
+            $scope.bikeDistanceTotals150_200 = new Totals("bike150_200", "Bike 150-200km");
+            $scope.totals.push($scope.bikeDistanceTotals150_200);
+
+            $scope.bikeDistanceTotals200 = new Totals("bike200", "Bike more than 200km");
+            $scope.totals.push($scope.bikeDistanceTotals200);
+
+            $scope.runDistanceTotals0_10 = new Totals("run0_10", "Run 0-10km");
+            $scope.totals.push($scope.runDistanceTotals0_10);
+
+            $scope.runDistanceTotals10_20 = new Totals("run10_20", "Run 10-20km");
+            $scope.totals.push($scope.runDistanceTotals10_20);
+
+            $scope.runDistanceTotals20_30 = new Totals("run20_30", "Run 20-30km");
+            $scope.totals.push($scope.runDistanceTotals20_30);
+
+            $scope.runDistanceTotals30_40 = new Totals("run30_40", "Run 30-40km");
+            $scope.totals.push($scope.runDistanceTotals30_40);
+
+            $scope.runDistanceTotals40 = new Totals("run40", "Run more than 40km");
+            $scope.totals.push($scope.runDistanceTotals40);
 
             $scope.countryTotals = new Object();
 
             $scope.gearTotals = new Object();
+
         }
 
         function compileInfoWindow() {
@@ -141,10 +183,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
 
                 /*osmPath.addEventListener('mousedown',
-                    function (event) {
-                        $scope.popup.setContent(compileInfoWindow());
-                     });*/
-                
+                 function (event) {
+                 $scope.popup.setContent(compileInfoWindow());
+                 });*/
+
                 osmPath.addEventListener('click',
                     function (event) {
                         $scope.currentActivity = activity;
@@ -196,18 +238,60 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                     $scope.manualTotals.add(activity);
                 }
 
+                if (activity.type == "Ride") {
+                    if (activity.distance / 1000 <= 50) {
+                        $scope.bikeDistanceTotals0_50.add(activity);
+                    }
+
+                    if (activity.distance / 1000 > 50 && activity.distance / 1000 <= 100) {
+                        $scope.bikeDistanceTotals50_100.add(activity);
+                    }
+
+                    if (activity.distance / 1000 > 100 && activity.distance / 1000 <= 150) {
+                        $scope.bikeDistanceTotals100_150.add(activity);
+                    }
+
+                    if (activity.distance / 1000 > 150 && activity.distance / 1000 <= 200) {
+                        $scope.bikeDistanceTotals150_200.add(activity);
+                    }
+                    
+                    if (activity.distance / 1000 > 200) {
+                        $scope.bikeDistanceTotals200.add(activity);
+                    }
+                }
+                if (activity.type == "Run") {
+                    if (activity.distance / 1000 <= 10) {
+                        $scope.runDistanceTotals0_10.add(activity);
+                    }
+
+                    if (activity.distance / 1000 > 10 && activity.distance / 1000 <= 20) {
+                        $scope.runDistanceTotals10_20.add(activity);
+                    }
+
+                    if (activity.distance / 1000 > 20 && activity.distance / 1000 <= 30) {
+                        $scope.runDistanceTotals20_30.add(activity);
+                    }
+
+                    if (activity.distance / 1000 > 30 && activity.distance / 1000 <= 40) {
+                        $scope.runDistanceTotals30_40.add(activity);
+                    }
+
+                    if (activity.distance / 1000 > 40) {
+                        $scope.runDistanceTotals40.add(activity);
+                    }
+                }
 
                 if ($scope.withGear && activity.gear_id) {
+                    var gearName = findGearName(activity.gear_id);
                     if (!$scope.gearTotals[activity.gear_id]) {
-                        $scope.gearTotals[activity.gear_id] = new Totals();
+                        $scope.gearTotals[activity.gear_id] = new Totals(activity.gear_id, gearName);
                     }
                     $scope.gearTotals[activity.gear_id].add(activity);
-                    $scope.gearTotals[activity.gear_id].gearName = findGearName(activity.gear_id);
                 }
 
                 if (activity.location_country) {
                     if (!$scope.countryTotals[activity.location_country]) {
-                        $scope.countryTotals[activity.location_country] = new Totals();
+                        $scope.countryTotals[activity.location_country] = new Totals(activity.location_country, activity.location_country);
                     }
                     $scope.countryTotals[activity.location_country].add(activity);
 
@@ -221,7 +305,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                         activity.location_state = "";
                     }
                     if (!country.states[activity.location_state]) {
-                        country.states[activity.location_state] = new Totals();
+                        country.states[activity.location_state] = new Totals(activity.location_state, activity.location_state);
                     }
                     country.states[activity.location_state].add(activity);
 
@@ -234,7 +318,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
                     if (activity.location_city) {
                         if (!state.cities[activity.location_city]) {
-                            state.cities[activity.location_city] = new Totals();
+                            state.cities[activity.location_city] = new Totals(activity.location_city, activity.location_city);
                         }
                         state.cities[activity.location_city].add(activity);
                     }
@@ -243,10 +327,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         }
 
-        $scope.drawActivityOnMap = function(activity) {
+        $scope.drawActivityOnMap = function (activity) {
             $scope.drawActivitiesOnMap([activity]);
         };
-        
+
         $scope.drawActivitiesOnMap = function (activities) {
             $('html,body').animate({scrollTop: $('#mapTop').offset().top});
 
@@ -348,7 +432,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
             $scope.after = firstDayOfMonth;
             $scope.fetchMyActivities(null, firstDayOfMonth, type);
-
         };
 
         $scope.fetchFriendsActivities = function () {
