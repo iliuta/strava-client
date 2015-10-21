@@ -64,8 +64,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         routingControl.getPlan().on("waypointschanged", function (e) {
             var waypoints = routingControl.getWaypoints();
-            
-            var nonEmptyWaypoints = waypoints.filter(function(waypoint) {
+
+            var nonEmptyWaypoints = waypoints.filter(function (waypoint) {
                 if (waypoint.latLng) {
                     return waypoint;
                 }
@@ -120,6 +120,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         var onAjaxError = function (data) {
             console.log(data);
             $scope.stravaError = data;
+            $scope.downloadInProgress = false;
         };
 
 // get athlete profile at the beginning
@@ -150,6 +151,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         }
 
         function initScopeProperties(withGear) {
+
+            $scope.downloadInProgress = true;
 
             $scope.withGear = withGear;
 
@@ -433,6 +436,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             $scope.photos = null;
             computeAllTotals(activities);
             $scope.drawActivitiesOnMap(activities);
+            $scope.downloadInProgress = false;
         };
 
         var drawPhotos = function (photos) {
@@ -472,13 +476,12 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 $scope.photos = [];
                 activities.forEach(function (activity) {
                     if (activity.total_photo_count && activity.total_photo_count > 0) {
+                        $scope.downloadInProgress = true;
                         $http.get('rest/photos/' + activity.id).success(function (photos) {
+                            $scope.downloadInProgress = false;
                             $scope.photos = $scope.photos.concat(photos);
                             drawPhotos(photos);
-                        }).error(function (data) {
-                            console.log(data);
-                            $scope.stravaError = data;
-                        });
+                        }).error(onAjaxError);
 
                     }
                 });
@@ -504,17 +507,13 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         $scope.fetchFriendsActivities = function () {
             initScopeProperties(false);
-            $http.get('rest/friends-activities').success(onSuccessActivities).error(function (data) {
-                $scope.stravaError = data;
-            });
+            $http.get('rest/friends-activities').success(onSuccessActivities).error(onAjaxError);
 
         };
 
         $scope.fetchClubActivities = function (clubId) {
             initScopeProperties(false);
-            $http.get('rest/club-activities/' + clubId).success(onSuccessActivities).error(function (data) {
-                $scope.stravaError = data;
-            });
+            $http.get('rest/club-activities/' + clubId).success(onSuccessActivities).error(onAjaxError);
         };
 
         $scope.fetchMyActivities = function (before, after, type) {
