@@ -6,8 +6,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         $scope.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 
 
-        //$scope.map = L.map('map-canvas').setView([48.880821, 2.242003], 8);
-
         var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
         var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 18, attribution: osmAttrib});
@@ -19,6 +17,11 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         var mapboxToken = "pk.eyJ1IjoiaWxpdXRhIiwiYSI6ImNpZmplb2RoODAweWV0amtuMnV6NG41N3QifQ.ielyh5hPAkTB9AquOPeuYQ";
         var runBikeHike =
             L.tileLayer("https://api.mapbox.com/v4/mapbox.run-bike-hike/{z}/{x}/{y}.png?access_token=" + mapboxToken,
+                {
+                    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+                });
+        var streets =
+            L.tileLayer("https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=" + mapboxToken,
                 {
                     attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
                 });
@@ -38,7 +41,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             "OpenStreetMap": osm,
             "OpenCycleMap": ocm,
             "Mapbox Terrain": runBikeHike,
-            "Mapbox Streets Satellite": satellite
+            "Mapbox Streets Satellite": satellite,
+            "Mapbox Streets": streets
         };
 
         $scope.map = L.map('map-canvas', {
@@ -96,24 +100,33 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         }
 
         $scope.map.on('click', function (e) {
-            var container = L.DomUtil.create('div'),
-                startBtn = createButton('Start from this location', container),
-                destBtn = createButton('Go to this location', container);
+            /*var container = L.DomUtil.create('div'),
+             startBtn = createButton('Start from this location', container),
+             destBtn = createButton('Go to this location', container);
 
-            L.DomEvent.on(startBtn, 'click', function () {
+             L.DomEvent.on(startBtn, 'click', function () {
+             routingControl.spliceWaypoints(0, 1, e.latlng);
+             $scope.map.closePopup();
+             });
+
+             L.DomEvent.on(destBtn, 'click', function () {
+             routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, e.latlng);
+             $scope.map.closePopup();
+             });
+
+             L.popup()
+             .setContent(container)
+             .setLatLng(e.latlng)
+             .openOn($scope.map);*/
+            if (!routingControl.getWaypoints()[0].latLng) {
                 routingControl.spliceWaypoints(0, 1, e.latlng);
-                $scope.map.closePopup();
-            });
-
-            L.DomEvent.on(destBtn, 'click', function () {
+            } else if (routingControl.getWaypoints().length == 2 && !routingControl.getWaypoints()[1].latLng) {
                 routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, e.latlng);
-                $scope.map.closePopup();
-            });
+            } else {
+                var lastWaypoint = routingControl.getWaypoints()[routingControl.getWaypoints().length - 1].latLng;
+                routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, lastWaypoint, e.latlng);
+            }
 
-            L.popup()
-                .setContent(container)
-                .setLatLng(e.latlng)
-                .openOn($scope.map);
         });
 
 
