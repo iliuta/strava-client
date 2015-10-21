@@ -64,7 +64,12 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                         {color: 'white', opacity: 0.8, weight: 6},
                         {color: 'yellow', opacity: 1, weight: 2}
                     ]
-                }
+                },
+                router: new L.Routing.OSRM({
+                    serviceUrl: '//api-osrm-routed-production.tilestream.net/viaroute',
+                    timeout: 30 * 1000,
+                    routingOptions: {}
+                })
             });
 
         routingControl.getPlan().on("waypointschanged", function (e) {
@@ -101,7 +106,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         }
 
         // hack to prevent click/dblclick weird behaviour
-        var mapOnDblClick =  function (event) {
+        var mapOnDblClick = function (event) {
             $scope.map.clicked = 0;
             $scope.map.zoomIn();
         };
