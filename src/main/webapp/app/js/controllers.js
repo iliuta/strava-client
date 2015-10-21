@@ -53,6 +53,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         L.control.layers(baseMaps).addTo($scope.map);
 
         $scope.gpxUrl = null;
+        $scope.routePlannerOnOff = false;
 
         var routingControl = L.Routing.control(
             {
@@ -64,7 +65,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                         {color: 'yellow', opacity: 1, weight: 2}
                     ]
                 }
-            }).addTo($scope.map);
+            });
 
         routingControl.getPlan().on("waypointschanged", function (e) {
             var waypoints = routingControl.getWaypoints();
@@ -99,35 +100,41 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             return btn;
         }
 
-        $scope.map.on('click', function (e) {
-            /*var container = L.DomUtil.create('div'),
-             startBtn = createButton('Start from this location', container),
-             destBtn = createButton('Go to this location', container);
+        // hack to prevent click/dblclick weird behaviour
+        var mapOnDblClick =  function (event) {
+            $scope.map.clicked = 0;
+            $scope.map.zoomIn();
+        };
 
-             L.DomEvent.on(startBtn, 'click', function () {
-             routingControl.spliceWaypoints(0, 1, e.latlng);
-             $scope.map.closePopup();
-             });
-
-             L.DomEvent.on(destBtn, 'click', function () {
-             routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, e.latlng);
-             $scope.map.closePopup();
-             });
-
-             L.popup()
-             .setContent(container)
-             .setLatLng(e.latlng)
-             .openOn($scope.map);*/
-            if (!routingControl.getWaypoints()[0].latLng) {
-                routingControl.spliceWaypoints(0, 1, e.latlng);
-            } else if (routingControl.getWaypoints().length == 2 && !routingControl.getWaypoints()[1].latLng) {
-                routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, e.latlng);
-            } else {
-                var lastWaypoint = routingControl.getWaypoints()[routingControl.getWaypoints().length - 1].latLng;
-                routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, lastWaypoint, e.latlng);
-            }
-
-        });
+        var mapOnClick = function (e) {
+            // hack to prevent click/dblclick weird behaviour
+            $scope.map.clicked = $scope.map.clicked + 1;
+            setTimeout(function () {
+                if ($scope.map.clicked == 1) {
+                    // at first click display a popup
+                    if (!routingControl.getWaypoints()[0].latLng) {
+                        var container = L.DomUtil.create('div'),
+                            startBtn = createButton('Start route from this location', container);
+                        L.DomEvent.on(startBtn, 'click', function () {
+                            routingControl.spliceWaypoints(0, 1, e.latlng);
+                            $scope.map.closePopup();
+                        });
+                        L.popup()
+                            .setContent(container)
+                            .setLatLng(e.latlng)
+                            .openOn($scope.map);
+                    } else if (routingControl.getWaypoints().length == 2 && !routingControl.getWaypoints()[1].latLng) {
+                        // then fill the coords of the last waypoint
+                        routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, e.latlng);
+                    } else {
+                        // then add the new waypoint to the end
+                        var lastWaypoint = routingControl.getWaypoints()[routingControl.getWaypoints().length - 1].latLng;
+                        routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, lastWaypoint, e.latlng);
+                    }
+                    $scope.map.clicked = 0;
+                }
+            }, 300);
+        };
 
 
         var onAjaxError = function (data) {
@@ -543,6 +550,20 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 afterEpoch = Math.floor(new Date(after).getTime() / 1000);
             }
             $http.get('rest/activities?before=' + (beforeEpoch ? beforeEpoch : '') + '&after=' + (afterEpoch ? afterEpoch : '') + '&type=' + (type ? type : '')).success(onSuccessActivities).error(onAjaxError);
+        };
+
+
+        $scope.activateRoutePlanner = function () {
+            if ($scope.routePlannerOnOff) {
+                routingControl.addTo($scope.map);
+                $scope.map.on("dblclick", mapOnDblClick);
+                $scope.map.on("click", mapOnClick);
+            } else {
+                $scope.clearRoute();
+                routingControl.removeFrom($scope.map);
+                $scope.map.off("dblclick", mapOnDblClick);
+                $scope.map.off("click", mapOnClick);
+            }
         };
 
 

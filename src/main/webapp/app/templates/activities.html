@@ -66,8 +66,7 @@
                                ng-click="fetchMyActivitiesThisMonth(type)" ng-disabled="downloadInProgress">
                         <input ng-show="activities" type="button" class="btn btn-primary btn-sm" value="Display photos"
                                ng-click="fetchPhotos(activities)" ng-disabled="downloadInProgress">
-                        <a ng-show="gpxUrl" href="{{gpxUrl}}">Download gpx</a>&nbsp;
-                        <a ng-show="gpxUrl" href="" ng-click="clearRoute()">Clear route</a>
+
                     </p>
                 </div>
             </form>
@@ -86,6 +85,9 @@
 
         </tab>
     </tabset>
+    <input type="checkbox" ng-model="routePlannerOnOff" ng-click="activateRoutePlanner()"> Route planner
+    <a ng-show="gpxUrl" href="{{gpxUrl}}">Download gpx</a>&nbsp;
+    <a ng-show="gpxUrl" href="" ng-click="clearRoute()">Clear route</a>
 </div>
 <div class="panel-body">
     <div class="alert alert-danger" role="alert" ng-show="stravaError">{{stravaError.message}} <span ng-show="stravaError.code==511">Please <a href="javascript:window.location.reload();">reload</a>.</span></div>
