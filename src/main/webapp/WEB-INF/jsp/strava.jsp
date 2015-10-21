@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+    <link rel="stylesheet" href="bower_components/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
 
     <title>Strava personal heatmap (beta)</title>
 
@@ -97,6 +98,7 @@
 <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 <script src="bower_components/Leaflet.encoded/Polyline.encoded.js"></script>
+<script src="bower_components/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 <script src="app/js/app.js"></script>
 <script src="app/js/controllers.js"></script>
 

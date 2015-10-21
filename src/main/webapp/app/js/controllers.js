@@ -48,6 +48,74 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         });
         L.control.layers(baseMaps).addTo($scope.map);
 
+        $scope.gpxUrl = null;
+
+        var routingControl = L.Routing.control(
+            {
+                waypoints: [],
+                lineOptions: {
+                    styles: [
+                        {color: 'black', opacity: 0.15, weight: 9},
+                        {color: 'white', opacity: 0.8, weight: 6},
+                        {color: 'yellow', opacity: 1, weight: 2}
+                    ]
+                }
+            }).addTo($scope.map);
+
+        routingControl.getPlan().on("waypointschanged", function (e) {
+            var waypoints = routingControl.getWaypoints();
+            
+            var nonEmptyWaypoints = waypoints.filter(function(waypoint) {
+                if (waypoint.latLng) {
+                    return waypoint;
+                }
+            });
+
+            if (nonEmptyWaypoints && nonEmptyWaypoints.length > 1) {
+                $scope.gpxUrl = "https://api-osrm-routed-production.tilestream.net/viaroute?output=gpx&geometry=false&alt=false&instructions=false";
+                nonEmptyWaypoints.forEach(function (waypoint) {
+                    if (waypoint.latLng) {
+                        $scope.gpxUrl += "&loc=" + waypoint.latLng.lat + "," + waypoint.latLng.lng;
+                    }
+                });
+                $scope.$apply();
+            }
+        });
+
+        $scope.clearRoute = function () {
+            routingControl.spliceWaypoints(0, routingControl.getWaypoints().length);
+            $scope.gpxUrl = null;
+        };
+
+
+        function createButton(label, container) {
+            var btn = L.DomUtil.create('button', '', container);
+            btn.setAttribute('type', 'button');
+            btn.innerHTML = label;
+            return btn;
+        }
+
+        $scope.map.on('click', function (e) {
+            var container = L.DomUtil.create('div'),
+                startBtn = createButton('Start from this location', container),
+                destBtn = createButton('Go to this location', container);
+
+            L.DomEvent.on(startBtn, 'click', function () {
+                routingControl.spliceWaypoints(0, 1, e.latlng);
+                $scope.map.closePopup();
+            });
+
+            L.DomEvent.on(destBtn, 'click', function () {
+                routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, e.latlng);
+                $scope.map.closePopup();
+            });
+
+            L.popup()
+                .setContent(container)
+                .setLatLng(e.latlng)
+                .openOn($scope.map);
+        });
+
 
         var onAjaxError = function (data) {
             console.log(data);
@@ -254,7 +322,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                     if (activity.distance / 1000 > 150 && activity.distance / 1000 <= 200) {
                         $scope.bikeDistanceTotals150_200.add(activity);
                     }
-                    
+
                     if (activity.distance / 1000 > 200) {
                         $scope.bikeDistanceTotals200.add(activity);
                     }
