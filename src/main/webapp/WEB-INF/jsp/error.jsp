@@ -26,6 +26,7 @@
 
         <p>An error occured</p>
 <%
+if (exception !=null) {
 if (exception.getCause() !=null && exception.getCause() instanceof org.springframework.security.oauth2.common.exceptions.UserDeniedAuthorizationException) {
 %>
 	User has denied the autorization.
@@ -34,6 +35,7 @@ if (exception.getCause() !=null && exception.getCause() instanceof org.springfra
 %>
         <%=exception.getMessage()%>
 <%
+}
 }
 %>
     </div>
