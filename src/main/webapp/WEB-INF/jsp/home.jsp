@@ -43,7 +43,7 @@
                 <input type="checkbox" onclick="setCookie()"> Don't show this again.
 
                 <p>
-                    This application uses Strava and Google Maps free APIs. No data is stored locally on the server.
+                    This application uses Strava free API. No data is stored locally on the server.
                     I haven't tested this with Internet Explorer. It seem to work properly with Chrome, Firefox and
                     Safari.
                     Suggestions and remarks are <a href="http://twitter.com/iliuta">welcome</a> or you can connect with
