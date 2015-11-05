@@ -72,6 +72,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 })
             });
 
+        routingControl.on("routesfound", function (e) {
+            // keep this for furhter evolutions, i.e. generate proper gpx track files
+            // console.log(e.routes[0].coordinates);
+        });
         routingControl.getPlan().on("waypointschanged", function (e) {
             var waypoints = routingControl.getWaypoints();
 
@@ -175,26 +179,39 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             }
         }
 
-        function initScopeProperties(withGear) {
+        function initScopeProperties(withGear, mine) {
 
+            // flag used to deactivate buttons while the download is in progress
             $scope.downloadInProgress = true;
 
+            // flag used to display gear statistics or not (in case of club and friends activities)
             $scope.withGear = withGear;
-
+            
+            // flag used to inform that activities displayed are mine or others' activities (clubs or friends)
+            // used to display or not the "photos" button (cannot display photos from activities not mine)
+            $scope.mine = mine;
+            
+            // store some error and display it on the screen
             $scope.stravaError = null;
 
+            // the activity currently clicked on the map 
             $scope.currentActivity = null;
 
+            // the list of activities currently displayed on the map 
             $scope.activities = null;
 
+            // array of statistics
             $scope.totals = [];
 
+            // all totals
             $scope.globalTotals = new Totals("total", "Total");
             $scope.totals.push($scope.globalTotals);
 
+            // totals for trainer activities
             $scope.trainerTotals = new Totals("trainer", "Trainer");
             $scope.totals.push($scope.trainerTotals);
 
+            // totals for manual activities
             $scope.manualTotals = new Totals("manual", "Manual");
             $scope.totals.push($scope.manualTotals);
 
@@ -234,8 +251,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             $scope.runDistanceTotals40 = new Totals("run40", "Run more than 40km");
             $scope.totals.push($scope.runDistanceTotals40);
 
+            // totals grouped by country (slightly more complex object using Totals)
             $scope.countryTotals = new Object();
 
+            // totals grouped by gear (slightly more complex object using Totals)
             $scope.gearTotals = new Object();
 
         }
@@ -459,6 +478,9 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         var onSuccessActivities = function (activities) {
             $scope.activities = activities;
             $scope.photos = null;
+            if ($scope.photosLayerGroup) {
+                $scope.photosLayerGroup.clearLayers();
+            }
             computeAllTotals(activities);
             $scope.drawActivitiesOnMap(activities);
             $scope.downloadInProgress = false;
@@ -489,6 +511,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                         $scope.$apply();
                         $('#photoModal').modal('show');
                     });
+                    $scope.photosLayerGroup.addLayer(marker);
                     marker.addTo($scope.map);
                 }
             });
@@ -497,6 +520,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
 
         $scope.fetchPhotos = function (activities) {
+            if (!$scope.photosLayerGroup) {
+                $scope.photosLayerGroup = L.layerGroup();
+                $scope.photosLayerGroup.addTo($scope.map);
+            }
             if (!$scope.photos) {
                 $scope.photos = [];
                 activities.forEach(function (activity) {
@@ -531,18 +558,18 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         };
 
         $scope.fetchFriendsActivities = function () {
-            initScopeProperties(false);
+            initScopeProperties(false, false);
             $http.get('rest/friends-activities').success(onSuccessActivities).error(onAjaxError);
 
         };
 
         $scope.fetchClubActivities = function (clubId) {
-            initScopeProperties(false);
+            initScopeProperties(false, false);
             $http.get('rest/club-activities/' + clubId).success(onSuccessActivities).error(onAjaxError);
         };
 
         $scope.fetchMyActivities = function (before, after, type) {
-            initScopeProperties(true);
+            initScopeProperties(true, true);
 
             var beforeEpoch;
 
