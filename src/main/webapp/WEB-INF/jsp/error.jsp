@@ -1,3 +1,4 @@
+<%@ page isErrorPage="true" contentType="text/html"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -23,8 +24,18 @@
     <div class="jumbotron">
         <h1>Strava personal heatmap</h1>
 
-        <p>Internal server error</p>
-
+        <p>An error occured</p>
+<%
+if (exception.getCause() !=null && exception.getCause() instanceof org.springframework.security.oauth2.common.exceptions.UserDeniedAuthorizationException) {
+%>
+	User has denied the autorization.
+<%
+} else {
+%>
+        <%=exception.getMessage()%>
+<%
+}
+%>
     </div>
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
