@@ -69,6 +69,9 @@
 
                     </p>
                 </div>
+                <div class="throbber-loader" ng-show="downloadInProgress">
+                    Loading…
+                </div>
             </form>
         </tab>
         <tab heading="Others">
@@ -79,6 +82,9 @@
                     <span ng-repeat="club in athleteProfile.clubs">
                         <img src="{{club.profile_medium | profileImage}}" class="btn btn-primary btn-sm" title="{{club.name}}"
                            ng-click="fetchClubActivities(club.id)" ng-disabled="downloadInProgress">
+                    </span>
+                    <span class="throbber-loader" ng-show="downloadInProgress">
+                        Loading…
                     </span>
                 </p>
             </div>
