@@ -186,11 +186,11 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
             // flag used to display gear statistics or not (in case of club and friends activities)
             $scope.withGear = withGear;
-            
+
             // flag used to inform that activities displayed are mine or others' activities (clubs or friends)
             // used to display or not the "photos" button (cannot display photos from activities not mine)
             $scope.mine = mine;
-            
+
             // store some error and display it on the screen
             $scope.stravaError = null;
 
@@ -470,8 +470,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 }
             });
 
-            $scope.map.fitBounds(bounds);
-            $scope.map.panInsideBounds(bounds);
+            if (bounds) {
+                $scope.map.fitBounds(bounds);
+                $scope.map.panInsideBounds(bounds);
+            }
         };
 
 
@@ -484,6 +486,9 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             computeAllTotals(activities);
             $scope.drawActivitiesOnMap(activities);
             $scope.downloadInProgress = false;
+            if (!activities || activities.length == 0) {
+                $scope.stravaError = {code: "0", message: "No activities found. Please change your criteria and try again."};
+            }
         };
 
         var drawPhotos = function (photos) {
