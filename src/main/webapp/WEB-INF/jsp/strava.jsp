@@ -22,7 +22,7 @@
 
         #map-canvas {
             width: 100%;
-            height: 700px;
+            height: 1024px;
         }
 
         body {
