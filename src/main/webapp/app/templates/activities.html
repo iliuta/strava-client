@@ -113,7 +113,7 @@
         </thead>
         <tbody ng-repeat-start="total in totals">
             <tr ng-show="total.nb > 0">
-                <td><a href="" data-toggle="collapse" data-target="#{{total.id}}Collapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a><b>
+                <td><a href="" data-toggle="collapse" data-target="#{{total.id}}Collapse" title="Expand/Collapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a><b>
                     <a href="" ng-click="drawActivitiesOnMap(total.activities)">{{total.title}}</a></b>
                 </td>
                 <td>
@@ -156,7 +156,7 @@
         <tbody>
             <tr ng-show="withGear">
                 <td>
-                    <a href="" data-toggle="collapse" data-target="#gearCollapse"><span
+                    <a href="" data-toggle="collapse" data-target="#gearCollapse" title="Expand/Collapse"><span
                             class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
                     Stats by gear
                 </td>
@@ -181,7 +181,7 @@
         <tbody>
             <tr>
                 <td>
-                    <a href="" data-toggle="collapse" data-target="#geographicCollapse"><span
+                    <a href="" data-toggle="collapse" data-target="#geographicCollapse" title="Expand/Collapse"><span
                             class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
                     Stats by location
                 </td>
