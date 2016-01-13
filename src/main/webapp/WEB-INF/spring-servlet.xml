@@ -17,32 +17,6 @@
     <context:component-scan base-package="com.iliuta.strava.mvc"/>
 
     <mvc:default-servlet-handler/>
-    <!--
-    <oauth:client id="oauth2ClientFilter"/>
-
-    <sec:http pattern="/bower_components/**" security="none" />
-    <sec:http pattern="/*.ico" security="none" />
-    <sec:http pattern="/index.jsp" security="none" />
-    <sec:http pattern="/login.jsp" security="none" />
-    <sec:http pattern="/app/img/**" security="none" />
-    <sec:http
-          auto-config="false"
-          authentication-manager-ref="oAuthAuthenticationManager">
-        <sec:form-login authentication-failure-url="/login.jsp?authentication_error=true" default-target-url="/index.jsp"
-                    login-page="/login.jsp" login-processing-url="/login.do" />
-        <sec:logout logout-success-url="/index.jsp" logout-url="/logout.do" />
-        <sec:anonymous />
-
-        
-
-        <sec:intercept-url pattern="/**" access="ROLE_USER"/>
-
-        <sec:custom-filter ref="oauth2ClientFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
-    </sec:http>
-
-
-    <bean id="oAuthAuthenticationManager" class="com.iliuta.strava.springsecurity.AlwaysUserAuthenticationManager" />
-    -->
 
     <mvc:annotation-driven />
     
@@ -51,7 +25,7 @@
                     client-secret="${strava.client.secret}"
                     access-token-uri="https://www.strava.com/oauth/token"
                     client-authentication-scheme="form"
-                    user-authorization-uri="https://www.strava.com/oauth/authorize?response_type=code&amp;scope=view_private"/>
+                    user-authorization-uri="https://www.strava.com/oauth/authorize?response_type=code&amp;scope=write,view_private"/>
 
     <oauth:rest-template id="stravaRestTemplate" resource="strava">
         <property name="messageConverters">

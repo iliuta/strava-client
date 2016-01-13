@@ -63,6 +63,13 @@ public class StravaRestController {
         return athleteProfile;
     }
 
+    @RequestMapping(value = "/update-activity", method = RequestMethod.POST)
+    public String updateActivity(@RequestBody Activity activity) throws StravaClientException {
+        String url = "https://www.strava.com/api/v3/activities/{id}?type={type}&private={isprivate}&commute={commute}&trainer={trainer}&name={name}&gear_id={gearId}";
+        stravaRestTemplate.put(url, null, activity.getId(), activity.getType(), activity.getIsprivate(), activity.getCommute(), activity.getTrainer(), activity.getName(), activity.getGearId());
+        return "";
+    }
+
     @RequestMapping("/friends-activities")
     public List<Activity> friendsActivities(Long before, String type) {
         LOGGER.debug("Fetch friends' activities before={} type={}", before, type);

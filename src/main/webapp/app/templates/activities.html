@@ -133,9 +133,11 @@
         <tbody id="{{total.id}}Collapse" class="collapse out">
             <tr ng-show="total.nb > 0" ng-repeat="activity in total.activities">
                 <td>
+                    <a href="" ng-click="displayEditActivityModal(activity)" ng-show="mine" title="Edit activity"><span class="glyphicon glyphicon-edit" aria-hidden="true" ></span></a>&nbsp;
                     <a href="" ng-click="drawActivityOnMap(activity)"><b>{{activity.name}}</b></a>
                     <a href="http://www.strava.com/athletes/{{activity.athlete.id}}" ng-show="activity.athlete.profile" target="_blank">{{activity.athlete.firstname}} {{activity.athlete.lastname}}</a>
                     {{activity.start_date | date : 'short'}}
+                    <span class="glyphicon glyphicon-lock" aria-hidden="true" ng-show="activity.private"></span>
                 </td>
                 <td></td>
                 <td>{{activity.distance/1000 | number:1}}km</td>
@@ -246,6 +248,84 @@
                         <a ng-show="currentPhoto.ref && currentPhoto.source==2" href="{{currentPhoto.ref}}" target="_blank">Show on Instagram</a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="editActivityModal" class="modal bs-example-modal-sm" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Edit activity</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger" role="alert" ng-show="stravaError">{{stravaError.message}} <span ng-show="stravaError.code==511">Please <a href="javascript:window.location.reload();">reload</a>.</span></div>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" ng-model="currentEditActivity.name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <select class="form-control" ng-model="currentEditActivity.type">
+                        <option></option>
+                        <option>Ride</option>
+                        <option>Run</option>
+                        <option>Swim</option>
+                        <option>Hike</option>
+                        <option>Walk</option>
+                        <option>AlpineSki</option>
+                        <option>BackcountrySki</option>
+                        <option>Canoeing</option>
+                        <option>CrossCountrySkiing</option>
+                        <option>Crossfit</option>
+                        <option>Elliptical</option>
+                        <option>IceSkate</option>
+                        <option>InlineSkate</option>
+                        <option>Kayaking</option>
+                        <option>Kitesurf</option>
+                        <option>NordicSki</option>
+                        <option>RockClimbing</option>
+                        <option>RollerSki</option>
+                        <option>Rowing</option>
+                        <option>Snowboard</option>
+                        <option>Snowshoe</option>
+                        <option>StairStepper</option>
+                        <option>StandUpPaddling</option>
+                        <option>Surfing</option>
+                        <option>WeightTraining</option>
+                        <option>Windsurf</option>
+                        <option>Workout</option>
+                        <option>Yoga</option>
+                    </select>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="currentEditActivity.private"> Private
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="currentEditActivity.trainer"> Trainer
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="currentEditActivity.commute"> Commute
+                    </label>
+                </div>
+                <div class="form-group" ng-show="currentEditActivity.type=='Run' || currentEditActivity.type=='Hike' || currentEditActivity.type=='Walk' || currentEditActivity.type=='Ride'">
+                    <select class="form-control" ng-model="currentEditActivity.gear_id">
+                        <option></option>
+                        <option ng-show="currentEditActivity.type=='Ride'" ng-repeat="bike in athleteProfile.bikes" value="{{bike.id}}">{{bike.name}}</option>
+                        <option ng-show="currentEditActivity.type=='Run' || currentEditActivity.type=='Hike' || currentEditActivity.type=='Walk'" ng-repeat="shoe in athleteProfile.shoes" value="{{shoe.id}}">{{shoe.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary"  ng-click="update(currentEditActivity)">Save</button>
             </div>
         </div>
     </div>

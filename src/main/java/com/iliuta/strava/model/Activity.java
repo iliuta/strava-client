@@ -23,6 +23,8 @@ public class Activity implements Serializable {
     @JsonProperty(value = "start_date_local")
     private Date startDateLocal;
     private Map map;
+    @JsonProperty(value = "private")
+    private Boolean isprivate;
     private Boolean trainer;
     private Boolean commute;
     private Boolean manual;
@@ -55,6 +57,14 @@ public class Activity implements Serializable {
     private Integer elapsedTime;
     @JsonProperty(value = "total_photo_count")
     private Integer totalPhotoCount;
+
+    public Boolean getIsprivate() {
+        return isprivate;
+    }
+
+    public void setIsprivate(Boolean isprivate) {
+        this.isprivate = isprivate;
+    }
 
     public Integer getTotalPhotoCount() {
         return totalPhotoCount;

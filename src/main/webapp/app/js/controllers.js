@@ -177,6 +177,18 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 this.elevationGain += activity.total_elevation_gain;
                 this.nb++;
             }
+            
+            this.remove = function (activity) {
+                var index = this.activities.indexOf(activity);
+                if (index > -1) {
+                    this.activities.splice(index, 1);
+                }
+                this.distance -= activity.distance;
+                this.movingTime -= activity.moving_time;
+                this.elapsedTime -= activity.elapsed_time;
+                this.elevationGain -= activity.total_elevation_gain;
+                this.nb--;
+            }
         }
 
         function initScopeProperties(withGear, mine) {
@@ -200,6 +212,11 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             // the list of activities currently displayed on the map 
             $scope.activities = null;
 
+            initScopeTotals();
+
+        }
+        
+        function initScopeTotals() {
             // array of statistics
             $scope.totals = [];
 
@@ -256,7 +273,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
             // totals grouped by gear (slightly more complex object using Totals)
             $scope.gearTotals = new Object();
-
+            
         }
 
         function compileInfoWindow() {
@@ -601,6 +618,61 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 $scope.map.off("dblclick", mapOnDblClick);
                 $scope.map.off("click", mapOnClick);
             }
+        };
+
+
+        $scope.displayEditActivityModal = function (activity) {
+            $scope.currentActivity = activity;
+            // copy the currentActivity into a new object to edit without change the selected activity
+            $scope.currentEditActivity = {};
+            $scope.currentEditActivity.type = activity.type;
+            $scope.currentEditActivity.id = activity.id;
+            $scope.currentEditActivity.name = activity.name;
+            $scope.currentEditActivity.private = activity.private;
+            $scope.currentEditActivity.trainer = activity.trainer;
+            $scope.currentEditActivity.commute = activity.commute;
+            $scope.currentEditActivity.gear_id = activity.gear_id;
+            $('#editActivityModal').modal('show');
+        };
+
+        $scope.update = function (activity) {
+            $http.post("rest/update-activity", activity).success(function () {
+                // check if trainer attribute has been modified and update trainer totals
+                if (activity.trainer != $scope.currentActivity.trainer) {
+                    if (activity.trainer) {
+                        $scope.trainerTotals.add($scope.currentActivity);
+                    } else {
+                        $scope.trainerTotals.remove($scope.currentActivity);
+                    }
+                }
+                // check if commute attribute has been modified and update commute and noCommute totals
+                if (activity.commute != $scope.currentActivity.commute) {
+                    if (activity.commute) {
+                        $scope.commuteTotals.add($scope.currentActivity);
+                        $scope.noCommuteTotals.remove($scope.currentActivity);
+                    } else {
+                        $scope.commuteTotals.remove($scope.currentActivity);
+                        $scope.noCommuteTotals.add($scope.currentActivity);
+                    }
+                }
+                // check if gear has been modified and update the corresponding gear totals
+                if (activity.gear_id != $scope.currentActivity.gear_id) {
+                    $scope.gearTotals[$scope.currentActivity.gear_id].remove(activity);
+                    if (!$scope.gearTotals[activity.gear_id]) {
+                        $scope.gearTotals[activity.gear_id] = new Totals(activity.gear_id, findGearName(activity.gear_id));
+                    }
+                    $scope.gearTotals[activity.gear_id].add(activity);
+                }
+
+                // copy the edited attributes into the original object
+                $scope.currentActivity.commute = activity.commute;
+                $scope.currentActivity.private = activity.private;
+                $scope.currentActivity.trainer = activity.trainer;
+                $scope.currentActivity.gear_id = activity.gear_id;
+                $scope.currentActivity.name = activity.name;
+                
+                $('#editActivityModal').modal('hide');
+            }).error(onAjaxError);
         };
 
 
