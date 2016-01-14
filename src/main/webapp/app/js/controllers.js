@@ -638,6 +638,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             $scope.currentEditActivity.gear_id = activity.gear_id;
             $('#editActivityModal').modal('show');
         };
+        
+        $scope.displayRoutePlannerHelpModal = function() {
+            $('#routePlannerHelpModal').modal('show');
+        };
 
         $scope.update = function (activity) {
             $http.post("rest/update-activity", activity).success(function () {

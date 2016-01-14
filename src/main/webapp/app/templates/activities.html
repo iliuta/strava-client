@@ -91,7 +91,7 @@
 
         </tab>
     </tabset>
-    <input type="checkbox" ng-model="routePlannerOnOff" ng-click="activateRoutePlanner()"> Route planner (beta)
+    <input type="checkbox" ng-model="routePlannerOnOff" ng-click="activateRoutePlanner()"> Route planner (beta) <a href="" ng-click="displayRoutePlannerHelpModal()"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
     <a ng-show="gpxUrl" href="" ng-click="downloadGpx()">Download gpx</a>&nbsp;
     <a ng-show="gpxUrl" href="" ng-click="clearRoute()">Clear route</a>
 </div>
@@ -331,3 +331,26 @@
     </div>
 </div>
 
+
+<div id="routePlannerHelpModal" class="modal bs-example-modal-sm" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Route planner</h4>
+            </div>
+            <div class="modal-body">
+                  <ol>
+                      <li>Activate route planner</li>
+                      <li>Click on the map where you want to start the route and then click on "Start route from this location" button</li>
+                      <li>Click on the map on the next location for the route. The route planner computes the route from the starting point to this point</li>
+                      <li>Click again on the map. The route planner computes the route from the last point to this point</li>
+                      <li>You can add intermediate points by clicking on the route</li>
+                      <li>You can drag any of the intermediate points on the map</li>
+                      <li>At the end, you can download the gpx track</li>
+                  </ol>
+                The Route planner uses <a href="http://project-osrm.org/" target="_new">OSM routing machine</a> and <a href="http://www.liedman.net/leaflet-routing-machine/" target="_new">Leaflet routing machine</a> API.
+            </div>
+        </div>
+    </div>
+</div>        
