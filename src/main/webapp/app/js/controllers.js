@@ -74,7 +74,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         routingControl.on("routesfound", function (e) {
             // every time a route is found, save its coordinates to create gpx file
-            $scope.route = e.routes[0].coordinates;            
+            $scope.route = e.routes[0].coordinates;
         });
         routingControl.getPlan().on("waypointschanged", function (e) {
             var waypoints = routingControl.getWaypoints();
@@ -117,6 +117,9 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         var mapOnClick = function (e) {
             // hack to prevent click/dblclick weird behaviour
+            if (!$scope.map.clicked) {
+                $scope.map.clicked = 0;
+            }
             $scope.map.clicked = $scope.map.clicked + 1;
             setTimeout(function () {
                 if ($scope.map.clicked == 1) {
@@ -608,6 +611,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
 
         $scope.activateRoutePlanner = function () {
+
             if ($scope.routePlannerOnOff) {
                 routingControl.addTo($scope.map);
                 $scope.map.on("dblclick", mapOnDblClick);
@@ -675,7 +679,9 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             }).error(onAjaxError);
         };
 
-
+        /**
+         * Create gpx file and download it
+         */
         $scope.downloadGpx = function () {
             //console.log($scope.route);
             var gpx = '<?xml version="1.0" encoding="UTF-8"?>' +
@@ -692,11 +698,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
             document.location = 'data:application/octet-stream,' +
                 encodeURIComponent(gpx);
-            console.log($scope.routeGpx);
         };
 
 
-// default behaviour, open my activities of the current month
+        // default behaviour, open my activities of the current month
         $scope.fetchMyActivitiesThisMonth(null);
     }])
 ;
