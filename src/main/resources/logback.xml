@@ -12,5 +12,6 @@
 
     <logger name="org.springframework.security" level="ERROR" />
     <logger name="com.iliuta.strava" level="INFO" />
+    <logger name="org.springframework.security.oauth2" level="DEBUG" />
 
 </configuration>
