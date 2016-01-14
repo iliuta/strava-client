@@ -92,7 +92,7 @@
         </tab>
     </tabset>
     <input type="checkbox" ng-model="routePlannerOnOff" ng-click="activateRoutePlanner()"> Route planner (beta)
-    <a ng-show="gpxUrl" href="{{gpxUrl}}">Download gpx</a>&nbsp;
+    <a ng-show="gpxUrl" href="" ng-click="downloadGpx()">Download gpx</a>&nbsp;
     <a ng-show="gpxUrl" href="" ng-click="clearRoute()">Clear route</a>
 </div>
 <div class="panel-body">
@@ -330,6 +330,4 @@
         </div>
     </div>
 </div>
-
-
 
