@@ -92,9 +92,9 @@
         </tab>
     </tabset>
     <input type="checkbox" ng-model="routePlannerOnOff" ng-click="activateRoutePlanner()"> Route planner (beta) <a href="" ng-click="displayRoutePlannerHelpModal()"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
-    <a ng-show="gpxUrl" href="" ng-click="downloadGpxTrack()">Download gpx track</a>&nbsp;
-    <a ng-show="gpxUrl" href="" ng-click="downloadGpxRoute()">Download gpx route</a>&nbsp;
-    <a ng-show="gpxUrl" href="" ng-click="clearRoute()">Clear route</a>
+    <a ng-show="routeFound" href="" ng-click="downloadGpxTrack()">Download gpx track</a>&nbsp;
+    <a ng-show="routeFound" href="" ng-click="downloadGpxRoute()">Download gpx route</a>&nbsp;
+    <a ng-show="routeFound" href="" ng-click="clearRoute()">Clear route</a>
 </div>
 <div class="panel-body">
     <div class="alert alert-danger" role="alert" ng-show="stravaError">{{stravaError.message}} <span ng-show="stravaError.code==511">Please <a href="javascript:window.location.reload();">reload</a>.</span></div>

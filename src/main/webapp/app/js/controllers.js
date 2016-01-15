@@ -53,7 +53,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         });
         L.control.layers(baseMaps).addTo($scope.map);
 
-        $scope.gpxUrl = null;
+        $scope.routeFound = false;
         $scope.routePlannerOnOff = false;
 
         var routingControl = L.Routing.control(
@@ -83,9 +83,11 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             e.route.instructions.forEach(function (instruction) {
                 $scope.gpxRoute.push(e.route.coordinates[instruction.index]);
             });
+            $scope.routeFound = true;
+            $scope.$apply();
         });
         routingControl.getPlan().on("waypointschanged", function (e) {
-            var waypoints = routingControl.getWaypoints();
+            /*var waypoints = routingControl.getWaypoints();
 
             var nonEmptyWaypoints = waypoints.filter(function (waypoint) {
                 if (waypoint.latLng) {
@@ -101,12 +103,12 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                     }
                 });
                 $scope.$apply();
-            }
+            }*/
         });
 
         $scope.clearRoute = function () {
             routingControl.spliceWaypoints(0, routingControl.getWaypoints().length);
-            $scope.gpxUrl = null;
+            $scope.routeFound = false;
         };
 
 
