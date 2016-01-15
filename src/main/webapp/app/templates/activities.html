@@ -92,7 +92,8 @@
         </tab>
     </tabset>
     <input type="checkbox" ng-model="routePlannerOnOff" ng-click="activateRoutePlanner()"> Route planner (beta) <a href="" ng-click="displayRoutePlannerHelpModal()"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
-    <a ng-show="gpxUrl" href="" ng-click="downloadGpx()">Download gpx</a>&nbsp;
+    <a ng-show="gpxUrl" href="" ng-click="downloadGpxTrack()">Download gpx track</a>&nbsp;
+    <a ng-show="gpxUrl" href="" ng-click="downloadGpxRoute()">Download gpx route</a>&nbsp;
     <a ng-show="gpxUrl" href="" ng-click="clearRoute()">Clear route</a>
 </div>
 <div class="panel-body">
@@ -347,7 +348,7 @@
                       <li>Click again on the map. The route planner computes the route from the last point to this point</li>
                       <li>You can add intermediate points by clicking on the route</li>
                       <li>You can drag any of the intermediate points on the map</li>
-                      <li>At the end, you can download the gpx track</li>
+                      <li>At the end, you can download the gpx track or the gpx route</li>
                   </ol>
                 The Route planner uses <a href="http://project-osrm.org/" target="_new">OSM routing machine</a> and <a href="http://www.liedman.net/leaflet-routing-machine/" target="_new">Leaflet routing machine</a> API.
             </div>

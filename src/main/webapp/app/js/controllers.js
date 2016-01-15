@@ -42,7 +42,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             "OpenCycleMap": ocm,
             "Mapbox Terrain": runBikeHike,
             "Mapbox Streets Satellite": satellite,
-            "Mapbox Streets": streets
+            "Mapbox Streets": streets,
+            "Google": google
         };
 
         $scope.map = L.map('map-canvas', {
@@ -72,9 +73,16 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 })
             });
 
-        routingControl.on("routesfound", function (e) {
+
+        routingControl.on("routeselected", function (e) {
             // every time a route is found, save its coordinates to create gpx file
-            $scope.route = e.routes[0].coordinates;
+            // gpxTrack is about all coordinates of the selected route            
+            $scope.gpxTrck = e.route.coordinates;
+            // gpxRoute is about the coordinates of the crossings, taken from the cue sheet (instructions)
+            $scope.gpxRoute = [];
+            e.route.instructions.forEach(function (instruction) {
+                $scope.gpxRoute.push(e.route.coordinates[instruction.index]);
+            });
         });
         routingControl.getPlan().on("waypointschanged", function (e) {
             var waypoints = routingControl.getWaypoints();
@@ -638,8 +646,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             $scope.currentEditActivity.gear_id = activity.gear_id;
             $('#editActivityModal').modal('show');
         };
-        
-        $scope.displayRoutePlannerHelpModal = function() {
+
+        $scope.displayRoutePlannerHelpModal = function () {
             $('#routePlannerHelpModal').modal('show');
         };
 
@@ -684,21 +692,39 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         };
 
         /**
-         * Create gpx file and download it
+         * Create gpx track file and download it
          */
-        $scope.downloadGpx = function () {
+        $scope.downloadGpxTrack = function () {
             //console.log($scope.route);
             var gpx = '<?xml version="1.0" encoding="UTF-8"?>' +
                 '<gpx version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
-                '<metadata><name>Route</name></metadata>' +
-                '<trk><name>Route</name>';
+                '<metadata><name>Track</name></metadata>' +
+                '<trk><name>Track</name>';
 
-            $scope.route.forEach(function (coords) {
+            $scope.gpxTrck.forEach(function (coords) {
                 gpx += '<trkpt lat="' + coords.lat + '" lon="' + coords.lng + '" />';
             });
 
 
             gpx += '</trk></gpx>';
+
+            document.location = 'data:application/octet-stream,' +
+                encodeURIComponent(gpx);
+        };
+
+
+        $scope.downloadGpxRoute = function () {
+            var gpx = '<?xml version="1.0" encoding="UTF-8"?>' +
+                '<gpx version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
+                '<metadata><name>Route</name></metadata>' +
+                '<rte><name>Route</name>';
+
+            $scope.gpxRoute.forEach(function (coords) {
+                gpx += '<rtept lat="' + coords.lat + '" lon="' + coords.lng + '" />';
+            });
+
+
+            gpx += '</rte></gpx>';
 
             document.location = 'data:application/octet-stream,' +
                 encodeURIComponent(gpx);
