@@ -281,9 +281,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             $scope.runDistanceTotals40 = new Totals("run40", "Run more than 40km");
             $scope.totals.push($scope.runDistanceTotals40);
 
-            // totals grouped by country (slightly more complex object using Totals)
-            $scope.countryTotals = new Object();
-
             // totals grouped by gear (slightly more complex object using Totals)
             $scope.gearTotals = new Object();
 
@@ -311,13 +308,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 osmPath.addEventListener('mouseover',
                     function (event) {
                         osmPath.setStyle({color: 'blue', weight: 7});
-                        /*$scope.currentActivity = activity;
-                         $scope.$apply();
-                         if (!$scope.infoWindowCompiled) {
-                         $scope.popup.setContent(compileInfoWindow());
-                         $scope.infoWindowCompiled = true;
-                         }
-                         $scope.popup.setLatLng(event.latlng);*/
                     });
 
 
@@ -325,12 +315,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                     function () {
                         osmPath.setStyle({color: '#FF0000', weight: 2});
                     });
-
-
-                /*osmPath.addEventListener('mousedown',
-                 function (event) {
-                 $scope.popup.setContent(compileInfoWindow());
-                 });*/
 
                 osmPath.addEventListener('click',
                     function (event) {
@@ -432,41 +416,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                         $scope.gearTotals[activity.gear_id] = new Totals(activity.gear_id, gearName);
                     }
                     $scope.gearTotals[activity.gear_id].add(activity);
-                }
-
-                if (activity.location_country) {
-                    if (!$scope.countryTotals[activity.location_country]) {
-                        $scope.countryTotals[activity.location_country] = new Totals(activity.location_country, activity.location_country);
-                    }
-                    $scope.countryTotals[activity.location_country].add(activity);
-
-                    var country = $scope.countryTotals[activity.location_country];
-
-                    if (!country.states) {
-                        country.states = new Object();
-                    }
-
-                    if (!activity.location_state) {
-                        activity.location_state = "";
-                    }
-                    if (!country.states[activity.location_state]) {
-                        country.states[activity.location_state] = new Totals(activity.location_state, activity.location_state);
-                    }
-                    country.states[activity.location_state].add(activity);
-
-
-                    var state = country.states[activity.location_state];
-
-                    if (!state.cities) {
-                        state.cities = new Object();
-                    }
-
-                    if (activity.location_city) {
-                        if (!state.cities[activity.location_city]) {
-                            state.cities[activity.location_city] = new Totals(activity.location_city, activity.location_city);
-                        }
-                        state.cities[activity.location_city].add(activity);
-                    }
                 }
             });
 

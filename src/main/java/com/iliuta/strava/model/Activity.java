@@ -31,10 +31,16 @@ public class Activity implements Serializable {
     @JsonProperty(value = "resource_state")
     private int resourceState;
     private Gear gear;
+    
+    @Deprecated
     @JsonProperty(value = "location_city")
     private String locationCity;
+    
+    @Deprecated
     @JsonProperty(value = "location_state")
     private String locationState;
+    
+    @Deprecated
     @JsonProperty(value = "location_country")
     private String locationCountry;
     @JsonProperty(value = "average_speed")

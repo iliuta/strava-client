@@ -60,6 +60,7 @@
             <div class="col-lg-12">
                 <h4>What's new</h4>
                 <ul>
+                    <li>Location information was deprecated by Strava so, no more location stats are available :( </li>
                     <li>It is now possible to edit each activity</li>
                     <li>Statistics by distance: bike and run</li>
                     <li>Now you can click on an activity on the list</li>
