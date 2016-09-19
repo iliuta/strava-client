@@ -99,6 +99,7 @@
 <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 <script src="bower_components/Leaflet.encoded/Polyline.encoded.js"></script>
+<script src="bower_components/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <script src="bower_components/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 <script src="app/js/app.js"></script>
 <script src="app/js/controllers.js"></script>

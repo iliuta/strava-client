@@ -83,7 +83,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                     serviceUrl: '//api-osrm-routed-production.tilestream.net/route/v1',
                     timeout: 30 * 1000,
                     routingOptions: {}
-                })
+                }),
+                geocoder: L.Control.Geocoder.nominatim()
             });
 
 
