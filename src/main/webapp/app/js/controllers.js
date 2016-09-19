@@ -79,8 +79,8 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                         {color: 'yellow', opacity: 1, weight: 2}
                     ]
                 },
-                router: new L.Routing.OSRM({
-                    serviceUrl: '//api-osrm-routed-production.tilestream.net/viaroute',
+                router: new L.Routing.OSRMv1({
+                    serviceUrl: '//api-osrm-routed-production.tilestream.net/route/v1',
                     timeout: 30 * 1000,
                     routingOptions: {}
                 })
@@ -672,8 +672,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
             gpx += '</trk></gpx>';
 
-            document.location = 'data:application/octet-stream,' +
-                encodeURIComponent(gpx);
+            window.open('data:application/gpx+xml,' + encodeURIComponent(gpx), "_blank");
         };
 
 
@@ -690,8 +689,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
             gpx += '</rte></gpx>';
 
-            document.location = 'data:application/octet-stream,' +
-                encodeURIComponent(gpx);
+            window.open('data:application/gpx+xml,' + encodeURIComponent(gpx), "_blank");
         };
 
 

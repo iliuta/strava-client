@@ -1,6 +1,6 @@
 {
   "name": "Leaflet.encoded",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "homepage": "https://github.com/jieter/Leaflet.encoded",
   "authors": [
     "Jan Pieter Waagmeester <jieter@jieter.nl>"
@@ -28,14 +28,13 @@
     "test",
     "tests"
   ],
-  "_release": "0.0.7",
+  "_release": "0.0.8",
   "_resolution": {
     "type": "version",
-    "tag": "0.0.7",
-    "commit": "8f820a34c0caa1df5eae2eed97818305c3eeb466"
+    "tag": "0.0.8",
+    "commit": "e7f3b7c5b2eea53dfe2e527d5518c59d9cb44b27"
   },
-  "_source": "git://github.com/jieter/Leaflet.encoded.git",
+  "_source": "https://github.com/jieter/Leaflet.encoded.git",
   "_target": "~0.0.7",
-  "_originalSource": "Leaflet.encoded",
-  "_direct": true
+  "_originalSource": "Leaflet.encoded"
 }

@@ -1,8 +1,9 @@
 # Support encoded polylines in Leaflet
 
-This Leaflet plugin extends the [Leaflet](https://github.com/Leaflet/Leaflet) API with functions to encode and decode Google maps polyline encoding. It is just a convenient way to use the Google polyline encoding algorithm in Leaflet.
+This Leaflet plugin extends Leaflet with functions to encode to and decode from Google maps polyline encoding.
 
-The algorithm is described in the [Google maps API Documentation](https://developers.google.com/maps/documentation/utilities/polylinealgorithm).
+- Works with [Leaflet](https://github.com/Leaflet/Leaflet) v0.7.7 and v1.0.0-rc.1
+- Algorithm described in the [Google maps API Documentation](https://developers.google.com/maps/documentation/utilities/polylinealgorithm).
 
 ## Escaping backslashes
 *Make sure to always escape the backslashes in encoded strings!* Not doing so will result in the backslash to be interpreted as an escape character, yielding wrong results.
@@ -68,7 +69,7 @@ console.log(polyline.getLatLngs());
 Use a decoding precision of 6 to decode OSRM Routing Engine geometries
 ```javascript
 var encoded = "_izlhA~pvydF_{geC~{mZ_kwzCn`{nI";
-var polyline = new L.Polyline(L.PolylineUtil.decode(encoded, 6));
+var polyline = L.polyline(L.PolylineUtil.decode(encoded, 6));
 
 // prints an array of 3 LatLng objects.
 console.log(polyline.getLatLngs());
