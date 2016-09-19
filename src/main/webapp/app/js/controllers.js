@@ -51,6 +51,19 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             zoom: 8,
             layers: [runBikeHike]
         });
+
+
+        function setMapSize() {
+            $("#map-canvas").height($(window).height()*0.7);
+            $scope.map.invalidateSize();
+        }
+
+        // resize the map according when resizing the window
+        $(window).on("resize", setMapSize).trigger("resize");
+
+        // initialize the map size at the beginning
+        setMapSize();
+        
         L.control.layers(baseMaps).addTo($scope.map);
 
         $scope.routeFound = false;
