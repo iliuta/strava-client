@@ -90,7 +90,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         routingControl.on("routeselected", function (e) {
             // every time a route is found, save its coordinates to create gpx file
-            // gpxTrack is about all coordinates of the selected route            
+            // gpxTrack is about all coordinates of the selected route
             $scope.gpxTrck = e.route.coordinates;
             // gpxRoute is about the coordinates of the crossings, taken from the cue sheet (instructions)
             $scope.gpxRoute = [];
@@ -661,34 +661,34 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
          */
         $scope.downloadGpxTrack = function () {
             //console.log($scope.route);
-            var gpx = '<?xml version="1.0" encoding="UTF-8"?>' +
-                '<gpx version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
-                '<metadata><name>Track</name></metadata>' +
-                '<trk><name>Track</name>';
+            var gpx = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+                '<gpx version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">\n' +
+                '\t<metadata>\n\t\t<name>Track</name>\n\t</metadata>\n' +
+                '\t<trk>\n\t\t<name>Track</name>\n';
 
             $scope.gpxTrck.forEach(function (coords) {
-                gpx += '<trkpt lat="' + coords.lat + '" lon="' + coords.lng + '" />';
+                gpx += '\t\t<trkpt lat="' + coords.lat + '" lon="' + coords.lng + '" />\n';
             });
 
 
-            gpx += '</trk></gpx>';
+            gpx += '\t</trk>\n</gpx>';
 
             window.open('data:application/gpx+xml,' + encodeURIComponent(gpx), "_blank");
         };
 
 
         $scope.downloadGpxRoute = function () {
-            var gpx = '<?xml version="1.0" encoding="UTF-8"?>' +
-                '<gpx version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
-                '<metadata><name>Route</name></metadata>' +
-                '<rte><name>Route</name>';
+            var gpx = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+                '<gpx version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">\n' +
+                '\t<metadata>\n\t\t<name>Route</name>\n\t</metadata>\n' +
+                '\t<rte>\n\t\t<name>Route</name>\n';
 
             $scope.gpxRoute.forEach(function (coords) {
-                gpx += '<rtept lat="' + coords.lat + '" lon="' + coords.lng + '" />';
+                gpx += '\t\t<rtept lat="' + coords.lat + '" lon="' + coords.lng + '" />\n';
             });
 
 
-            gpx += '</rte></gpx>';
+            gpx += '\t</rte>\n</gpx>';
 
             window.open('data:application/gpx+xml,' + encodeURIComponent(gpx), "_blank");
         };
