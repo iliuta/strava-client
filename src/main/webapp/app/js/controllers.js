@@ -100,24 +100,16 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             $scope.routeFound = true;
             $scope.$apply();
         });
+
         routingControl.getPlan().on("waypointschanged", function (e) {
-            /*var waypoints = routingControl.getWaypoints();
-
-            var nonEmptyWaypoints = waypoints.filter(function (waypoint) {
-                if (waypoint.latLng) {
-                    return waypoint;
-                }
-            });
-
-            if (nonEmptyWaypoints && nonEmptyWaypoints.length > 1) {
-                $scope.gpxUrl = "https://api-osrm-routed-production.tilestream.net/viaroute?output=gpx&geometry=false&alt=false&instructions=false";
-                nonEmptyWaypoints.forEach(function (waypoint) {
-                    if (waypoint.latLng) {
-                        $scope.gpxUrl += "&loc=" + waypoint.latLng.lat + "," + waypoint.latLng.lng;
-                    }
-                });
+            // check if there are at least two valid points in the route
+            if (!routingControl.getWaypoints()[0].latLng || (routingControl.getWaypoints().length == 2 && !routingControl.getWaypoints()[1].latLng)) {
+                // invalidate route found and gpx track and route
+                $scope.routeFound = false;
+                $scope.gpxTrck = [];
+                $scope.gpxRoute = [];
                 $scope.$apply();
-            }*/
+            }
         });
 
         $scope.clearRoute = function () {
