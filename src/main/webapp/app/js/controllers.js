@@ -105,10 +105,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             // check if there are at least two valid points in the route
             if (!routingControl.getWaypoints()[0].latLng || (routingControl.getWaypoints().length == 2 && !routingControl.getWaypoints()[1].latLng)) {
                 // invalidate route found and gpx track and route
-                $scope.routeFound = false;
+                /*$scope.routeFound = false;
                 $scope.gpxTrck = [];
                 $scope.gpxRoute = [];
-                $scope.$apply();
+                $scope.$apply();*/
             }
         });
 

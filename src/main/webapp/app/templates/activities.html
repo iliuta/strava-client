@@ -1,8 +1,8 @@
 <div class="col-md-12">
 <div class="panel panel-default">
 <div id="mapTop" class="panel-heading">
-    <tabset>
-        <tab heading="Mine">
+    <uib-tabset>
+        <uib-tab heading="Mine">
             <form class="form-inline">
                 <div class="form-group">
                     <label for="dateAfter">From</label>
@@ -73,8 +73,8 @@
                     Loading…
                 </div>
             </form>
-        </tab>
-        <tab heading="Others">
+        </uib-tab>
+        <uib-tab heading="Others">
             <div class="form-group">
                 <p class="input-group">
                     <input type="button" class="btn btn-primary btn-sm" value="Contacts"
@@ -89,8 +89,8 @@
                 </p>
             </div>
 
-        </tab>
-    </tabset>
+        </uib-tab>
+    </uib-tabset>
     <input type="checkbox" ng-model="routePlannerOnOff" ng-click="activateRoutePlanner()"> Route planner (beta) <a href="" ng-click="displayRoutePlannerHelpModal()"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></a>
     <a ng-show="routeFound" href="" ng-click="downloadGpxTrack()">Download gpx track</a>&nbsp;
     <a ng-show="routeFound" href="" ng-click="downloadGpxRoute()">Download gpx route</a>&nbsp;
