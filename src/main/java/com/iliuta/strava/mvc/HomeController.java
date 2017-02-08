@@ -23,7 +23,7 @@ public class HomeController {
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
 
 
-    @RequestMapping("/home")
+    @RequestMapping("/")
     public String showHome(@CookieValue(required = false) String dontShowThisAgain) {
         if (!StringUtils.isEmpty(dontShowThisAgain)) {
             return "redirect:/profile";
