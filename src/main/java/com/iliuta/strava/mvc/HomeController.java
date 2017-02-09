@@ -1,18 +1,11 @@
 package com.iliuta.strava.mvc;
 
-import com.iliuta.strava.model.AthleteProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.common.exceptions.InvalidRequestException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestOperations;
-
-import javax.annotation.Resource;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Created by apapusoi on 17/12/14.
@@ -30,7 +23,7 @@ public class HomeController {
         } else {
             return "home";
         }
-        
+
     }
 
 }
