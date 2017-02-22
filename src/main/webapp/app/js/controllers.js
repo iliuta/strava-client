@@ -583,7 +583,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 $scope.map.on("click", mapOnClick);
             } else {
                 $scope.clearRoute();
-                routingControl.removeFrom($scope.map);
+                routingControl.remove();
                 $scope.map.off("dblclick", mapOnDblClick);
                 $scope.map.off("click", mapOnClick);
             }
