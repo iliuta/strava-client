@@ -1,7 +1,5 @@
-<%@ page isErrorPage="true" contentType="text/html"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,19 +23,9 @@
         <h1>Strava personal heatmap</h1>
 
         <p>An error occured</p>
-<%
-if (exception !=null) {
-if (exception.getCause() !=null && exception.getCause() instanceof org.springframework.security.oauth2.common.exceptions.UserDeniedAuthorizationException) {
-%>
-	User has denied the autorization.
-<%
-} else {
-%>
-        <%=exception.getMessage()%>
-<%
-}
-}
-%>
+        <span th:if="${exception == 'org.springframework.security.oauth2.common.exceptions.UserDeniedAuthorizationException'}">User has denied the autorization.</span>
+        <span th:unless="${exception == 'org.springframework.security.oauth2.common.exceptions.UserDeniedAuthorizationException'}" th:text="${message}"></span>
+
     </div>
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
