@@ -34,3 +34,12 @@ mvn clean package
 ```
 java -DSTRAVA_CLIENT_ID=<your_client_id> -DSTRAVA_CLIENT_SECRET=<your_strava_client_secret> -jar target/strava-client.war
 ```
+
+You can customize the server port by adding -DSERVER_PORT=<port_value> to the line above. Otherwise it will be 8080 by default.
+
+# Test
+
+In your browser:
+http://localhost:8080
+
+Alternatively, you can deploy this on Heroku or AWS Beanstalk. Make sure you configure properly the Strava API at https://www.strava.com/settings/api .
