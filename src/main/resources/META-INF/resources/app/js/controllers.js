@@ -14,7 +14,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             maxZoom: 18,
             subdomains: [ 0, 1, 2, 3 ]
         });
-        var mapboxToken = "pk.eyJ1IjoiaWxpdXRhIiwiYSI6ImNpZmplb2RoODAweWV0amtuMnV6NG41N3QifQ.ielyh5hPAkTB9AquOPeuYQ";
+
         var runBikeHike =
             L.tileLayer("https://api.mapbox.com/v4/mapbox.run-bike-hike/{z}/{x}/{y}.png?access_token=" + mapboxToken,
                 {

@@ -23,7 +23,9 @@ Some front frameworks used:
 # Prerequisites
 Java 8 & Maven
 
-Create Strava API credentials of your own at https://www.strava.com/settings/api
+Create [Strava API credentials](https://www.strava.com/settings/api) of your own.
+
+Ask for a [Mapbox access token](https://www.mapbox.com/help/create-api-access-token/).
 
 # Build
 ```
@@ -32,7 +34,7 @@ mvn clean package
 
 # Launch
 ```
-java -DSTRAVA_CLIENT_ID=<your_client_id> -DSTRAVA_CLIENT_SECRET=<your_strava_client_secret> -jar target/strava-client.war
+java -DSTRAVA_CLIENT_ID=<your_client_id> -DSTRAVA_CLIENT_SECRET=<your_strava_client_secret> -DMAPBOX_TOKEN=<your_mapbox_token> -jar target/strava-client.war
 ```
 
 You can customize the server port by adding -DSERVER_PORT=<port_value> to the line above. Otherwise it will be 8080 by default.

@@ -3,6 +3,7 @@ package com.iliuta.strava.mvc;
 import com.iliuta.strava.model.AthleteProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.common.exceptions.InvalidRequestException;
@@ -26,6 +27,10 @@ public class ProfileController {
 
     @Resource(name = "stravaRestTemplate")
     private RestOperations stravaRestTemplate;
+    
+    
+    @Value(value = "${mapbox.token}")
+    private String mapboxToken;
 
     @RequestMapping("/profile")
     public String userProfile(Model model, @ModelAttribute("athleteProfile") AthleteProfile athleteProfile) {
@@ -35,7 +40,11 @@ public class ProfileController {
             userLocale = userLocale + "-" + LocaleContextHolder.getLocale().getCountry().toLowerCase();
         }
         model.addAttribute("locale", userLocale);
+        
+        model.addAttribute("mapboxToken", mapboxToken);
+        
         LOGGER.info("AthleteProfile retrieved: id={} {}, locale={}", athleteProfile.getId(), athleteProfile.getFirstName(), LocaleContextHolder.getLocale());
+        
         return "strava";
     }
 
