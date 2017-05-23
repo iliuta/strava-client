@@ -80,7 +80,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                     ]
                 },
                 router: new L.Routing.OSRMv1({
-                    serviceUrl: '//api-osrm-routed-production.tilestream.net/route/v1',
+                    serviceUrl: 'http://api-osrm-routed-production.tilestream.net/route/v1',
                     timeout: 30 * 1000,
                     routingOptions: {}
                 }),
