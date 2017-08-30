@@ -30,7 +30,7 @@ public class StravaRestController {
     @Resource(name = "stravaRestTemplate")
     private RestOperations stravaRestTemplate;
 
-    @RequestMapping("/activities")
+    @RequestMapping(value = "/activities", method = RequestMethod.GET)
     public List<Activity> activities(Long before, Long after, String type) {
         int page = 1;
 
@@ -55,7 +55,7 @@ public class StravaRestController {
     }
 
 
-    @RequestMapping("/profile")
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public AthleteProfile profile(@ModelAttribute("athleteProfile") AthleteProfile athleteProfile) throws StravaClientException {
         if (athleteProfile == null) {
             throw new StravaClientException("No athlete profile.");
@@ -70,7 +70,7 @@ public class StravaRestController {
         return "";
     }
 
-    @RequestMapping("/friends-activities")
+    @RequestMapping(value = "/friends-activities", method = RequestMethod.GET)
     public List<Activity> friendsActivities(Long before, String type) {
         LOGGER.debug("Fetch friends' activities before={} type={}", before, type);
         String url = "https://www.strava.com/api/v3/activities/following?per_page=100";
@@ -86,7 +86,7 @@ public class StravaRestController {
         }
     }
 
-    @RequestMapping("/club-activities/{clubId}")
+    @RequestMapping(value = "/club-activities/{clubId}", method = RequestMethod.GET)
     public List<Activity> clubActivities(Long before, String type, @PathVariable String clubId) {
         LOGGER.debug("Fetch club {} activities before={} type={}", clubId, before, type);
         String url = "https://www.strava.com/api/v3/clubs/" + clubId + "/activities?per_page=100";
@@ -102,7 +102,7 @@ public class StravaRestController {
         }
     }
 
-    @RequestMapping("/photos/{activityId}")
+    @RequestMapping(value = "/photos/{activityId}", method = RequestMethod.GET)
     public List<Photo> activityPhotos(@PathVariable String activityId) {
         LOGGER.debug("Fetch photos for activity {}", activityId);
         String url = "https://www.strava.com/api/v3/activities/" + activityId + "/photos?photo_sources=true&size=300";
