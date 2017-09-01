@@ -1,8 +1,10 @@
 package com.iliuta.strava.mvc;
 
+import com.iliuta.strava.StravaApiConfiguration;
 import com.iliuta.strava.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
@@ -10,6 +12,8 @@ import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestOperations;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -27,8 +31,11 @@ public class StravaRestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(StravaRestController.class);
     private static final int PAGE_SIZE = 200;
 
-    @Resource(name = "stravaRestTemplate")
+    @Autowired
     private RestOperations stravaRestTemplate;
+
+    @Autowired
+    private StravaApiConfiguration stravaApiConfiguration;
 
     @RequestMapping(value = "/activities", method = RequestMethod.GET)
     public List<Activity> activities(Long before, Long after, String type) {
@@ -65,15 +72,14 @@ public class StravaRestController {
 
     @RequestMapping(value = "/update-activity", method = RequestMethod.POST)
     public String updateActivity(@RequestBody Activity activity) throws StravaClientException {
-        String url = "https://www.strava.com/api/v3/activities/{id}?type={type}&private={isprivate}&commute={commute}&trainer={trainer}&name={name}&gear_id={gearId}";
-        stravaRestTemplate.put(url, null, activity.getId(), activity.getType(), activity.getIsprivate(), activity.getCommute(), activity.getTrainer(), activity.getName(), activity.getGearId());
+        stravaRestTemplate.put(this.stravaApiConfiguration.getUpdateActivityUrl(), null, activity.getId(), activity.getType(), activity.getIsprivate(), activity.getCommute(), activity.getTrainer(), activity.getName(), activity.getGearId());
         return "";
     }
 
     @RequestMapping(value = "/friends-activities", method = RequestMethod.GET)
     public List<Activity> friendsActivities(Long before, String type) {
         LOGGER.debug("Fetch friends' activities before={} type={}", before, type);
-        String url = "https://www.strava.com/api/v3/activities/following?per_page=100";
+        String url = this.stravaApiConfiguration.getFriendsActivitiesUrl();
         if (before != null) {
             url = url + "&before=" + before;
         }
@@ -89,7 +95,8 @@ public class StravaRestController {
     @RequestMapping(value = "/club-activities/{clubId}", method = RequestMethod.GET)
     public List<Activity> clubActivities(Long before, String type, @PathVariable String clubId) {
         LOGGER.debug("Fetch club {} activities before={} type={}", clubId, before, type);
-        String url = "https://www.strava.com/api/v3/clubs/" + clubId + "/activities?per_page=100";
+        String url = UriComponentsBuilder.fromUriString(this.stravaApiConfiguration.getClubActivitiesUrl()).buildAndExpand(clubId).toString();
+
         if (before != null) {
             url = url + "&before=" + before;
         }
@@ -105,14 +112,14 @@ public class StravaRestController {
     @RequestMapping(value = "/photos/{activityId}", method = RequestMethod.GET)
     public List<Photo> activityPhotos(@PathVariable String activityId) {
         LOGGER.debug("Fetch photos for activity {}", activityId);
-        String url = "https://www.strava.com/api/v3/activities/" + activityId + "/photos?photo_sources=true&size=300";
 
-        PhotoList result = stravaRestTemplate.getForObject(url, PhotoList.class);
+        PhotoList result = stravaRestTemplate.getForObject(this.stravaApiConfiguration.getActivityPhotosUrl(), PhotoList.class, activityId);
+
         return result;
     }
 
     private ActivityList fetch200ActivitiesFromStrava(Long before, Long after, int page) {
-        String url = "https://www.strava.com/api/v3/activities?per_page=" + PAGE_SIZE + "&page=" + page;
+        String url = UriComponentsBuilder.fromUriString(this.stravaApiConfiguration.getActivitiesUrl()).buildAndExpand(PAGE_SIZE, page).toString();
         if (before != null) {
             url = url + "&before=" + before;
         }
