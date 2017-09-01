@@ -47,8 +47,6 @@ public class StravaRestControllerTest {
                 .getForObject("https://www.strava.com/api/v3/activities?per_page=200&page=1", ActivityList.class);
         Assertions.assertThat(result).isNotNull();
         Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        System.out.println(result.getBody());
-
     }
 
     @Test
@@ -77,7 +75,5 @@ public class StravaRestControllerTest {
 
         Assertions.assertThat(result).isNotNull();
         Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        System.out.println(result.getBody());
-
     }
 }
