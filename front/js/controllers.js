@@ -1,3 +1,9 @@
+import angular from 'angular';
+import L from 'leaflet';
+import Routing from 'leaflet-routing-machine';
+import Geocoder from 'leaflet-control-geocoder';
+import Polyline from 'polyline-encoded';
+
 var stravaControllers = angular.module('stravaControllers', []);
 
 stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '$filter', '$locale',
@@ -69,7 +75,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         $scope.routeFound = false;
         $scope.routePlannerOnOff = false;
 
-        var routingControl = L.Routing.control(
+        var routingControl = Routing.control(
             {
                 waypoints: [],
                 lineOptions: {
@@ -79,12 +85,12 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                         {color: 'yellow', opacity: 1, weight: 2}
                     ]
                 },
-                router: new L.Routing.OSRMv1({
+                router: new Routing.OSRMv1({
                     serviceUrl: '//router.project-osrm.org/route/v1',
                     timeout: 30 * 1000,
                     routingOptions: {}
                 }),
-                geocoder: L.Control.Geocoder.nominatim()
+                geocoder: Geocoder.nominatim()
             });
 
 
@@ -690,3 +696,5 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         $scope.fetchMyActivitiesThisMonth(null);
     }])
 ;
+
+export { stravaControllers };

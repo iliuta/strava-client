@@ -2,16 +2,7 @@
   "name": "strava-client",
   "description": "Strava client front",
   "dependencies": {
-    "angular": "1.5.8",
-    "angular-bootstrap": "2.1.3",
-    "angular-i18n": "1.5.8",
-    "angular-route": "1.5.8",
-    "bootstrap": "3.3.7",
-    "jquery": "3.1.0",
-    "leaflet": "1.0.3",
-    "Leaflet.encoded": "0.0.8",
-    "leaflet-control-geocoder":"1.5.4",
-    "leaflet-routing-machine": "3.2.5"
+    "jquery": "3.1.0"
   }
 }
 

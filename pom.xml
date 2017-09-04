@@ -122,6 +122,13 @@
                         </configuration>
                     </execution>
 
+                    <execution>
+                        <id>webpack build</id>
+                        <goals>
+                            <goal>webpack</goal>
+                        </goals>
+                    </execution>
+
                 </executions>
                 <configuration>
                     <nodeVersion>v6.11.2</nodeVersion>

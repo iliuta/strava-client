@@ -4,9 +4,24 @@
   "description": "This application demonstrates how to use Strava API with Spring boot, Spring security OAuth2 & Thymeleaf.",
   "main": "index.js",
   "dependencies": {
-    "bower": "^1.8.0"
+    "angular": "1.5.8",
+    "angular-ui-bootstrap": "2.1.3",
+    "angular-i18n": "1.5.8",
+    "angular-route": "1.5.8",
+    "bootstrap": "3.3.7",
+    "jquery": "3.1.0",
+    "leaflet": "1.0.3",
+    "polyline-encoded": "0.0.8",
+    "leaflet-control-geocoder": "1.5.4",
+    "leaflet-routing-machine": "3.2.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "bower": "^1.8.0",
+    "css-loader": "^0.28.7",
+    "file-loader": "^0.11.2",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.5.5"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

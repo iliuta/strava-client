@@ -1,3 +1,15 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import '../css/throbber.css';
+
+import 'bootstrap';
+import angular from 'angular';
+import ngRoute from 'angular-route';
+import stravaControllers from './controllers.js';
+import uiBootstrap from 'angular-ui-bootstrap';
+
+
 var stravaAppFilters = angular.module('stravaAppFilters', []).filter('duration', function () {
 
     return function (seconds) {
@@ -66,3 +78,6 @@ stravaApp.config(['$routeProvider',
                 redirectTo: '/activities'
             });
     }]);
+
+
+export { stravaApp };
