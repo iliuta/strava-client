@@ -102,13 +102,13 @@
                         <phase>generate-resources</phase>
                     </execution>
                     <execution>
-                        <id>npm install bower</id>
+                        <id>npm install</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
                         <!-- Optional configuration which provides for running any npm command -->
                         <configuration>
-                            <arguments>install bower</arguments>
+                            <arguments>install</arguments>
                         </configuration>
                     </execution>
 

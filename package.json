@@ -1,0 +1,23 @@
+{
+  "name": "strava-client",
+  "version": "1.0.0",
+  "description": "This application demonstrates how to use Strava API with Spring boot, Spring security OAuth2 & Thymeleaf.",
+  "main": "index.js",
+  "dependencies": {
+    "bower": "^1.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iliuta/strava-client.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iliuta/strava-client/issues"
+  },
+  "homepage": "https://github.com/iliuta/strava-client#readme"
+}
