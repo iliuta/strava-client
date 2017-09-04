@@ -1,8 +1,0 @@
-{
-  "name": "strava-client",
-  "description": "Strava client front",
-  "dependencies": {
-    "jquery": "3.1.0"
-  }
-}
-

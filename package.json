@@ -16,7 +16,6 @@
     "leaflet-routing-machine": "3.2.4"
   },
   "devDependencies": {
-    "bower": "^1.8.0",
     "css-loader": "^0.28.7",
     "file-loader": "^0.11.2",
     "style-loader": "^0.18.2",
