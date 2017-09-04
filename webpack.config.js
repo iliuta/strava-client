@@ -3,9 +3,12 @@ const path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  entry: './front/js/app.js',
+  entry: {
+    app: './front/js/app.js',
+    static: './front/js/static.js'
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'src/main/resources/META-INF/resources/dist')
   },
   plugins: [
