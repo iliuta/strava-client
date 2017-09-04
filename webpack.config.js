@@ -9,7 +9,7 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'src/main/resources/META-INF/resources/dist')
+    path: path.resolve(__dirname, 'target/classes/static/dist')
   },
   plugins: [
           new webpack.ProvidePlugin({
