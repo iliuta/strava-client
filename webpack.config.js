@@ -48,6 +48,18 @@ module.exports = {
               }
               }
             ]
+         },
+         {
+            test: /\.(html)$/,
+            use: [
+            {
+              loader: 'file-loader',
+              options: {
+                'publicPath': 'dist/',
+                'name': '[name].[ext]'
+              }
+              }
+            ]
          }
        ]
      }

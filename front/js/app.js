@@ -8,7 +8,7 @@ import angular from 'angular';
 import ngRoute from 'angular-route';
 import stravaControllers from './controllers.js';
 import uiBootstrap from 'angular-ui-bootstrap';
-
+import activitiesTemplateUrl from '../templates/activities.html';
 
 var stravaAppFilters = angular.module('stravaAppFilters', []).filter('duration', function () {
 
@@ -71,7 +71,7 @@ stravaApp.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
             when('/activities', {
-                templateUrl: 'app/templates/activities.html',
+                templateUrl: activitiesTemplateUrl,
                 controller: 'ActivitiesCtrl'
             }).
             otherwise({

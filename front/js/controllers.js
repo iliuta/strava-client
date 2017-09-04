@@ -4,6 +4,8 @@ import Routing from 'leaflet-routing-machine';
 import Geocoder from 'leaflet-control-geocoder';
 import Polyline from 'polyline-encoded';
 
+import infowindowTemplateUrl from '../templates/infowindow.html';
+
 var stravaControllers = angular.module('stravaControllers', []);
 
 stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '$filter', '$locale',
@@ -39,7 +41,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
 
         $scope.popup = L.popup();
-        var template = '<div ng-include src="\'app/templates/infowindow.html\'"></div>';
+        var template = '<div ng-include src="\'' + infowindowTemplateUrl + '\'"></div>';
         var compiled = $compile(template)($scope);
         $scope.popup.setContent(compiled[0].parentNode);
 
@@ -299,7 +301,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         }
 
         function compileInfoWindow() {
-            var template = '<div ng-include src="\'app/templates/infowindow.html\'"></div>';
+            var template = '<div ng-include src="\'' + infowindowTemplateUrl + '\'"></div>';
             var compiled = $compile(template)($scope);
             $scope.$apply();
             return compiled[0].parentNode;
