@@ -6,6 +6,16 @@ import Polyline from 'polyline-encoded';
 
 import infowindowTemplateUrl from '../templates/infowindow.html';
 
+// hack for avoiding leaflet bug with webpack
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
+// end hack
+
 var stravaControllers = angular.module('stravaControllers', []);
 
 stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '$filter', '$locale',
