@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class StravaApiConfiguration {
 
     private String baseUrl;
+    private String athleteProfileUrl;
     private String activitiesUrl;
     private String updateActivityUrl;
     private String friendsActivitiesUrl;
@@ -20,6 +21,14 @@ public class StravaApiConfiguration {
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
+    }
+
+    public String getAthleteProfileUrl() {
+        return athleteProfileUrl;
+    }
+
+    public void setAthleteProfileUrl(String athleteProfileUrl) {
+        this.athleteProfileUrl = athleteProfileUrl;
     }
 
     public String getActivitiesUrl() {

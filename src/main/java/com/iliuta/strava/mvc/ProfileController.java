@@ -1,8 +1,10 @@
 package com.iliuta.strava.mvc;
 
+import com.iliuta.strava.StravaApiConfiguration;
 import com.iliuta.strava.model.AthleteProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -23,6 +25,9 @@ import javax.annotation.Resource;
 public class ProfileController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProfileController.class);
+
+    @Autowired
+    private StravaApiConfiguration stravaApiConfiguration;
 
 
     @Resource(name = "stravaRestTemplate")
@@ -51,7 +56,7 @@ public class ProfileController {
     @ModelAttribute("athleteProfile")
     private AthleteProfile getAthleteProfile() {
         return stravaRestTemplate
-                .getForObject("https://www.strava.com/api/v3/athlete", AthleteProfile.class);
+                .getForObject(stravaApiConfiguration.getAthleteProfileUrl(), AthleteProfile.class);
     }
 
     public void setStravaRestTemplate(OAuth2RestTemplate stravaRestTemplate) {

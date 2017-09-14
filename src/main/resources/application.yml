@@ -1,0 +1,41 @@
+# Disable default error page
+server:
+  error:
+    whitelabel:
+      enabled: false
+
+# Thymeleaf
+spring:
+  thymeleaf:
+    mode: LEGACYHTML5
+  # Jackson: prevent failing when strava adds new fields to their api
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: false
+
+# OAuth2 client configuration
+security:
+  oauth2:
+    client:
+      clientId: ${STRAVA_CLIENT_ID}
+      clientSecret: ${STRAVA_CLIENT_SECRET}
+      accessTokenUri: https://www.strava.com/oauth/token
+      userAuthorizationUri: https://www.strava.com/oauth/authorize?response_type=code&amp;scope=write,view_private
+      clientAuthenticationScheme: form
+
+
+# your mapbox token
+mapbox:
+  token: ${MAPBOX_TOKEN}
+
+
+# Strava API URLs
+strava:
+  api:
+    baseUrl: https://www.strava.com/api/v3
+    athleteProfileUrl: https://www.strava.com/api/v3/athlete
+    activitiesUrl: ${strava.api.baseUrl}/activities?per_page={pageSize}&page={page}
+    updateActivityUrl: ${strava.api.baseUrl}/activities/{id}?type={type}&private={isprivate}&commute={commute}&trainer={trainer}&name={name}&gear_id={gearId}
+    friendsActivitiesUrl: ${strava.api.baseUrl}/activities/following?per_page=100
+    clubActivitiesUrl: ${strava.api.baseUrl}/clubs/{clubId}/activities?per_page=100
+    activityPhotosUrl: ${strava.api.baseUrl}/activities/{activityId}/photos?photo_sources=true&size=300
