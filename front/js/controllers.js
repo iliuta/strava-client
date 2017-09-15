@@ -1,5 +1,6 @@
 import angular from 'angular';
 import StravaMap from './map.js';
+import {Statistics, Totals} from './statistics.js';
 
 import infoWindowTemplateUrl from '../templates/infowindow.html';
 // end hack
@@ -80,40 +81,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             $scope.athleteProfile = data;
         }).error(onAjaxError);
 
-
-// object to store some statistics
-        function Totals(id, title) {
-            this.id = id;
-            this.title = title;
-            this.nb = 0;
-            this.distance = 0;
-            this.elevationGain = 0;
-            this.movingTime = 0;
-            this.elapsedTime = 0;
-            this.activities = [];
-
-            this.add = function (activity) {
-                this.activities.push(activity);
-                this.distance += activity.distance;
-                this.movingTime += activity.moving_time;
-                this.elapsedTime += activity.elapsed_time;
-                this.elevationGain += activity.total_elevation_gain;
-                this.nb++;
-            }
-
-            this.remove = function (activity) {
-                var index = this.activities.indexOf(activity);
-                if (index > -1) {
-                    this.activities.splice(index, 1);
-                }
-                this.distance -= activity.distance;
-                this.movingTime -= activity.moving_time;
-                this.elapsedTime -= activity.elapsed_time;
-                this.elevationGain -= activity.total_elevation_gain;
-                this.nb--;
-            }
-        }
-
         function initScopeProperties(withGear, mine) {
 
             // flag used to deactivate buttons while the download is in progress
@@ -135,157 +102,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             // the list of activities currently displayed on the map 
             $scope.activities = null;
 
-            initScopeTotals();
-
-        }
-
-        function initScopeTotals() {
-            // array of statistics
-            $scope.totals = [];
-
-            // all totals
-            $scope.globalTotals = new Totals("total", "Total");
-            $scope.totals.push($scope.globalTotals);
-
-            // totals for trainer activities
-            $scope.trainerTotals = new Totals("trainer", "Trainer");
-            $scope.totals.push($scope.trainerTotals);
-
-            // totals for manual activities
-            $scope.manualTotals = new Totals("manual", "Manual");
-            $scope.totals.push($scope.manualTotals);
-
-            $scope.commuteTotals = new Totals("commute", "Commute");
-            $scope.totals.push($scope.commuteTotals);
-
-            $scope.noCommuteTotals = new Totals("noCommute", "No commute");
-            $scope.totals.push($scope.noCommuteTotals);
-
-            $scope.bikeDistanceTotals0_50 = new Totals("bike0_50", "Bike 0-50km");
-            $scope.totals.push($scope.bikeDistanceTotals0_50);
-
-            $scope.bikeDistanceTotals50_100 = new Totals("bike50_100", "Bike 50-100km");
-            $scope.totals.push($scope.bikeDistanceTotals50_100);
-
-            $scope.bikeDistanceTotals100_150 = new Totals("bike100_150", "Bike 100-150km");
-            $scope.totals.push($scope.bikeDistanceTotals100_150);
-
-            $scope.bikeDistanceTotals150_200 = new Totals("bike150_200", "Bike 150-200km");
-            $scope.totals.push($scope.bikeDistanceTotals150_200);
-
-            $scope.bikeDistanceTotals200 = new Totals("bike200", "Bike more than 200km");
-            $scope.totals.push($scope.bikeDistanceTotals200);
-
-            $scope.runDistanceTotals0_10 = new Totals("run0_10", "Run 0-10km");
-            $scope.totals.push($scope.runDistanceTotals0_10);
-
-            $scope.runDistanceTotals10_20 = new Totals("run10_20", "Run 10-20km");
-            $scope.totals.push($scope.runDistanceTotals10_20);
-
-            $scope.runDistanceTotals20_30 = new Totals("run20_30", "Run 20-30km");
-            $scope.totals.push($scope.runDistanceTotals20_30);
-
-            $scope.runDistanceTotals30_40 = new Totals("run30_40", "Run 30-40km");
-            $scope.totals.push($scope.runDistanceTotals30_40);
-
-            $scope.runDistanceTotals40 = new Totals("run40", "Run more than 40km");
-            $scope.totals.push($scope.runDistanceTotals40);
-
-            // totals grouped by gear (slightly more complex object using Totals)
-            $scope.gearTotals = new Object();
-
-        }
-
-        function findGearName(gear_id) {
-            if ($scope.athleteProfile) {
-                for (var bikeIndex in $scope.athleteProfile.bikes) {
-                    var bike = $scope.athleteProfile.bikes[bikeIndex];
-                    if (bike.id == gear_id) {
-                        return bike.name;
-                    }
-                }
-                for (var shoeIndex in $scope.athleteProfile.shoes) {
-                    var shoe = $scope.athleteProfile.shoes[shoeIndex];
-                    if (shoe.id == gear_id) {
-                        return shoe.name;
-                    }
-                }
-            }
-            return "unnamed gear";
-        }
-
-
-        function computeAllTotals(activities) {
-            $scope.activities.forEach(function (activity) {
-
-                $scope.globalTotals.add(activity);
-
-                if (activity.commute) {
-                    $scope.commuteTotals.add(activity);
-                } else {
-                    $scope.noCommuteTotals.add(activity);
-                }
-
-                if (activity.trainer) {
-                    $scope.trainerTotals.add(activity);
-                }
-
-                if (activity.manual) {
-                    $scope.manualTotals.add(activity);
-                }
-
-                if (activity.type == "Ride") {
-                    if (activity.distance / 1000 <= 50) {
-                        $scope.bikeDistanceTotals0_50.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 50 && activity.distance / 1000 <= 100) {
-                        $scope.bikeDistanceTotals50_100.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 100 && activity.distance / 1000 <= 150) {
-                        $scope.bikeDistanceTotals100_150.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 150 && activity.distance / 1000 <= 200) {
-                        $scope.bikeDistanceTotals150_200.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 200) {
-                        $scope.bikeDistanceTotals200.add(activity);
-                    }
-                }
-                if (activity.type == "Run") {
-                    if (activity.distance / 1000 <= 10) {
-                        $scope.runDistanceTotals0_10.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 10 && activity.distance / 1000 <= 20) {
-                        $scope.runDistanceTotals10_20.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 20 && activity.distance / 1000 <= 30) {
-                        $scope.runDistanceTotals20_30.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 30 && activity.distance / 1000 <= 40) {
-                        $scope.runDistanceTotals30_40.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 40) {
-                        $scope.runDistanceTotals40.add(activity);
-                    }
-                }
-
-                if ($scope.withGear && activity.gear_id) {
-                    var gearName = findGearName(activity.gear_id);
-                    if (!$scope.gearTotals[activity.gear_id]) {
-                        $scope.gearTotals[activity.gear_id] = new Totals(activity.gear_id, gearName);
-                    }
-                    $scope.gearTotals[activity.gear_id].add(activity);
-                }
-            });
-
+            $scope.statistics = new Statistics(withGear);
         }
 
         $scope.drawActivityOnMap = function (activity) {
@@ -298,21 +115,18 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             stravaMap.drawActivities(activities);
         };
 
-
         var onSuccessActivities = function (activities) {
             $scope.activities = activities;
             $scope.photos = null;
 
-            computeAllTotals(activities);
+            $scope.statistics.addAll(activities, $scope.athleteProfile);
+
             $scope.drawActivitiesOnMap(activities);
             $scope.downloadInProgress = false;
             if (!activities || activities.length == 0) {
                 $scope.stravaError = {code: "0", message: "No activities found. Please change your criteria and try again."};
             }
         };
-
-
-
 
         $scope.fetchPhotos = function (activities) {
             if (!$scope.photos) {
@@ -396,32 +210,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         $scope.update = function (activity) {
             $http.post("rest/update-activity", activity).success(function () {
-                // check if trainer attribute has been modified and update trainer totals
-                if (activity.trainer != $scope.currentActivity.trainer) {
-                    if (activity.trainer) {
-                        $scope.trainerTotals.add($scope.currentActivity);
-                    } else {
-                        $scope.trainerTotals.remove($scope.currentActivity);
-                    }
-                }
-                // check if commute attribute has been modified and update commute and noCommute totals
-                if (activity.commute != $scope.currentActivity.commute) {
-                    if (activity.commute) {
-                        $scope.commuteTotals.add($scope.currentActivity);
-                        $scope.noCommuteTotals.remove($scope.currentActivity);
-                    } else {
-                        $scope.commuteTotals.remove($scope.currentActivity);
-                        $scope.noCommuteTotals.add($scope.currentActivity);
-                    }
-                }
-                // check if gear has been modified and update the corresponding gear totals
-                if (activity.gear_id != $scope.currentActivity.gear_id) {
-                    $scope.gearTotals[$scope.currentActivity.gear_id].remove(activity);
-                    if (!$scope.gearTotals[activity.gear_id]) {
-                        $scope.gearTotals[activity.gear_id] = new Totals(activity.gear_id, findGearName(activity.gear_id));
-                    }
-                    $scope.gearTotals[activity.gear_id].add(activity);
-                }
+                $scope.statistics.updateActivity(activity, $scope.currentActivity);
 
                 // copy the edited attributes into the original object
                 $scope.currentActivity.commute = activity.commute;

@@ -100,7 +100,7 @@
     <div class="alert alert-danger" role="alert" ng-show="stravaError">{{stravaError.message}} <span ng-show="stravaError.code==511">Please <a href="javascript:window.location.reload();">reload</a>.</span></div>
     <div id="map-canvas"></div>
 </div>
-<div class="panel-footer table-responsive" ng-show="globalTotals.nb > 0">
+<div class="panel-footer table-responsive" ng-show="activities">
     <table class="table">
         <thead>
             <th></th>
@@ -112,7 +112,7 @@
             <th>Motionless time</th>
             <th>Avg speed</th>
         </thead>
-        <tbody ng-repeat-start="total in totals">
+        <tbody ng-repeat-start="total in statistics.totals">
             <tr ng-show="total.nb > 0">
                 <td><a href="" data-toggle="collapse" data-target="#{{total.id}}Collapse" title="Expand/Collapse"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a><b>
                     <a href="" ng-click="drawActivitiesOnMap(total.activities)">{{total.title}}</a></b>
@@ -165,7 +165,7 @@
             </tr>
         </tbody>
         <tbody id="gearCollapse" class="collapse out">
-            <tr ng-show="withGear" ng-repeat="(key,value) in gearTotals">
+            <tr ng-show="withGear" ng-repeat="(key,value) in statistics.gearTotals">
                 <td><b><a href="" ng-click="drawActivitiesOnMap(value.activities)">{{value.title}}</a></b></td>
                 <td>{{value.nb}}</td>
                 <td>{{value.distance / 1000 | number : 1}}km</td>
