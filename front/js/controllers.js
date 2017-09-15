@@ -1,19 +1,7 @@
 import angular from 'angular';
-import L from 'leaflet';
-import Routing from 'leaflet-routing-machine';
-import Geocoder from 'leaflet-control-geocoder';
-import Polyline from 'polyline-encoded';
+import StravaMap from './map.js';
 
-import infowindowTemplateUrl from '../templates/infowindow.html';
-
-// hack for avoiding leaflet bug with webpack
-delete L.Icon.Default.prototype._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-});
+import infoWindowTemplateUrl from '../templates/infowindow.html';
 // end hack
 
 var stravaControllers = angular.module('stravaControllers', []);
@@ -23,165 +11,63 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         $scope.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 
+        let gpxTrck = [];
+        let gpxRoute = [];
 
-        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-        var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-        var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 18, attribution: osmAttrib});
-        var ocm = L.tileLayer("http://a.tile.thunderforest.com/cycle/{z}/{x}/{y}.png");
-        var google = L.tileLayer('//mt{s}.googleapis.com/vt?x={x}&y={y}&z={z}', {
-            maxZoom: 18,
-            subdomains: [ 0, 1, 2, 3 ]
+        let stravaMap = new StravaMap(function() {
+            let template = '<div ng-include src="\'' + infoWindowTemplateUrl + '\'"></div>';
+            let compiled = $compile(template)($scope);
+            $scope.$apply();
+            return compiled[0].parentNode;
         });
 
-        var runBikeHike =
-            L.tileLayer("https://api.mapbox.com/v4/mapbox.run-bike-hike/{z}/{x}/{y}.png?access_token=" + mapboxToken,
-                {
-                    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-                });
-        var streets =
-            L.tileLayer("https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=" + mapboxToken,
-                {
-                    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-                });
-        var satellite =
-            L.tileLayer("https://api.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.png?access_token=" + mapboxToken,
-                {
-                    attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-                });
-
-
-        $scope.popup = L.popup();
-        var template = '<div ng-include src="\'' + infowindowTemplateUrl + '\'"></div>';
-        var compiled = $compile(template)($scope);
-        $scope.popup.setContent(compiled[0].parentNode);
-
-        var baseMaps = {
-            "OpenStreetMap": osm,
-            "OpenCycleMap": ocm,
-            "Mapbox Terrain": runBikeHike,
-            "Mapbox Streets Satellite": satellite,
-            "Mapbox Streets": streets,
-            "Google": google
-        };
-
-        $scope.map = L.map('map-canvas', {
-            center: [39.73, -104.99],
-            zoom: 8,
-            layers: [runBikeHike]
-        });
-
+        stravaMap.on('selectActivity',
+            function(activity) {
+                $scope.currentActivity = activity;
+                $scope.$apply();
+            }
+         ).on('photoClick',
+           function(photoUrl, photo) {
+               $scope.currentPhotoUrl = photoUrl;
+               $scope.currentPhoto = photo;
+               $scope.$apply();
+               $('#photoModal').modal('show');
+           }
+        ).on('routeFound',
+            function(track, route) {
+                gpxTrck = track;
+                gpxRoute = route;
+                $scope.routeFound = true;
+                $scope.$apply();
+            }
+        );
 
         function setMapSize() {
             $("#map-canvas").height($(window).height()*0.7);
-            $scope.map.invalidateSize();
+            stravaMap.invalidateMapSize();
         }
-
         // resize the map according when resizing the window
         $(window).on("resize", setMapSize).trigger("resize");
 
         // initialize the map size at the beginning
         setMapSize();
         
-        L.control.layers(baseMaps).addTo($scope.map);
-
         $scope.routeFound = false;
         $scope.routePlannerOnOff = false;
 
-        var routingControl = Routing.control(
-            {
-                waypoints: [],
-                lineOptions: {
-                    styles: [
-                        {color: 'black', opacity: 0.15, weight: 9},
-                        {color: 'white', opacity: 0.8, weight: 6},
-                        {color: 'yellow', opacity: 1, weight: 2}
-                    ]
-                },
-                router: new Routing.OSRMv1({
-                    serviceUrl: '//router.project-osrm.org/route/v1',
-                    timeout: 30 * 1000,
-                    routingOptions: {}
-                }),
-                geocoder: Geocoder.nominatim()
-            });
-
-
-        routingControl.on("routeselected", function (e) {
-            // every time a route is found, save its coordinates to create gpx file
-            // gpxTrack is about all coordinates of the selected route
-            $scope.gpxTrck = e.route.coordinates;
-            // gpxRoute is about the coordinates of the crossings, taken from the cue sheet (instructions)
-            $scope.gpxRoute = [];
-            e.route.instructions.forEach(function (instruction) {
-                $scope.gpxRoute.push(e.route.coordinates[instruction.index]);
-            });
-            $scope.routeFound = true;
-            $scope.$apply();
-        });
-
-        routingControl.getPlan().on("waypointschanged", function (e) {
-            // check if there are at least two valid points in the route
-            if (!routingControl.getWaypoints()[0].latLng || (routingControl.getWaypoints().length == 2 && !routingControl.getWaypoints()[1].latLng)) {
-                // invalidate route found and gpx track and route
-                /*$scope.routeFound = false;
-                $scope.gpxTrck = [];
-                $scope.gpxRoute = [];
-                $scope.$apply();*/
+        $scope.activateRoutePlanner = function () {
+            if ($scope.routePlannerOnOff) {
+                stravaMap.displayRoutePlanner();
+            } else {
+                $scope.clearRoute();
+                stravaMap.hideRoutePlanner();
             }
-        });
+        };
 
         $scope.clearRoute = function () {
-            routingControl.spliceWaypoints(0, routingControl.getWaypoints().length);
+            stravaMap.resetRoutePlanner();
             $scope.routeFound = false;
         };
-
-
-        function createButton(label, container) {
-            var btn = L.DomUtil.create('button', '', container);
-            btn.setAttribute('type', 'button');
-            btn.innerHTML = label;
-            return btn;
-        }
-
-        // hack to prevent click/dblclick weird behaviour
-        var mapOnDblClick = function (event) {
-            $scope.map.clicked = 0;
-            $scope.map.zoomIn();
-        };
-
-        var mapOnClick = function (e) {
-            // hack to prevent click/dblclick weird behaviour
-            if (!$scope.map.clicked) {
-                $scope.map.clicked = 0;
-            }
-            $scope.map.clicked = $scope.map.clicked + 1;
-            setTimeout(function () {
-                if ($scope.map.clicked == 1) {
-                    // at first click display a popup
-                    if (!routingControl.getWaypoints()[0].latLng) {
-                        var container = L.DomUtil.create('div'),
-                            startBtn = createButton('Start route from this location', container);
-                        L.DomEvent.on(startBtn, 'click', function () {
-                            routingControl.spliceWaypoints(0, 1, e.latlng);
-                            $scope.map.closePopup();
-                        });
-                        L.popup()
-                            .setContent(container)
-                            .setLatLng(e.latlng)
-                            .openOn($scope.map);
-                    } else if (routingControl.getWaypoints().length == 2 && !routingControl.getWaypoints()[1].latLng) {
-                        // then fill the coords of the last waypoint
-                        routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, e.latlng);
-                    } else {
-                        // then add the new waypoint to the end
-                        var lastWaypoint = routingControl.getWaypoints()[routingControl.getWaypoints().length - 1].latLng;
-                        routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, lastWaypoint, e.latlng);
-                    }
-                    $scope.map.clicked = 0;
-                }
-            }, 300);
-        };
-
 
         var onAjaxError = function (data) {
             console.log(data);
@@ -310,49 +196,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         }
 
-        function compileInfoWindow() {
-            var template = '<div ng-include src="\'' + infowindowTemplateUrl + '\'"></div>';
-            var compiled = $compile(template)($scope);
-            $scope.$apply();
-            return compiled[0].parentNode;
-        }
-
-
-        function drawActivityPolylineOnMap(activity, map) {
-            if (!activity.map.summary_polyline) {
-                console.log(activity.name);
-                return null;
-            } else {
-                var decodedPath = L.Polyline.fromEncoded(activity.map.summary_polyline);
-
-                var osmPath = L.polyline(decodedPath.getLatLngs(), {color: '#FF0000', weight: 2}).addTo(map);
-
-                osmPath.bindPopup($scope.popup);
-
-                osmPath.addEventListener('mouseover',
-                    function (event) {
-                        osmPath.setStyle({color: 'blue', weight: 7});
-                    });
-
-
-                osmPath.addEventListener('mouseout',
-                    function () {
-                        osmPath.setStyle({color: '#FF0000', weight: 2});
-                    });
-
-                osmPath.addEventListener('click',
-                    function (event) {
-                        $scope.currentActivity = activity;
-                        $scope.$apply();
-                        $scope.popup.setContent(compileInfoWindow());
-                        $scope.popup.setLatLng(event.latlng);
-                    });
-
-
-                return osmPath;
-            }
-        }
-
         function findGearName(gear_id) {
             if ($scope.athleteProfile) {
                 for (var bikeIndex in $scope.athleteProfile.bikes) {
@@ -452,40 +295,14 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         $scope.drawActivitiesOnMap = function (activities) {
             $('html,body').animate({scrollTop: $('#mapTop').offset().top});
 
-            if ($scope.polylinesLayerGroup) {
-                $scope.polylinesLayerGroup.clearLayers();
-            }
-
-            var bounds = null;
-
-            $scope.polylinesLayerGroup = L.layerGroup();
-            $scope.polylinesLayerGroup.addTo($scope.map);
-
-            activities.forEach(function (activity) {
-                var polyline = drawActivityPolylineOnMap(activity, $scope.map);
-                if (polyline) {
-                    if (!bounds) {
-                        bounds = polyline.getBounds();
-                    } else {
-                        bounds.extend(polyline.getBounds());
-                    }
-                    $scope.polylinesLayerGroup.addLayer(polyline);
-                }
-            });
-
-            if (bounds) {
-                $scope.map.fitBounds(bounds);
-                $scope.map.panInsideBounds(bounds);
-            }
+            stravaMap.drawActivities(activities);
         };
 
 
         var onSuccessActivities = function (activities) {
             $scope.activities = activities;
             $scope.photos = null;
-            if ($scope.photosLayerGroup) {
-                $scope.photosLayerGroup.clearLayers();
-            }
+
             computeAllTotals(activities);
             $scope.drawActivitiesOnMap(activities);
             $scope.downloadInProgress = false;
@@ -494,44 +311,10 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             }
         };
 
-        var drawPhotos = function (photos) {
-            photos.forEach(function (photo) {
-                if (photo.location && photo.location.length == 2) {
-                    var photoLatLng = new L.latLng(photo.location[0], photo.location[1]);
 
-                    var photoUrl = photo.urls[300];
-
-                    var image = L.icon({
-                        iconUrl: photoUrl,
-                        iconSize: [50, 50],
-                        iconAnchor: [0, 32]
-                    });
-
-                    var marker = L.marker(photoLatLng, {
-                        riseOnHover: true,
-                        title: photoUrl,
-                        icon: image
-                    });
-
-                    marker.addEventListener('click', function () {
-                        $scope.currentPhotoUrl = photoUrl;
-                        $scope.currentPhoto = photo;
-                        $scope.$apply();
-                        $('#photoModal').modal('show');
-                    });
-                    $scope.photosLayerGroup.addLayer(marker);
-                    marker.addTo($scope.map);
-                }
-            });
-
-        };
 
 
         $scope.fetchPhotos = function (activities) {
-            if (!$scope.photosLayerGroup) {
-                $scope.photosLayerGroup = L.layerGroup();
-                $scope.photosLayerGroup.addTo($scope.map);
-            }
             if (!$scope.photos) {
                 $scope.photos = [];
                 activities.forEach(function (activity) {
@@ -540,13 +323,13 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                         $http.get('rest/photos/' + activity.id).success(function (photos) {
                             $scope.downloadInProgress = false;
                             $scope.photos = $scope.photos.concat(photos);
-                            drawPhotos(photos);
+                            stravaMap.drawPhotos(photos);
                         }).error(onAjaxError);
 
                     }
                 });
             } else {
-                drawPhotos($scope.photos);
+                stravaMap.drawPhotos($scope.photos);
             }
         };
 
@@ -590,21 +373,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 afterEpoch = Math.floor(new Date(after).getTime() / 1000);
             }
             $http.get('rest/activities?before=' + (beforeEpoch ? beforeEpoch : '') + '&after=' + (afterEpoch ? afterEpoch : '') + '&type=' + (type ? type : '')).success(onSuccessActivities).error(onAjaxError);
-        };
-
-
-        $scope.activateRoutePlanner = function () {
-
-            if ($scope.routePlannerOnOff) {
-                routingControl.addTo($scope.map);
-                $scope.map.on("dblclick", mapOnDblClick);
-                $scope.map.on("click", mapOnClick);
-            } else {
-                $scope.clearRoute();
-                routingControl.remove();
-                $scope.map.off("dblclick", mapOnDblClick);
-                $scope.map.off("click", mapOnClick);
-            }
         };
 
 
@@ -676,7 +444,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 '\t<metadata>\n\t\t<name>Track</name>\n\t</metadata>\n' +
                 '\t<trk>\n\t\t<name>Track</name>\n';
 
-            $scope.gpxTrck.forEach(function (coords) {
+            gpxTrck.forEach(function (coords) {
                 gpx += '\t\t<trkpt lat="' + coords.lat + '" lon="' + coords.lng + '" />\n';
             });
 
@@ -693,7 +461,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
                 '\t<metadata>\n\t\t<name>Route</name>\n\t</metadata>\n' +
                 '\t<rte>\n\t\t<name>Route</name>\n';
 
-            $scope.gpxRoute.forEach(function (coords) {
+            gpxRoute.forEach(function (coords) {
                 gpx += '\t\t<rtept lat="' + coords.lat + '" lon="' + coords.lng + '" />\n';
             });
 
