@@ -1,5 +1,5 @@
 
-let Totals = function(id, title) {
+let Totals = function (id, title) {
     this.id = id;
     this.title = title;
     this.nb = 0;
@@ -49,7 +49,7 @@ function findGearName(athleteProfile, gear_id) {
     return "unnamed gear";
 }
 
-let Statistics = function(withGear) {
+let Statistics = function (withGear, athleteProfile) {
 
     this.globalTotals = new Totals("total", "Total");
     this.trainerTotals = new Totals("trainer", "Trainer");
@@ -69,120 +69,124 @@ let Statistics = function(withGear) {
     this.gearTotals = {};
 
     this.totals = [this.globalTotals,
-                    this.trainerTotals,
-                    this.manualTotals,
-                    this.commuteTotals,
-                    this.noCommuteTotals,
-                    this.bikeDistanceTotals0_50,
-                    this.bikeDistanceTotals50_100,
-                    this.bikeDistanceTotals100_150,
-                    this.bikeDistanceTotals200,
-                    this.runDistanceTotals0_10,
-                    this.runDistanceTotals10_20,
-                    this.runDistanceTotals20_30,
-                    this.runDistanceTotals30_40,
-                    this.runDistanceTotals40];
+    this.trainerTotals,
+    this.manualTotals,
+    this.commuteTotals,
+    this.noCommuteTotals,
+    this.bikeDistanceTotals0_50,
+    this.bikeDistanceTotals50_100,
+    this.bikeDistanceTotals100_150,
+    this.bikeDistanceTotals200,
+    this.runDistanceTotals0_10,
+    this.runDistanceTotals10_20,
+    this.runDistanceTotals20_30,
+    this.runDistanceTotals30_40,
+    this.runDistanceTotals40];
 
 
 
-    this.addAll = function(activities, athleteProfile) {
+    this.addAll = function (activities) {
         let that = this;
         activities.forEach(function (activity) {
-                that.globalTotals.add(activity);
+            that.globalTotals.add(activity);
 
-                if (activity.commute) {
-                    that.commuteTotals.add(activity);
-                } else {
-                    that.noCommuteTotals.add(activity);
+            if (activity.commute) {
+                that.commuteTotals.add(activity);
+            } else {
+                that.noCommuteTotals.add(activity);
+            }
+
+            if (activity.trainer) {
+                that.trainerTotals.add(activity);
+            }
+
+            if (activity.manual) {
+                that.manualTotals.add(activity);
+            }
+
+            if (activity.type == "Ride") {
+                if (activity.distance / 1000 <= 50) {
+                    that.bikeDistanceTotals0_50.add(activity);
                 }
 
-                if (activity.trainer) {
-                    that.trainerTotals.add(activity);
+                if (activity.distance / 1000 > 50 && activity.distance / 1000 <= 100) {
+                    that.bikeDistanceTotals50_100.add(activity);
                 }
 
-                if (activity.manual) {
-                    that.manualTotals.add(activity);
+                if (activity.distance / 1000 > 100 && activity.distance / 1000 <= 150) {
+                    that.bikeDistanceTotals100_150.add(activity);
                 }
 
-                if (activity.type == "Ride") {
-                    if (activity.distance / 1000 <= 50) {
-                        that.bikeDistanceTotals0_50.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 50 && activity.distance / 1000 <= 100) {
-                        that.bikeDistanceTotals50_100.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 100 && activity.distance / 1000 <= 150) {
-                        that.bikeDistanceTotals100_150.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 150 && activity.distance / 1000 <= 200) {
-                        that.bikeDistanceTotals150_200.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 200) {
-                        that.bikeDistanceTotals200.add(activity);
-                    }
-                }
-                if (activity.type == "Run") {
-                    if (activity.distance / 1000 <= 10) {
-                        that.runDistanceTotals0_10.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 10 && activity.distance / 1000 <= 20) {
-                        that.runDistanceTotals10_20.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 20 && activity.distance / 1000 <= 30) {
-                        that.runDistanceTotals20_30.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 30 && activity.distance / 1000 <= 40) {
-                        that.runDistanceTotals30_40.add(activity);
-                    }
-
-                    if (activity.distance / 1000 > 40) {
-                        that.runDistanceTotals40.add(activity);
-                    }
+                if (activity.distance / 1000 > 150 && activity.distance / 1000 <= 200) {
+                    that.bikeDistanceTotals150_200.add(activity);
                 }
 
-                if (withGear && activity.gear_id) {
-                    var gearName = findGearName(athleteProfile, activity.gear_id);
-                    if (!that.gearTotals[activity.gear_id]) {
-                        that.gearTotals[activity.gear_id] = new Totals(activity.gear_id, gearName);
-                    }
-                    that.gearTotals[activity.gear_id].add(activity);
+                if (activity.distance / 1000 > 200) {
+                    that.bikeDistanceTotals200.add(activity);
                 }
-            });
+            }
+            if (activity.type == "Run") {
+                if (activity.distance / 1000 <= 10) {
+                    that.runDistanceTotals0_10.add(activity);
+                }
+
+                if (activity.distance / 1000 > 10 && activity.distance / 1000 <= 20) {
+                    that.runDistanceTotals10_20.add(activity);
+                }
+
+                if (activity.distance / 1000 > 20 && activity.distance / 1000 <= 30) {
+                    that.runDistanceTotals20_30.add(activity);
+                }
+
+                if (activity.distance / 1000 > 30 && activity.distance / 1000 <= 40) {
+                    that.runDistanceTotals30_40.add(activity);
+                }
+
+                if (activity.distance / 1000 > 40) {
+                    that.runDistanceTotals40.add(activity);
+                }
+            }
+
+            if (withGear && activity.gear_id) {
+                var gearName = findGearName(athleteProfile, activity.gear_id);
+                if (!that.gearTotals[activity.gear_id]) {
+                    that.gearTotals[activity.gear_id] = new Totals(activity.gear_id, gearName);
+                }
+                that.gearTotals[activity.gear_id].add(activity);
+            }
+        });
     };
 
-    this.updateActivity = function(oldActivity, updatedActivity) {
+    this.updateActivity = function (editedActivity, oldActivity) {
         // check if trainer attribute has been modified and update trainer totals
-        if (oldActivity.trainer != updatedActivity.trainer) {
-            if (oldActivity.trainer) {
-                this.trainerTotals.add(updatedActivity);
+        if (editedActivity.trainer != oldActivity.trainer) {
+            if (editedActivity.trainer) {
+                this.trainerTotals.add(oldActivity);
             } else {
-                this.trainerTotals.remove(updatedActivity);
+                this.trainerTotals.remove(oldActivity);
             }
+            oldActivity.trainer = editedActivity.trainer;
         }
         // check if commute attribute has been modified and update commute and noCommute totals
-        if (oldActivity.commute != updatedActivity.commute) {
-            if (oldActivity.commute) {
-                this.commuteTotals.add(updatedActivity);
-                this.noCommuteTotals.remove(updatedActivity);
+        if (editedActivity.commute != oldActivity.commute) {
+            if (editedActivity.commute) {
+                this.commuteTotals.add(oldActivity);
+                this.noCommuteTotals.remove(oldActivity);
             } else {
-                this.commuteTotals.remove(updatedActivity);
-                this.noCommuteTotals.add(updatedActivity);
+                this.commuteTotals.remove(oldActivity);
+                this.noCommuteTotals.add(oldActivity);
             }
+            oldActivity.commute = editedActivity.commute;
         }
         // check if gear has been modified and update the corresponding gear totals
-        if (oldActivity.gear_id != updatedActivity.gear_id) {
-            this.gearTotals[updatedActivity.gear_id].remove(oldActivity);
-            if (!this.gearTotals[oldActivity.gear_id]) {
-                this.gearTotals[oldActivity.gear_id] = new Totals(oldActivity.gear_id, findGearName(oldActivity.gear_id));
+        if (editedActivity.gear_id != oldActivity.gear_id) {
+            this.gearTotals[oldActivity.gear_id].remove(oldActivity);
+            if (!this.gearTotals[editedActivity.gear_id]) {
+                this.gearTotals[editedActivity.gear_id] = 
+                    new Totals(editedActivity.gear_id, findGearName(athleteProfile, editedActivity.gear_id));
             }
-            this.gearTotals[oldActivity.gear_id].add(oldActivity);
+            this.gearTotals[editedActivity.gear_id].add(oldActivity);
+            oldActivity.gear_id = editedActivity.gear_id;
         }
     };
 };

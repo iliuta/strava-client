@@ -15,7 +15,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         let gpxTrck = [];
         let gpxRoute = [];
 
-        let stravaMap = new StravaMap(function() {
+        let stravaMap = new StravaMap(function () {
             let template = '<div ng-include src="\'' + infoWindowTemplateUrl + '\'"></div>';
             let compiled = $compile(template)($scope);
             $scope.$apply();
@@ -23,28 +23,28 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         });
 
         stravaMap.on('selectActivity',
-            function(activity) {
+            function (activity) {
                 $scope.currentActivity = activity;
                 $scope.$apply();
             }
-         ).on('photoClick',
-           function(photoUrl, photo) {
-               $scope.currentPhotoUrl = photoUrl;
-               $scope.currentPhoto = photo;
-               $scope.$apply();
-               $('#photoModal').modal('show');
-           }
-        ).on('routeFound',
-            function(track, route) {
+        ).on('photoClick',
+            function (photoUrl, photo) {
+                $scope.currentPhotoUrl = photoUrl;
+                $scope.currentPhoto = photo;
+                $scope.$apply();
+                $('#photoModal').modal('show');
+            }
+            ).on('routeFound',
+            function (track, route) {
                 gpxTrck = track;
                 gpxRoute = route;
                 $scope.routeFound = true;
                 $scope.$apply();
             }
-        );
+            );
 
         function setMapSize() {
-            $("#map-canvas").height($(window).height()*0.7);
+            $("#map-canvas").height($(window).height() * 0.7);
             stravaMap.invalidateMapSize();
         }
         // resize the map according when resizing the window
@@ -52,7 +52,7 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         // initialize the map size at the beginning
         setMapSize();
-        
+
         $scope.routeFound = false;
         $scope.routePlannerOnOff = false;
 
@@ -76,10 +76,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             $scope.downloadInProgress = false;
         };
 
-// get athlete profile at the beginning
-        $http.get('rest/profile').success(function (data) {
-            $scope.athleteProfile = data;
-        }).error(onAjaxError);
 
         function initScopeProperties(withGear, mine) {
 
@@ -102,15 +98,21 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             // the list of activities currently displayed on the map 
             $scope.activities = null;
 
-            $scope.statistics = new Statistics(withGear);
+            $scope.statistics = new Statistics(withGear, $scope.athleteProfile);
         }
+
+        // get athlete profile at the beginning
+        $http.get('rest/profile').success(function (data) {
+            $scope.athleteProfile = data;
+            initScopeProperties(true, true);
+        }).error(onAjaxError);
 
         $scope.drawActivityOnMap = function (activity) {
             $scope.drawActivitiesOnMap([activity]);
         };
 
         $scope.drawActivitiesOnMap = function (activities) {
-            $('html,body').animate({scrollTop: $('#mapTop').offset().top});
+            $('html,body').animate({ scrollTop: $('#mapTop').offset().top });
 
             stravaMap.drawActivities(activities);
         };
@@ -119,12 +121,12 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
             $scope.activities = activities;
             $scope.photos = null;
 
-            $scope.statistics.addAll(activities, $scope.athleteProfile);
+            $scope.statistics.addAll(activities);
 
             $scope.drawActivitiesOnMap(activities);
             $scope.downloadInProgress = false;
             if (!activities || activities.length == 0) {
-                $scope.stravaError = {code: "0", message: "No activities found. Please change your criteria and try again."};
+                $scope.stravaError = { code: "0", message: "No activities found. Please change your criteria and try again." };
             }
         };
 
@@ -211,14 +213,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
         $scope.update = function (activity) {
             $http.post("rest/update-activity", activity).success(function () {
                 $scope.statistics.updateActivity(activity, $scope.currentActivity);
-
-                // copy the edited attributes into the original object
-                $scope.currentActivity.commute = activity.commute;
-                $scope.currentActivity.private = activity.private;
-                $scope.currentActivity.trainer = activity.trainer;
-                $scope.currentActivity.gear_id = activity.gear_id;
-                $scope.currentActivity.name = activity.name;
-
                 $('#editActivityModal').modal('hide');
             }).error(onAjaxError);
         };
@@ -263,7 +257,6 @@ stravaControllers.controller('ActivitiesCtrl', ['$compile', '$scope', '$http', '
 
         // default behaviour, open my activities of the current month
         $scope.fetchMyActivitiesThisMonth(null);
-    }])
-;
+    }]);
 
 export { stravaControllers };
