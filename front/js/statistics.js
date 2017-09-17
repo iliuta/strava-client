@@ -187,4 +187,4 @@ let Statistics = function(withGear) {
     };
 };
 
-export { Statistics, Totals };
+module.exports = Statistics;

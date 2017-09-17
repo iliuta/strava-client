@@ -1,6 +1,6 @@
 import angular from 'angular';
 import StravaMap from './map.js';
-import {Statistics, Totals} from './statistics.js';
+const Statistics = require('./statistics.js');
 
 import infoWindowTemplateUrl from '../templates/infowindow.html';
 // end hack

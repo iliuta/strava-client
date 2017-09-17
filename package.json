@@ -16,13 +16,15 @@
     "leaflet-routing-machine": "3.2.4"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "css-loader": "^0.28.7",
     "file-loader": "^0.11.2",
+    "mocha": "^3.5.3",
     "style-loader": "^0.18.2",
     "webpack": "^3.5.5"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha front/test"
   },
   "repository": {
     "type": "git",

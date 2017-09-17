@@ -94,17 +94,17 @@ function StravaMap(infoWindowCompiler) {
     );
 
     routingControl.on("routeselected", function (e) {
-     if (onRouteFound) {
-         // every time a route is found, save its coordinates to create gpx file
-         // gpxTrack is about all coordinates of the selected route
-         let gpxTrck = e.route.coordinates;
-         // gpxRoute is about the coordinates of the crossings, taken from the cue sheet (instructions)
-         let gpxRoute = [];
-         e.route.instructions.forEach(function (instruction) {
-             gpxRoute.push(e.route.coordinates[instruction.index]);
-         });
-         onRouteFound(gpxTrck, gpxRoute);
-    }
+        if (onRouteFound) {
+             // every time a route is found, save its coordinates to create gpx file
+             // gpxTrack is about all coordinates of the selected route
+             let gpxTrck = e.route.coordinates;
+             // gpxRoute is about the coordinates of the crossings, taken from the cue sheet (instructions)
+             let gpxRoute = [];
+             e.route.instructions.forEach(function (instruction) {
+                 gpxRoute.push(e.route.coordinates[instruction.index]);
+             });
+             onRouteFound(gpxTrck, gpxRoute);
+        }
     });
 
     function createRoutePlannerButton(label, container) {
