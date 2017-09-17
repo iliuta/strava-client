@@ -28,4 +28,7 @@ hs_err_pid*
 # node
 node_modules/
 
+# VSCode
+launch.json
+
 
