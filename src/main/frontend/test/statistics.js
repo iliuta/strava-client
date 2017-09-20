@@ -1,4 +1,4 @@
-const Statistics = require('../js/statistics.js');
+const Statistics = require('../src/js/statistics.js');
 
 var assert = require('chai').assert;
 

@@ -4,12 +4,12 @@ var webpack = require('webpack');
 
 module.exports = {
   entry: {
-    app: './front/js/app.js',
-    static: './front/js/static.js'
+    app: './src/js/app.js',
+    static: './src/js/static.js'
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'target/classes/static/dist')
+    path: path.resolve(__dirname, '../../../target/classes/static/dist')
   },
   plugins: [
           new webpack.ProvidePlugin({

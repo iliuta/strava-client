@@ -132,6 +132,7 @@
                     <nodeVersion>v6.11.2</nodeVersion>
                     <npmVersion>3.10.10</npmVersion>
                     <installDirectory>target</installDirectory>
+                    <workingDirectory>src/main/frontend</workingDirectory>
                 </configuration>
             </plugin>
 

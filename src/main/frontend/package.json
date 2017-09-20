@@ -24,7 +24,7 @@
     "webpack": "^3.5.5"
   },
   "scripts": {
-    "test": "mocha front/test"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
