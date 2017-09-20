@@ -5,6 +5,7 @@ var webpack = require('webpack');
 module.exports = {
   entry: {
     app: './src/js/app.js',
+    appReact: './src/js/app.jsx',
     static: './src/js/static.js'
   },
   output: {
@@ -20,6 +21,15 @@ module.exports = {
       ],
    module: {
        rules: [
+         {
+           test: /\.jsx$/,
+           exclude: /(node_modules)/,
+           loader: 'babel-loader',
+           query: {
+               cacheDirectory: true,
+               presets: ['es2015', 'react']
+           }
+         },
          {
            test: /\.css$/,
            use: [
