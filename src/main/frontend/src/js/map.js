@@ -56,6 +56,7 @@ function StravaMap(infoWindowCompiler) {
     let onPhotoClick = null;
     let onRouteFound = null;
 
+
     // local vars
     let internalMap = L.map('map-canvas', {
         center: [39.73, -104.99],
@@ -67,12 +68,6 @@ function StravaMap(infoWindowCompiler) {
     let photosLayerGroup = null;
 
     let activityPopup = L.popup();
-
-    if (infoWindowCompiler) {
-        setTimeout(function () {
-            activityPopup.setContent(infoWindowCompiler());
-        });
-    }
 
     let polylinesLayerGroup = null;
 
@@ -158,7 +153,7 @@ function StravaMap(infoWindowCompiler) {
         }, 300);
     };
 
-    function drawActivityPolylineOnMap(activity) {
+    function drawActivityPolylineOnMap(activity, athleteProfile) {
         if (!activity.map.summary_polyline) {
             console.log(activity.name);
             return null;
@@ -186,7 +181,7 @@ function StravaMap(infoWindowCompiler) {
                         onSelectActivity(activity);
                     }
                     if (infoWindowCompiler) {
-                        activityPopup.setContent(infoWindowCompiler());
+                        activityPopup.setContent(infoWindowCompiler(activity, athleteProfile));
                     }
                     activityPopup.setLatLng(event.latlng);
                 });
@@ -200,7 +195,7 @@ function StravaMap(infoWindowCompiler) {
         internalMap.invalidateSize();
     }
 
-    this.drawActivities = function (activities) {
+    this.drawActivities = function (activities, athleteProfile) {
         if (photosLayerGroup) {
             photosLayerGroup.clearLayers();
         }
@@ -214,7 +209,7 @@ function StravaMap(infoWindowCompiler) {
         polylinesLayerGroup.addTo(internalMap);
 
         activities.forEach(function (activity) {
-            var polyline = drawActivityPolylineOnMap(activity);
+            var polyline = drawActivityPolylineOnMap(activity, athleteProfile);
             if (polyline) {
                 if (!bounds) {
                     bounds = polyline.getBounds();

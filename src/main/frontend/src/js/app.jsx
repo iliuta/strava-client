@@ -13,25 +13,41 @@ import { durationString, profileImageUrlOrDefault } from './util.js';
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+var ReactDOMServer = require('react-dom/server');
+
 
 const Statistics = require('./statistics.js');
 
 class Map extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			stravaMap: null
-		};
+		this.map = null;
+	}
+
+	infoWindowCompiler(currentActivity, athleteProfile) {
+		const athleteUrl = "http://www.strava.com/athletes/" + athleteProfile.id;
+		const activityUrl = "http://www.strava.com/activities/" + currentActivity.id;
+		return ReactDOMServer.renderToString(
+			<ul className="list-group">
+				<li className="list-group-item">
+					<img src={profileImageUrlOrDefault(athleteProfile.profile)} />
+					<a href={athleteUrl} target="_blank">{athleteProfile.firstname} {athleteProfile.lastname}</a>
+				</li>
+				<li className="list-group-item">
+					<a href={activityUrl}
+						target="_blank">{currentActivity.name}</a>
+				</li>
+			</ul>
+		);
 	}
 
 
 	componentDidMount() {
-		let map = new StravaMap();
-		this.setState({ stravaMap: map });
+		this.map = new StravaMap(this.infoWindowCompiler);
 	}
 
 	componentDidUpdate() {
-		this.state.stravaMap.drawActivities(this.props.activities);
+		this.map.drawActivities(this.props.activities, this.props.athleteProfile);
 	}
 
 	render() {
@@ -189,7 +205,7 @@ class StravaHeatmapApp extends React.Component {
 			<div className="col-md-12">
 				<div className="panel panel-default">
 					<div id="mapTop" className="panel-heading">
-						<Map activities={this.state.activities} />
+						<Map activities={this.state.activities} athleteProfile={this.state.athleteProfile} />
 						<StatisticsDisplay statistics={this.state.statistics} />
 					</div>
 				</div>
