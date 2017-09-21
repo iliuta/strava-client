@@ -7,19 +7,19 @@ import Polyline from 'polyline-encoded';
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
 
 const osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-const osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 18, attribution: osmAttrib});
+const osm = new L.TileLayer(osmUrl, { minZoom: 1, maxZoom: 18, attribution: osmAttrib });
 const ocm = L.tileLayer("http://a.tile.thunderforest.com/cycle/{z}/{x}/{y}.png");
 const google = L.tileLayer('//mt{s}.googleapis.com/vt?x={x}&y={y}&z={z}', {
     maxZoom: 18,
-    subdomains: [ 0, 1, 2, 3 ]
+    subdomains: [0, 1, 2, 3]
 });
 
 const runBikeHike =
@@ -68,9 +68,11 @@ function StravaMap(infoWindowCompiler) {
 
     let activityPopup = L.popup();
 
-    setTimeout(function() {
-        activityPopup.setContent(infoWindowCompiler());
-    });
+    if (infoWindowCompiler) {
+        setTimeout(function () {
+            activityPopup.setContent(infoWindowCompiler());
+        });
+    }
 
     let polylinesLayerGroup = null;
 
@@ -79,9 +81,9 @@ function StravaMap(infoWindowCompiler) {
             waypoints: [],
             lineOptions: {
                 styles: [
-                    {color: 'black', opacity: 0.15, weight: 9},
-                    {color: 'white', opacity: 0.8, weight: 6},
-                    {color: 'yellow', opacity: 1, weight: 2}
+                    { color: 'black', opacity: 0.15, weight: 9 },
+                    { color: 'white', opacity: 0.8, weight: 6 },
+                    { color: 'yellow', opacity: 1, weight: 2 }
                 ]
             },
             router: new Routing.OSRMv1({
@@ -95,15 +97,15 @@ function StravaMap(infoWindowCompiler) {
 
     routingControl.on("routeselected", function (e) {
         if (onRouteFound) {
-             // every time a route is found, save its coordinates to create gpx file
-             // gpxTrack is about all coordinates of the selected route
-             let gpxTrck = e.route.coordinates;
-             // gpxRoute is about the coordinates of the crossings, taken from the cue sheet (instructions)
-             let gpxRoute = [];
-             e.route.instructions.forEach(function (instruction) {
-                 gpxRoute.push(e.route.coordinates[instruction.index]);
-             });
-             onRouteFound(gpxTrck, gpxRoute);
+            // every time a route is found, save its coordinates to create gpx file
+            // gpxTrack is about all coordinates of the selected route
+            let gpxTrck = e.route.coordinates;
+            // gpxRoute is about the coordinates of the crossings, taken from the cue sheet (instructions)
+            let gpxRoute = [];
+            e.route.instructions.forEach(function (instruction) {
+                gpxRoute.push(e.route.coordinates[instruction.index]);
+            });
+            onRouteFound(gpxTrck, gpxRoute);
         }
     });
 
@@ -163,19 +165,19 @@ function StravaMap(infoWindowCompiler) {
         } else {
             var decodedPath = L.Polyline.fromEncoded(activity.map.summary_polyline);
 
-            var osmPath = L.polyline(decodedPath.getLatLngs(), {color: '#FF0000', weight: 2}).addTo(internalMap);
+            var osmPath = L.polyline(decodedPath.getLatLngs(), { color: '#FF0000', weight: 2 }).addTo(internalMap);
 
             osmPath.bindPopup(activityPopup);
 
             osmPath.addEventListener('mouseover',
                 function (event) {
-                    osmPath.setStyle({color: 'blue', weight: 7});
+                    osmPath.setStyle({ color: 'blue', weight: 7 });
                 });
 
 
             osmPath.addEventListener('mouseout',
                 function () {
-                    osmPath.setStyle({color: '#FF0000', weight: 2});
+                    osmPath.setStyle({ color: '#FF0000', weight: 2 });
                 });
 
             osmPath.addEventListener('click',
@@ -183,7 +185,9 @@ function StravaMap(infoWindowCompiler) {
                     if (onSelectActivity) {
                         onSelectActivity(activity);
                     }
-                    activityPopup.setContent(infoWindowCompiler());
+                    if (infoWindowCompiler) {
+                        activityPopup.setContent(infoWindowCompiler());
+                    }
                     activityPopup.setLatLng(event.latlng);
                 });
 
@@ -192,7 +196,7 @@ function StravaMap(infoWindowCompiler) {
         }
     }
 
-    this.invalidateMapSize = function() {
+    this.invalidateMapSize = function () {
         internalMap.invalidateSize();
     }
 
@@ -262,7 +266,7 @@ function StravaMap(infoWindowCompiler) {
         });
     };
 
-    this.on = function(eventName, handler) {
+    this.on = function (eventName, handler) {
         if (eventName === 'selectActivity') {
             onSelectActivity = handler;
         } else if (eventName === 'photoClick') {
@@ -274,20 +278,20 @@ function StravaMap(infoWindowCompiler) {
     };
 
 
-    this.displayRoutePlanner = function() {
+    this.displayRoutePlanner = function () {
         routingControl.addTo(internalMap);
         internalMap.on("dblclick", routePlannerMapOnDblClick);
         internalMap.on("click", routePlannerMapOnClick);
     };
 
-    this.hideRoutePlanner = function() {
+    this.hideRoutePlanner = function () {
         routingControl.remove();
         internalMap.off("dblclick", routePlannerMapOnDblClick);
         internalMap.off("click", routePlannerMapOnClick);
-     };
+    };
 
-    this.resetRoutePlanner = function() {
-       routingControl.spliceWaypoints(0, routingControl.getWaypoints().length);
+    this.resetRoutePlanner = function () {
+        routingControl.spliceWaypoints(0, routingControl.getWaypoints().length);
     };
 
 

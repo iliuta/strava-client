@@ -6,6 +6,8 @@ import '../css/throbber.css';
 
 import 'bootstrap';
 
+import StravaMap from './map.js';
+
 import { durationString, profileImageUrlOrDefault } from './util.js';
 
 
@@ -13,6 +15,33 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 
 const Statistics = require('./statistics.js');
+
+class Map extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			stravaMap: null
+		};
+	}
+
+
+	componentDidMount() {
+		let map = new StravaMap();
+		this.setState({ stravaMap: map });
+	}
+
+	componentDidUpdate() {
+		this.state.stravaMap.drawActivities(this.props.activities);
+	}
+
+	render() {
+		return (
+			<div className="panel-body">
+				<div id="map-canvas"></div>
+			</div>
+		);
+	}
+}
 
 class StatisticsDisplay extends React.Component {
 	constructor(props) {
@@ -108,7 +137,11 @@ class StravaHeatmapApp extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { activities: [] };
+		this.state = {
+			activities: [],
+			statistics: null,
+			athleteProfile: null
+		};
 	}
 
 	fetchMyActivities(before, after, type) {
@@ -153,7 +186,14 @@ class StravaHeatmapApp extends React.Component {
 
 	render() {
 		return (
-			<StatisticsDisplay statistics={this.state.statistics} />
+			<div className="col-md-12">
+				<div className="panel panel-default">
+					<div id="mapTop" className="panel-heading">
+						<Map activities={this.state.activities} />
+						<StatisticsDisplay statistics={this.state.statistics} />
+					</div>
+				</div>
+			</div>
 		)
 	}
 }
