@@ -69,19 +69,20 @@ let Statistics = function (withGear, athleteProfile) {
     this.gearTotals = {};
 
     this.totals = [this.globalTotals,
-    this.trainerTotals,
-    this.manualTotals,
-    this.commuteTotals,
-    this.noCommuteTotals,
-    this.bikeDistanceTotals0_50,
-    this.bikeDistanceTotals50_100,
-    this.bikeDistanceTotals100_150,
-    this.bikeDistanceTotals200,
-    this.runDistanceTotals0_10,
-    this.runDistanceTotals10_20,
-    this.runDistanceTotals20_30,
-    this.runDistanceTotals30_40,
-    this.runDistanceTotals40];
+                    this.trainerTotals,
+                    this.manualTotals,
+                    this.commuteTotals,
+                    this.noCommuteTotals,
+                    this.bikeDistanceTotals0_50,
+                    this.bikeDistanceTotals50_100,
+                    this.bikeDistanceTotals100_150,
+                    this.bikeDistanceTotals150_200,
+                    this.bikeDistanceTotals200,
+                    this.runDistanceTotals0_10,
+                    this.runDistanceTotals10_20,
+                    this.runDistanceTotals20_30,
+                    this.runDistanceTotals30_40,
+                    this.runDistanceTotals40];
 
 
 
