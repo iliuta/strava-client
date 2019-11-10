@@ -20,7 +20,7 @@ security:
       clientId: ${STRAVA_CLIENT_ID}
       clientSecret: ${STRAVA_CLIENT_SECRET}
       accessTokenUri: https://www.strava.com/oauth/token
-      userAuthorizationUri: https://www.strava.com/oauth/authorize?response_type=code&amp;scope=write,view_private
+      userAuthorizationUri: https://www.strava.com/oauth/authorize?response_type=code&amp;scope=activity:read_all,activity:write
       clientAuthenticationScheme: form
 
 
